@@ -1,0 +1,184 @@
+\documentclass[12pt,a4paper,oneside]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+
+
+\title{\color{TealBlue} cgmisc \\\ \normalsize Package containing various functions useful in computational genetics, especially in genome-wide association studies}
+\author{\color{Orange}Marcin Kierczak}
+\maketitle
+
+\newpage
+
+\section*{Introduction}
+\subsection{Synopsis}
+\noindent Package cgmisc contains miscellaneous functions, hopefully useful for extending genome-wide association study (GWAS) analyses.
+\subsection{Getting help}
+\noindent Like every other R function, the functions provided in this package are documented in the standard R-help (Rd) format and can be easily accessed by issuing \textbf{help}() or its shorter version, \textbf{?} function. For instance, if you want to get more information on how to use the clump.markers() function, type either help(clumpmarkers) or ?clump.markers and press return/enter. To see this document from within R you type vignette(`cgmisc`).
+\subsection{Purpose of this document}
+\noindent This document aims at presenting how to use functions provided in this package in a typical GWAS data analyses workflow. It is, however, not pretending to be a GWAS tutorial as such.
+\subsection{Conventions}
+\begin{itemize}
+\item{All R commands are written in terminal type: myfun(foo=T, bar=54)}
+\item{In the above example: \textit{myfun} is a function and both \textit{foo} and \textit{bar} are its arguments}
+\end{itemize}
+
+\section*{Working with \texttt{cgmisc}}
+\subsection{Installation}
+\noindent In order to install \texttt{cgmisc}, you either use one of the R GUIs (native R GUI, RStudio etc.) or type the following command:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+ \hlkwd{install.packages}\hlstd{(}\hlstr{"cgmisc"}\hlstd{,} \hlkwc{repos}\hlstd{=}\hlstr{""}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\noindent Functions in the \texttt{cgmisc} package often complement or use \texttt{GenABEL} package functions and data structures.\texttt{GenABEL} is an excellent and widely-used R package for performing genome-wide association studies and much more... Therefore \texttt{GenABEL} will be loaded automagically when loading cgmisc. You can load \texttt{cgmisc} package by as follows:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{require}\hlstd{(}\hlstr{"cgmisc"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: cgmisc\\\#\# Loading required package: GenABEL\\\#\# Loading required package: MASS\\\#\# Loading required package: GenABEL.data\\\#\# \\\#\#\ \ Package cgmisc contains miscellaneous functions, useful for extending\\\#\# genome-wide association study (GWAS) analyses. \\\#\# \\\#\# Package Name: cgmisc \\\#\#\ \ Version: 2.9.3 \\\#\#\ \ Date: 2014-08-13 \\\#\#\ \ Author: Marcin Kierczak <marcin.kierczak@imbim.uu.se> \\\#\#\ \ License GPL (>=2.10) \\\#\# \\\#\#\ \ Package contains various functions useful in computational\\\#\#\ \ \ \  genetics, especially in genome-wide association studies.}}\end{kframe}
+\end{knitrout}
+
+\noindent After having loaded the package it is time to load some data:
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlcom{#setwd("~/Dropbox/cgmisc-devel/cgmisc_jagoda-devel")}
+  \hlkwd{load}\hlstd{(}\hlstr{'data/data.Rd'}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: cannot open compressed file 'data/data.Rd', probable reason 'No such file or directory'}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: cannot open the connection}}\end{kframe}
+\end{knitrout}
+
+\subsection{Association Analysis}
+\noindent Some of \texttt{cgmisc} functions use data which are the result of GWAS analyses. Let's perform GWAS on our data to obtain \texttt{GenABEL} \texttt{scan.gwaa-class} object : 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{an0} \hlkwb{<-} \hlkwd{qtscore}\hlstd{(response} \hlopt{~} \hlstd{sex,} \hlkwc{data} \hlstd{= data)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: wrong data class: should be gwaa.data}}\end{kframe}
+\end{knitrout}
+
+\noindent And have a look at top 5 markers
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(an0,} \hlkwc{top} \hlstd{=} \hlnum{5}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'an0' not found}}\end{kframe}
+\end{knitrout}
+
+
+
+
+\noindent Once this is done, we can proceed with \texttt{cgmisc} functions.
+
+\newpage
+
+\section*{Functions}
+\subsection{Plot.Manhattan.LD}
+\noindent The \texttt{plot.Manhattan.LD} function allows you to visualize the LD pattern in a genome fragment on an enchanced Manhattan plot. You select one marker, typically the one with the strongest association to the analysed trait and all other markers in the region are coloured according to the degree of linkage disequilibrium with this index marker. 
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plot.manhattan.LD}\hlstd{(data, an0,} \hlkwc{chr} \hlstd{=} \hlnum{34}\hlstd{,} \hlkwc{region} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{3.9e+07}\hlstd{,} \hlnum{4.2e+07}\hlstd{),} \hlkwc{index.snp} \hlstd{=} \hlstr{"BICF2P1063345"}\hlstd{,}
+    \hlkwc{bonferroni} \hlstd{= F)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: trying to get slot "{}gtdata"{} from an object of a basic class ("{}function"{}) with no slots}}\end{kframe}
+\end{knitrout}
+
+\subsection{Clump.markers}
+\noindent \texttt{clump.markers} function implements clumping procedure described in PLINK documentation. Clumping is based on linkage disequilibrium. The function returns list of clumps which can be used for further analyses or plotted using \texttt{plot.clumps} function included in our package.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{clumps} \hlkwb{<-} \hlkwd{clump.markers}\hlstd{(data,} \hlkwc{gwas.result} \hlstd{= an0,} \hlkwc{chr} \hlstd{=} \hlnum{6}\hlstd{,} \hlkwc{bp.dist} \hlstd{=} \hlnum{250000}\hlstd{,}
+    \hlkwc{p1} \hlstd{=} \hlnum{1e-04}\hlstd{,} \hlkwc{p2} \hlstd{=} \hlnum{0.01}\hlstd{,} \hlkwc{r2} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{image} \hlstd{= T)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'an0' not found}}\end{kframe}
+\end{knitrout}
+
+\end{document}

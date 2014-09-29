@@ -1,0 +1,209 @@
+\documentclass[12pt,a4paper,oneside]{article}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+<<setup, include=FALSE>>=
+library(knitr)
+library(GenABEL)
+opts_chunk$set(fig.width=9, fig.height=5, out.width="1.0\\textwidth",
+   fig.keep="high",
+   fig.show="hold",
+   fig.align="center",
+   dev='CairoPNG',
+   fig.path='images/',
+   highlight=TRUE,
+   tidy=TRUE, size='footnotesize')
+@
+
+\begin{document}
+
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+concordance=TRUE
+)
+@
+
+
+\title{\color{TealBlue} cgmisc \\\ \normalsize Package containing various functions useful in computational genetics, especially in genome-wide association studies}
+\author{\color{Orange}Marcin Kierczak}
+\maketitle
+
+\newpage
+
+\section*{Introduction}
+\subsection*{Synopsis}
+\noindent Package cgmisc contains miscellaneous functions, hopefully useful for extending genome-wide association study (GWAS) analyses.
+\subsection*{Getting help}
+\noindent Like every other R function, the functions provided in this package are documented in the standard R-help (Rd) format and can be easily accessed by issuing \textbf{help}() or its shorter version, \textbf{?} function. For instance, if you want to get more information on how to use the clump.markers() function, type either help(clumpmarkers) or ?clump.markers and press return/enter. To see this document from within R you type vignette(`cgmisc`).
+\subsection*{Purpose of this document}
+\noindent This document aims at presenting how to use functions provided in this package in a typical GWAS data analyses workflow. It is, however, not pretending to be a GWAS tutorial as such.
+\subsection*{Conventions}
+\begin{itemize}
+\item{All R commands are written in terminal type: myfun(foo=T, bar=54)}
+\item{In the above example: \textit{myfun} is a function and both \textit{foo} and \textit{bar} are its arguments}
+\end{itemize}
+
+\section*{Working with \texttt{cgmisc}}
+\subsection*{Installation}
+\noindent In order to install \texttt{cgmisc}, you either use one of the R GUIs (native R GUI, RStudio etc.) or type the following command:
+
+<<installing.packages, eval=FALSE, tidy=FALSE, echo=TRUE>>=
+ install.packages("cgmisc", repos="")
+@
+
+\noindent Functions in the \texttt{cgmisc} package often complement or use \texttt{GenABEL} package functions and data structures.\texttt{GenABEL} is an excellent and widely-used R package for performing genome-wide association studies and much more... Therefore \texttt{GenABEL} will be loaded automagically when loading cgmisc. You can load \texttt{cgmisc} package by as follows:
+
+<<loading.packages, eval=TRUE, tidy=TRUE>>=
+  require("cgmisc") 
+@
+
+\noindent After having loaded the package it is time to load some data:
+
+<<loading.data, eval=TRUE, results='hide', tidy=FALSE, echo=TRUE>>=
+  load('data/data.rda')
+@
+
+\subsection*{Association Analysis}
+\noindent Some of \texttt{cgmisc} functions use data which are the result of GWAS analyses. Let's perform GWAS on our data to obtain \texttt{GenABEL} \texttt{scan.gwaa-class} object : 
+
+<<gwas, eval = TRUE, tidy=TRUE, echo=TRUE>>=
+  an0  <- qtscore(response~sex, data = data )
+@
+
+\noindent And have a look at top 5 markers
+
+<<summary, echo=TRUE, eval=TRUE>>=
+  summary(an0, top = 5)
+@
+
+
+\noindent Once this is done, we can proceed with \texttt{cgmisc} functions.
+
+\newpage
+
+\section*{Functions}
+\subsection*{Plot.Manhattan.LD}
+\noindent The \texttt{plot.Manhattan.LD} function allows you to visualize the LD pattern in a genome fragment on an enchanced Manhattan plot. You select one marker, typically the one with the strongest association to the analysed trait and all other markers in the region are coloured according to the degree of linkage disequilibrium with this index marker. 
+
+<<plot.Manhattan.LD, tidy=FALSE>>=
+plot.manhattan.LD(data, an0, chr=34, region=c(39e6,42e6), 
+                  index.snp = 'BICF2P1063345', bonferroni = F)
+@
+
+\subsection*{Clump.markers}
+\noindent \texttt{clump.markers} function implements clumping procedure described in PLINK documentation. Clumping is based on linkage disequilibrium. The function returns list of clumps which can be used for further analyses or plotted using \texttt{plot.clumps} function included in our package.
+
+<<clump.markers, tidy=FALSE >>=
+clumps <- clump.markers(data, gwas.result = an0, chr = 6, 
+                        bp.dist = 250e3, p1 = 0.0001, p2 = 0.01, r2 = 0.5, image=T)
+@
+
+\subsection*{plot.clumps}
+\noindent \texttt{plot.clumps} function plots clumps resulting from running the \texttt{clump.markers}  function on Manhattan Plot. 
+
+<<plot.clumps>>=
+plot.clumps(gwas.result = an0, clumps = clumps, chr = 1, region = c(3330897, 3497239))
+@
+
+\subsection*{Compute.Fstats}
+\noindent Fixation index Fst is a measure of population differentiation due to genetic structure. 
+Given a set of genotypes in two populations, the function computes fixation index (Fst) and corresponding indices: Fit and Fis. 
+Pops is a vector of two values indicating to which population an individual belongs. Typically, one uses a vector of zeroes and ones where 0 marks an individual belonging to population 1 and 1 marks an individual belonging to population 2. Often, the vector is a result of clustering in MDS-scaled genomic kinship space.
+
+<<MDS, results='hide', eval=TRUE, echo=FALSE, include=FALSE>>=
+require(mclust)
+autosomal <- which(data@gtdata@chromosome != 39)
+gkin <- ibs(data=data, snpsubset=autosomal, weight="freq")
+dm <- as.dist(.5 - gkin)
+d2d <- cmdscale(dm)
+mclust <- Mclust(d2d, G=2)
+pops <- mclust$classification
+@
+
+<<compute.Fstats, eval=TRUE>>=
+fstats  <- compute.Fstats(data, pops)
+@
+
+\subsection*{Plot.fstats}
+\noindent Plot results of \texttt{compute.Fstats} function.
+
+<<plot.fstats>>=
+plot.fstats(data, fstats)
+@
+
+\subsection*{create.Haploview.info}
+\noindent The program PHASE implements a Bayesian statistical method for reconstructing haplotypes from population genotype data. \texttt{Create.Haploview.info} function prepares PHASE and fastPHASE input files from GWAS data object. 
+It can be used on a single entire chromosome or on a specified chromosomal region.
+
+<<create.Haploview.info, eval=FALSE, tidy=FALSE >>=
+create.Haploview.info(data=data, chr=2, coords=c(3030587,5030587), 
+                      outFile="~user/test.info")
+@
+
+\subsection*{get.adjacent.markers}
+\noindent This function returns the number of markers which are adjacent to the given within a distance set as parameter. 
+
+<<get.adjacent.markers, eval=TRUE, results='hide'>>=
+adj  <- get.adjacent.markers(data, 'BICF2P647127')
+@
+
+<<get.adjacent.markers.display, eval=TRUE>>=
+print(adj[5:10])
+@
+\subsection*{get.chr.midpoints}
+\noindent \texttt{Get.chr.midpoints} function might be very useful for plotting chromsome labels on x-axis. It returns a list of chromosome midpoints coordinates which are independent of coordinates used.
+
+<<get.chr.midpoints, eval=TRUE>>=
+mids  <- get.chr.midpoints(data)
+@
+
+\subsection*{get.overlapping.windows}
+\noindent 
+
+<<get.overlapping.windows, eval=TRUE>>=
+olw  <- get.overlapping.windows(data, chr=3, size = 100e4, overlap = 25e2)
+@
+
+\subsection*{het.for.overlap.wind}
+\noindent
+
+<<het.for.overlap, eval=TRUE, results='hide'>>=
+het  <- het.for.overlap.wind(olw)
+@
+
+\subsection*{get.window.means}
+\noindent
+
+<<get.window.means>>=
+
+@
+
+\subsection*{open.region.UCSC}
+\noindent
+
+<<open.region.UCSC, results='hide', eval=FALSE>>=
+open.region.UCSC(chr=3, coords=c(40455299,64160299), assembly = "canFam3")
+@
+
+\subsection*{pop.allele.counts}
+\noindent
+
+<<pop.allele.counts, results='hide', cache=FALSE>>=
+pac <- pop.allele.counts(data, pops, progress = TRUE)
+@
+
+
+\subsection*{plot.pac}
+\noindent
+
+<<plot.pac, eval=TRUE>>=
+plot.pac(data, pac, plot.LD=FALSE)
+@
+
+
+
+\end{document}

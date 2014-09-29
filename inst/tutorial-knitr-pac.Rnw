@@ -1,0 +1,244 @@
+\documentclass[12pt,a4paper,oneside]{article}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\setlength\parindent{0pt}
+
+<<setup, include=FALSE>>=
+library(knitr)
+library(GenABEL)
+library(cgmisc)
+opts_chunk$set(fig.width=9, fig.height=5, out.width="1.0\\textwidth",
+   fig.keep="high",
+   fig.show="hold",
+   fig.align="center",
+   dev='CairoPNG',
+   fig.path='images/',
+   cache=TRUE,
+   concordance=TRUE,
+   highlight=TRUE,
+   tidy=TRUE, size='footnotesize')
+@
+
+\begin{document}
+
+\title{\color{TealBlue} cgmisc \\\ \normalsize Package containing various functions useful in computational genetics, especially in genome-wide association studies}
+\author{\color{Orange}Marcin Kierczak}
+\maketitle
+
+\newpage
+
+\section*{Introduction}
+\subsection*{Synopsis}
+\noindent Package cgmisc contains miscellaneous functions, hopefully useful for extending genome-wide association study (GWAS) analyses.
+
+\subsection*{Purpose of this document}
+\noindent This document aims at presenting how to use functions provided in the \texttt{cgmisc} package in a typical GWAS data analyses workflow. It is, however, not aiming to be a standalone GWAS tutorial as such.
+
+\subsection*{Conventions}
+Here, we present typographic conventions used throughout the text in order to facilitate following this document.
+\begin{itemize}
+\item{All R commands are written in terminal type: {\tt myfun(foo=T, bar=54)}}
+\item{In the above example: \textit{myfun} is a function and both \textit{foo} and \textit{bar} are its arguments}
+\end{itemize}
+
+\subsection*{Getting help}
+\noindent Like every other R function, the functions provided in this package are documented in the standard R-help (Rd) format and can be easily accessed by issuing \textbf{help}() or its shorter version, \textbf{?} function. For instance, if you want to get more information on how to use the clump.markers() function, type either \texttt{help(clumpmarkers)} or \texttt{?clump.markers} and press return/enter. To see this document from within R you type \texttt{vignette(`cgmisc`)}.
+
+\section*{Working with \texttt{cgmisc}}
+\subsection*{Installation}
+\noindent In order to install \texttt{cgmisc}, you either use one of the R GUIs (native R GUI, RStudio etc.) or type the following command:
+
+<<installing.packages, eval=FALSE, tidy=FALSE, echo=TRUE>>=
+ install.packages("cgmisc", repos="")
+@
+
+\noindent Functions in the \texttt{cgmisc} package often complement or use \texttt{GenABEL} package functions and data structures. \texttt{GenABEL} is an excellent and widely-used R package for performing genome-wide association studies and much more\dots Therefore \texttt{GenABEL} will be loaded automagically when loading cgmisc. You can load \texttt{cgmisc} package as follows:
+
+<<loading.packages, eval=TRUE, tidy=TRUE>>=
+  require("cgmisc") 
+@
+
+\section*{Loading and preparing example data}
+First, we load the data, in this case internal cgmisc data.
+<<data.load>>=
+data(cgmisc_data)
+@
+And run some quality checks. It is important not to exclude any markers due to their low minor allele frequency as we will be looking for stretches of homozygosity.
+<<qc, results='hide'>>=
+qc <- check.marker(data,callrate = .95, perid.call = .95, maf = -1)
+data.clean <- data[qc$idok, qc$snpok]
+@
+Once data is clean and neat, we can look at genomic kinship and try to determine population structure:
+<<gkin, fig.height=7, fig.width=7, fig.cap="An MDS projection of genomic kinship.">>=
+gkin <- ibs(data.clean, weight = "freq")
+gkin.dist <- as.dist(0.5 - gkin)
+gkin.mds <- cmdscale(gkin.dist)
+plot(gkin.mds, xlab="MDS1", ylab="MDS2", las=1, bty="n")
+grid()
+@
+So, it seems there is some population structure in here. Just by eyeballing, we can spot two distinct clusters of individuals.\footnote{Well, OK, we actually did a scree test to see there is two clusters here. Eyeballing is not very scientific.} Let's run a simple k-means clustering to determine which individuals belong to which cluster.
+<<gkin.pops, fig.height=7, fig.width=7, fig.cap="An MDS projection of genomic kinship.">>=
+km <- kmeans(gkin.mds, centers = 2)
+pop <- km$cluster
+plot(gkin.mds, xlab="MDS1", ylab="MDS2", col=pop, las=1, bty='n')
+grid()
+@
+\section*{Comparing allele counts between populations}
+To compare allele counts between two populations, you first need to call {\tt pop.allele.counts} function. You supply data (in our case only chromosome 27) and pop vector which assigns each individual to a population. Populations have to be encoded as 1 and 2. In addition, there is an option {\tt progress} which turns on and off displaying of the progress bar.
+<<pac>>=
+dat <- data.clean[ ,data.clean@gtdata@chromosome == "27"]
+allele.counts <- pop.allele.counts(data = dat, pops = pop, progress = F)
+@
+Now, when the tests are finished, you may want to plot the result. If you are plotting single chromosome, you may want to turn on coloring markers by LD (still experimental option).
+<<plot.pac1, fig.show='asis'>>=
+plot.pac(data = dat, 
+         allele.cnt = allele.counts, 
+         plot.LD = T)
+@
+But what if you want to plot the result in a custom way, say applying some window-based smoothing? The simplest type of window will be based on a number of markers, say we want to apply smoothing based on a sliding window of 21 markers:
+<<plot.pac.smooth, fig.show='asis', tidy=F>>=
+coords <- allele.counts@map
+p.vals <- -log10(allele.counts@p.values)
+# Handle NAs for the nice look
+p.vals[is.na(p.vals)] <- 0
+filter21 <- rep(1/21, 21)
+smooth <- filter(p.vals, filter21, sides=2)
+plot(coords/1e6, p.vals, xlab="Mb", type='l', col="grey", 
+     bty='n', xlim=c(0,50), las=1)
+lines(coords/1e6, smooth, col='blue')
+grid()
+@
+And what if you want the windows to span certain number of base pairs?
+<<pac.plot.smooth2, tidy=FALSE>>=
+# Prepare a matrix of overlapping windows
+W <- get.overlapping.windows(data = dat, chr = 27, size = 1e6, 
+                             overlap = 25e4)
+# Get mean values per window
+PW <- apply(W[[2]], MARGIN = 1, FUN = function(x) { mean(x * p.vals) } )
+# Do plotting 
+plot(W[[1]]$midpoint/1e6, PW, type='h', 
+    col=wes.palette(2,name = "Cavalcanti")[1], 
+    xlim=c(0,50),
+    las=1, bty='n', xlab="Mb", ylab="Mean -log10(p-value)")
+grid()
+@
+It is also quite common to discard windows which contain just a few markers. Here, we set the threshold to 65 markers in a window. It is probably way too high, but we do it just as an example of how one can do filtering.
+<<pac.plot.filtered.windows, fig.show='asis', tidy=FALSE>>=
+window.len <- apply(W[[2]], MARGIN = 1, sum)
+threshold <- 65
+W.filtered <- list(W[[1]][window.len >= threshold,], 
+                   W[[2]][window.len >= threshold,])
+PW.filtered <- apply(W.filtered[[2]], 
+                     MARGIN = 1, 
+                     FUN = function(x) { mean(x * p.vals) } )
+plot(W.filtered[[1]]$midpoint/1e6, PW.filtered, type='h', 
+    col=wes.palette(2,name = "Cavalcanti")[1], 
+    xlim=c(0,50), 
+    las=1, bty='n', xlab="Mb", ylab="Mean -log10(p-value)")
+grid()
+@
+
+\subsection*{Computing and plotting $F_{ST}$}
+The fixation index ($F_{ST}$) is a widely used measure of population differentiation due to genetic structure. \texttt{cgmisc} package provides a function \texttt{compute.Fstats} that, along with \texttt{plot.Fstats} function, enable computation and visualization of $F_{ST}$ for a pair of populations.
+<<fst, fig.show='asis'>>=
+fst <- compute.Fstats(data = dat, pops = pop)
+plot.fstats(data = dat, fstats =  fst)
+@
+The \texttt{computeFstats} function returns an object of \texttt{fstats.result} class which contains two \textit{slots}: global statistics, statistics for populations. Global statistics is a \textit{data frame} and can be accessed by using either \texttt{glob(fst)} or \texttt{fst@glob} notation. Let's try to see global statistics for the 5 first markers:
+<<fst.glob>>=
+fst@glob[1:5, ]
+@
+Here, we can see 8 different columns for every marker. The meaning of these is:
+\begin{itemize}
+  \item{p.bar and q.bar -- allele frequencies based on all individuals},
+  \item{HI, HS and HT -- global heterozygosity indices based on the observed allele frequencies, allele frequencies expected under the \textit{null} and allele frequencies computed using all individuals, respectively.}
+  \item{FIS, FST and FIT -- inbreeding coefficient individual/subpopulation ($F_{IS}$), subpopulation effect ($F_{ST}$) and inbreeding coefficient individual/total population ($F_{IT}$)}
+\end{itemize}
+Now, let us examine statistics obtained for the first 5 markers in subpopulation 2:
+<<fst.pop>>=
+fst@pops[[2]][1:5,]
+@
+Here, we have the following columns per each marker: 
+\begin{itemize}
+  \item{AA, Aa and aa -- observed genotype counts,}
+  \item{p, q -- observed allele frequencies,}
+  \item{exp.AA, exp.Aa, exp.aa -- genotype frequencies expected under the \textit{null},}
+  \item{obs.het, exp.het, dev.het -- observed heterozygosity, heterozygosity expected under the \textit{null} and difference of the two above,}
+  \item{Fs -- F-statistics value}
+\end{itemize}
+
+\section*{Visualizing LD-decay}
+To visualize average rate of LD-decay with the distance between markers, one can use the \texttt{plot.LD.decay} function. It lets one specify the minimal and the maximal distance considered as well as the number of bins used in binning LD values. The more bins, the more ``jumpy'' the curve will be, the less bins the ``smoother'' the curve but at the same time the lower resolution. So choose something aroud 100 bins as a good compromise.
+<<ld.decay, fig.show='asis', tidy=FALSE>>=
+plot.LD.decay(data=dat, N=100, dmin=0, dmax=1e6, 
+              main="LD decay on chr 27")
+@
+
+\section*{Endogenous retroviral sequences}
+Given a set of coordinates in canFam3, returns $-log(p-value)$ of hits reflecting the likelihood that a particular region is an endogenous retroviral sequence (ERV). 
+<<plot.ervs>>=
+plot.erv("chr16", coords=c(1500000, 1700000))
+@
+
+\section*{Association Analysis}
+\noindent Some of \texttt{cgmisc} functions use data which are the result of GWAS analyses. Let's perform GWAS on our data to obtain \texttt{GenABEL} \texttt{scan.gwaa-class} object : 
+
+<<gwas, eval = TRUE, tidy=TRUE, echo=TRUE>>=
+  an0  <- qtscore(response~sex, data = data )
+@
+
+\noindent And have a look at top 5 markers
+
+<<summary, echo=TRUE, eval=TRUE>>=
+  summary(an0, top = 5)
+@
+
+\subsection*{Plotting qunatile-quantile plot of p-values}
+<<plot.qq, fig.show='asis', fig.height=5, fig.width=5>>=
+plot.qq(pvals = an0@results$P1df, conf = c(0.05, 0.95), step = 100)
+@
+
+\subsection*{Plot.Manhattan.LD}
+\noindent The \texttt{plot.Manhattan.LD} function allows you to visualize the LD pattern in a genome fragment on an enchanced Manhattan plot. You select one marker, typically the one with the strongest association to the analysed trait and all other markers in the region are coloured according to the degree of linkage disequilibrium with this index marker. 
+
+<<plot.Manhattan.LD, tidy=FALSE>>=
+plot.manhattan.LD(data, an0, chr=34, region=c(39e6,42e6), 
+                  index.snp = 'BICF2P1063345', bonferroni = F)
+@
+
+\subsection*{Clumping}
+\noindent \texttt{clump.markers} function implements clumping procedure described in PLINK documentation. Clumping is based on linkage disequilibrium. The function returns list of clumps which can be used for further analyses or plotted using \texttt{plot.clumps} function included in our package.
+
+<<clump.markers>>=
+clumps <- clump.markers(data, gwas.result = an0, chr = 6, bp.dist = 250e3, p1 = 0.0001, p2 = 0.01, r2 = 0.5, image=T)
+@
+
+Now, one can plot clumps using the \texttt{plot.clumps()} function:
+<<plot.clumps, fig.show='asis', tidy=FALSE>>=
+plot.clumps(gwas.result = an0, clumps = clumps, 
+            chr = 6, region = c(68.3e6, 81.6e6))
+@
+
+\section*{Data conversion functions}
+\subsection*{gwaa2bed}
+\subsection*{gwaa2bigRR}
+\subsection*{gwaa2PHASE}
+\subsection*{gwaa2vgwas}
+\subsection*{phase2fasta}
+\subsection*{phase2haploview}
+
+\section*{Convenience functions}
+\subsection*{open.region.UCSC}
+\subsection*{get.overlapping.windows}
+\subsection*{get.erv}
+\subsection*{get.adjacent.markers}
+\subsection*{get.chr.midpoints}
+\subsection*{get.LD.colors.r}
+\subsection*{create.haploview.info}
+\subsection*{choose.top.snps}
+
+\section*{Species-specific functions}
+\subsection*{Xfix.canfam}
+\end{document}
