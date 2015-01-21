@@ -48,3 +48,4 @@ gwaa.to.bigrr <- function(formula, data, trait) {
 }
 gwaa2bigrr <- gwaa.to.bigrr
 gwaa.to.bigRR <- gwaa.to.bigrr
+gwaa2bigRR <- gwaa.to.bigrr

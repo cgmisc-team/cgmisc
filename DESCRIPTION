@@ -1,6 +1,6 @@
 Package: cgmisc
 Version: 2.9.7
-Date: 2014-11-25
+Date: 2015-01-21
 Title: Various functions useful in computational genetics, e.g. GWAS.
 Author: Marcin Kierczak <marcin.kierczak@imbim.uu.se>
 Maintainer: Marcin Kierczak <marcin.kierczak@imbim.uu.se>

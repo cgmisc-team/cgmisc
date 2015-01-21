@@ -23,3 +23,5 @@ gwaa.to.vgwas <- function(data, trait.name) {
   result
 }
 gwaa2vgwas <- gwaa.to.vgwas
+gwaa.to.vGWAS <- gwaa.to.vgwas
+gwaa2vGWAS <- gwaa.to.vgwas
