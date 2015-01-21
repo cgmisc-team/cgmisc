@@ -41,4 +41,6 @@ gwaa.to.phase <- function(data, chr, coords = NULL, outFile){
 }
 gwaa.to.PHASE <- gwaa.to.phase
 gwaa2phase <- gwaa.to.phase
+gwaa2PHASE <- gwaa.to.phase
+
 

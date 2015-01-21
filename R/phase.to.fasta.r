@@ -31,3 +31,5 @@ phase.to.fasta <- function(input, output=NULL, filter=NULL) {
   writeLines(result, con=output, sep="\n")
 }
 phase2fasta <- phase.to.fasta
+PHASE.to.FASTA <- phase.to.fasta
+PHASE2FASTA <- phase.to.fasta

@@ -27,3 +27,5 @@ create.haploview.info <- function(data, chr, coords, outFile) {
   result <- data.frame(marker=data.region@gtdata@snpnames, coord=data.region@gtdata@map)
   write.table(result, outFile, append=T, row.names=F, col.names=F, quote=F, na="?", sep="\t")
 }
+
+create.Haploview.info <- create.haploview.info

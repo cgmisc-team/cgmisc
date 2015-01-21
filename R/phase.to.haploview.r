@@ -53,3 +53,5 @@ phase.to.haploview <- function(input, output=NULL) {
                   file=output, row.names=F, quote=F, sep="\t")
 }
 phase2haploview <- phase.to.haploview
+PHASE.to.Haploview <- phase.to.haploview
+PHASE2Haploview <- phase.to.haploview
