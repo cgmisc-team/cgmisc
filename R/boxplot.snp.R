@@ -19,8 +19,12 @@ boxplot.snp  <- function(GWASdata, marker, trait, recode = F, ...){
     geno <- as.genotype.gwaa.data(GWASdata[,marker])
   }
   y <- phdata(GWASdata)[,trait]
-  box <- boxplot(y ~ as.matrix(geno), col = c('lightblue2','lightpink1','lightsalmon'))
+  max.y <- max(y, na.rm=T)
+  box <- boxplot(y ~ as.matrix(geno), col = 'lightblue', las = 1, frame=F, cex.axis = .8,  ylim = range(pretty(c(0, max.y))))
+  grid()
+  boxplot(y ~ as.matrix(geno), col = 'lightblue', las = 1, frame=F, cex.axis = .8,  ylim = range(pretty(c(0, max.y))), add = T)
   axis(1, at=1:length(box$n), labels=paste("n =", box$n), line=2, lty=0)
+  axis(1, labels=FALSE)
   genotypes <- as.character(unique(geno[,1]))
   if(length(genotypes) == 1){
     axis(1, at=1, labels=genotypes)

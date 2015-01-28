@@ -15,6 +15,7 @@
 ##' }
 ##' @keywords LD, LD decay, plot, r2
 ##' @export plot.ld.decay
+
 plot.ld.decay <- function(data, N=200, dmin=NA, dmax=NA, ...){
   m <- as.matrix(data@gtdata@map)
   dm <- as.matrix(dist(m, diag=T))
@@ -32,7 +33,9 @@ plot.ld.decay <- function(data, N=200, dmin=NA, dmax=NA, ...){
   pts <- tapply(r2m, INDEX, mean)
   pts2 <- tapply(r2m, INDEX, median)
   dist <- bpts[1:length(pts)]
-  plot(dist, pts, cex=.5, col='olivedrab', xlab="distance in bp", ylab="r2", type='n', las=1, bty='n', ...)
+  max.y <- max(pts, na.rm = T)
+  min.y <- min(pts, na.rm = T)
+  plot(dist, pts, cex=.5, col='olivedrab', xlab="distance in bp", ylab="r2", type='n', las=1, bty='n',ylim = range(pretty(c(min.y, max.y))), ...)
   grid()
   abline(v=seq(1,max(dist), by=1e6), lty=3, col="grey")
   points(dist, pts, type='l', cex=.5, col='olivedrab')

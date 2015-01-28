@@ -45,14 +45,20 @@ plot.pac <- function(data, allele.cnt, plot.LD=FALSE,...) {
     pvals <- allele.cnt@p.values
     index.snp <- which(allele.cnt@p.values == min(allele.cnt@p.values, na.rm = T ))[1]
     # Do plotting
-    plot(-log10(pvals), type='h', col="darkgrey", xlab=prefix, ylab=expression(paste(-log[10],"(p-value)")), xaxt='n', bty='n', las=2, ...)
+    max.y <- max(-log10(pvals), na.rm = T)
+    plot(-log10(pvals), type='h', col="darkgrey", xlab=prefix, ylab=expression(paste(-log[10],"(p-value)")), xaxt='n', bty='n', las=2, ylim = range(pretty(c(0, max.y))), panel.first = grid() ,...)
     # Plot LD-colored points
     if (plot.LD) {
       colors <- get.LD.colors(data, chr=chromosomes[1], index.snp)
       points(-log10(pvals), col=as.character(colors[[1]]), pch=as.numeric(colors[[2]]), cex=.7)    
     }
     tmp <- seq(0,length(data@gtdata@map), by=100)
+    print(tmp)
     axis(1, at=tmp, 
          labels=round(seq(axis.start,axis.stop, along.with=tmp)/divisor,digits=2))
+    
+    #plot legend
+    legend(tmp[length(tmp)]-150,max.y, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
+           col=c('lightsalmon','lightpink1','lightblue2',"aquamarine2","bisque2"), cex=.8, title=expression(r^2), y.intersp = 0.8)
   }
 }

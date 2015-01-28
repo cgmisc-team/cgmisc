@@ -14,7 +14,7 @@
 ##' @keywords plot, LD, colours
 ##' @seealso \code{\link[cgmisc]{plot.pac}}
 ##' @export get.ld.colors
-get.ld.colors <- function(data, chr, index.snp, region=NULL, wes.par=c(5, 'Chevalier', 'continuous')) {
+get.ld.colors <- function(data, chr, index.snp, region=NULL) {
   require(wesanderson)
   data  <- data[,data@gtdata@chromosome==chr]
   if (!is.null(region)) {
@@ -22,8 +22,9 @@ get.ld.colors <- function(data, chr, index.snp, region=NULL, wes.par=c(5, 'Cheva
   }
   result <- list()
   myBreaks <- c(1.0,0.8,0.6,0.4,0.2,0.0,-1)
-  wes.f <- wes.palette(wes.par[1], wes.par[2], wes.par[3])
-  myColors <- rev(c(wes.f(5), 'black'))
+  #wes.f <- wes.palette(wes.par[1], wes.par[2], wes.par[3])
+  
+  myColors <- rev(c('lightsalmon','lightpink1','lightblue2',"aquamarine2","bisque2", 'black'))
   r2matrix <- r2fast(data)
   r2matrix[lower.tri(r2matrix)] <- t(r2matrix)[lower.tri(r2matrix)]
   r2vec <- r2matrix[index.snp,]

@@ -23,15 +23,16 @@ plot.clumps <- function(gwas.result, clumps, chr, region) {
     }
     pvals <- -log10(gwas.result@results$P1df[region])
     coords <- gwas.result@annotation$Position[region]
-    plot(coords, pvals, pch=19, cex=.5, ann = FALSE, xaxt='n', yaxt='n', bty='n', type='n', ylim = c(-length(clumps)-1,max(pvals)))
+    plot(coords, pvals, pch=19, cex=1, ann = FALSE, xaxt='n', yaxt='n', bty='n', type='n', ylim = c(-length(clumps)-1,max(pvals)), las = 2)
+    grid()
     step <- (max(coords) - min(coords)) / 5
-    axis(1, at = seq(min(coords), max(coords), by=step), labels=format(seq(min(coords), max(coords), by=step)/1e6, scientific=F, digits=3))
-    axis(2, at=seq(0, max(pvals), 1), labels=T)
+    axis(1, at = seq(min(coords), max(coords), by=step), font= 2,labels=format(seq(min(coords), max(coords), by=step)/1e6, scientific=F, digits=3))
+    axis(2, at=seq(0, max(pvals), 1), labels=T, font =2, las = 1)
     #axis(2, at=seq(-1, -1-length(clumps), -1),labels=abs(seq(-1, -1-length(clumps), -1)))
     mtext('Position (Mb)', 1, 3)
     #mtext(expression(clumps~'            '~-log[10](p-value)), 2, 3)
     mtext(expression(-log[10](p-value)), 2, 3)
-    points(coords, pvals, pch=19, cex=.5)
+    points(coords, pvals, pch=19, cex=1)
     mycols <- colorRampPalette(colors=c("slateblue","grey","red"))
     cols <- mycols(length(clumps))
     for (i in 1:length(clumps)) {
@@ -40,9 +41,9 @@ plot.clumps <- function(gwas.result, clumps, chr, region) {
       #lines(x,y, col="tomato", lty=2)
       lines(c(min(clumps[[i]]$coord), max(clumps[[i]]$coord)), c(-1-i, -1-i), col=cols[i])
       #points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], type='l', lwd=2)
-      points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], cex=.8, pch=19)
+      points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], cex=1.2, pch=19)
       #abline(v=(min(clumps[[i]]$coord)+max(clumps[[i]]$coord))/2, col="tomato", lty=2)
-      points(clumps[[i]]$coord, rep(-1-i, times=length(clumps[[i]]$coord)), col=cols[i], pch=19, cex=0.8)
+      points(clumps[[i]]$coord, rep(-1-i, times=length(clumps[[i]]$coord)), col=cols[i], pch=19, cex=1.2)
     }
   }
   else { stop("The list of clumps is empty!") }
