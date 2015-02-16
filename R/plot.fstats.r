@@ -17,10 +17,6 @@ plot.fstats <- function(data, fstats, ...) {
     chr.mid <- get.chr.midpoints(data)
   }
   myfst <- fstats@glob$FST
-  col.fun <- wes.palette(n = 2, name = "GrandBudapest", type = "continuous")
-  #color <- (as.numeric(data@gtdata@chromosome)%% 2) + 1
-  #color[color == 1] <- col.fun(2)[1]
-  #color[color == 2] <- col.fun(2)[2]
   color <- 'lightsalmon'
 
   range <- max(data@gtdata@map) - min(data@gtdata@map) 

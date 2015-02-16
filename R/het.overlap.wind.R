@@ -16,6 +16,8 @@ het.overlap.wind <- function (data, LW, progress = TRUE){
   heter.zyg <- matrix(nrow = (nrow(LW)), ncol = 2)
   heter.zyg[,1]  <- seq(nrow(LW))
   gtypes <- data@gtdata
+  four <- LW[4,]
+  
   if (progress) {
     pb <- txtProgressBar(min=0, max=nrow(LW), initial=0, style=3)
   }
@@ -23,15 +25,18 @@ het.overlap.wind <- function (data, LW, progress = TRUE){
     if (progress) {
      setTxtProgressBar(pb=pb, value=i)
     }
-    markers <- which(LW[i,] == TRUE, arr.ind= T)
-    markers <- as.vector(markers[,2])
-    my.gtps <- summary(gtypes[,markers])
-    p  <- 1 - my.gtps$Q.2
-    q  <- my.gtps$Q.2
-    het.tmp  <- 1 - (p**2 + q**2)
-    tmp  <- 1/length(het.tmp)*sum(p**2+q**2)
-    het.window  <- 1 - tmp
-    heter.zyg[i,2]  <-  het.window
+    #check if window contains any marker!
+    if (TRUE %in% LW[i,]){
+      markers <- which(LW[i,] == TRUE, arr.ind= T)
+      markers <- as.vector(markers[,2])
+      my.gtps <- summary(gtypes[,markers])
+      p  <- 1 - my.gtps$Q.2
+      q  <- my.gtps$Q.2
+      het.tmp  <- 1 - (p**2 + q**2)
+      tmp  <- 1/length(het.tmp)*sum(p**2+q**2)
+      het.window  <- 1 - tmp
+      heter.zyg[i,2]  <-  het.window
+    }
 }
 return (heter.zyg)
 }
