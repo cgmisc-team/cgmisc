@@ -53,7 +53,6 @@ plot.pac <- function(data, allele.cnt, plot.LD=FALSE,...) {
       points(-log10(pvals), col=as.character(colors[[1]]), pch=as.numeric(colors[[2]]), cex=.7)    
     }
     tmp <- seq(0,length(data@gtdata@map), by=100)
-    print(tmp)
     axis(1, at=tmp, 
          labels=round(seq(axis.start,axis.stop, along.with=tmp)/divisor,digits=2))
     

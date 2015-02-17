@@ -27,12 +27,12 @@ plot.clumps <- function(gwas.result, clumps, chr, region) {
     grid()
     step <- (max(coords) - min(coords)) / 5
     axis(1, at = seq(min(coords), max(coords), by=step), font= 2,labels=format(seq(min(coords), max(coords), by=step)/1e6, scientific=F, digits=3))
-    axis(2, at=seq(0, max(pvals), 1), labels=T, font =2, las = 1)
+    axis(2, at=seq(0, max(pvals), 2), labels=T, font = 2, las = 1, cex.axis = 0.6)
     #axis(2, at=seq(-1, -1-length(clumps), -1),labels=abs(seq(-1, -1-length(clumps), -1)))
     mtext('Position (Mb)', 1, 3)
     #mtext(expression(clumps~'            '~-log[10](p-value)), 2, 3)
     mtext(expression(-log[10](p-value)), 2, 3)
-    points(coords, pvals, pch=19, cex=1)
+    points(coords, pvals, pch=19, cex=.7)
     mycols <- colorRampPalette(colors=c("slateblue","grey","red"))
     cols <- mycols(length(clumps))
     for (i in 1:length(clumps)) {
@@ -41,9 +41,9 @@ plot.clumps <- function(gwas.result, clumps, chr, region) {
       #lines(x,y, col="tomato", lty=2)
       lines(c(min(clumps[[i]]$coord), max(clumps[[i]]$coord)), c(-1-i, -1-i), col=cols[i])
       #points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], type='l', lwd=2)
-      points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], cex=1.2, pch=19)
+      points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], cex=.9, pch=19)
       #abline(v=(min(clumps[[i]]$coord)+max(clumps[[i]]$coord))/2, col="tomato", lty=2)
-      points(clumps[[i]]$coord, rep(-1-i, times=length(clumps[[i]]$coord)), col=cols[i], pch=19, cex=1.2)
+      points(clumps[[i]]$coord, rep(-1-i, times=length(clumps[[i]]$coord)), col=cols[i], pch=19, cex=.9)
     }
   }
   else { stop("The list of clumps is empty!") }
