@@ -16,9 +16,8 @@ plot.overlap  <- function(LW, heter.zyg, ...){
   max.y <- max(het, na.rm = T)
   plot(x = 1:length(het), y = het, xlab = 'window', ylab ='average heterozygosities',
        type = 'h',lwd=2, col = 'darkseagreen3', las=1, frame = F, ylim = range(pretty(c(0, max.y))), axes = F, ...)
-  axis(1, at= 1:length(het))
+  axis(1, at = seq(1,length(het), length.out = 100), labels = F)
+  axis(1,lwd = 0)
   axis(2, las = 1)
-  
-  #hist(het, breaks = 50, main = 'Heterozygosities distribution', xlab = 'Heterozygosity',
-   #    col = 'darkolivegreen4', las = 1)
+
 }
