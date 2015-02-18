@@ -1,0 +1,125 @@
+---
+title: 'cgmisc: package tutorial'
+author: Marcin Kierczak, Jagoda Jablonska, Simon Forsberg, Matteo Bianchi, Katarina
+  Tengvall, Mats Pettersson, Jennifer Meadows, Patric Jern, Orjan Carlborg, Kerstin
+  Lindblad-Toh
+date: "2 Feb 2015"
+output: pdf_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5)
+```
+
+**cgmisc** is an R package for enhanced genome-wide association studies (GWAS) and visualisation. This document aims at guiding you through the installation process and to demonstrate package capabilities in a series of practical examples based on an example data included in the package.
+
+# Package installation
+The **cgmisc** package can be installed in the same way as any other R package. One way is to issue the following command in R console:
+
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=F}
+install.packages("cgmisc")
+```
+Other possibilities include using graphical user interface (GUI) of, e.g. R console or RStudio.
+
+After the package has been installed, to use the package, it is necessary to load it into environment:
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+library("cgmisc")
+```
+
+# Loading data
+Whenever possible, the **cgmisc** package uses data structures used by the GenABEL (Aulchenko et al., 2007) package. In particular, the ```gwaa.data-class``` and the ```gwaa.scan-class``` structures are used.
+The package is shipped with an example dataset called **cgmisc_data** that contains genotyping data (Illumina, canFam2) for N=207 German shepherds originally collected for the project described in (Tengvall et al., 2012). The phenotypes, though, have been simulated in order to be able to illustrate various features of **cgmisc**. To load the example dataset, use the following command:
+
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+data("data")
+```
+
+# Example analyses
+In order to illustrate how to use particular functions, we will perform a very much simplified GWAS analysis. We begin by initial quality control where we prune the data with per marker of per individual call rates below 95%. Based on 2000 randomly selected markers, we remove one (with lower call rate) from each pair of too similar (more than 95% similarity) individuals. We also set very low ($10^{-3}$) threshold for pruning on minor allele frequency (in practise only the monomorphic markers will be removed) and turn off checks based on the departure form Hardy-Weinberg equilibrium (p.level=10e-18)
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+qc1 <- check.marker(data, callrate = .95, perid.call = .95, ibs.threshold = .95, ibs.mrk=2000, ibs.exclude="lower", p.level=10e-18, maf=1e-3)
+data.qc1 <- data[qc1$idok, qc1$snpok]
+```
+
+Next, we analyse population structure by means of genomic-kinship:
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+autosomal <- which(data.qc1@gtdata@chromosome != 39)
+data.qc1.gkin <- ibs(data.qc1, snpsubset = autosomal, weight = 'freq')
+data.qc1.dist <- as.dist(0.5 - data.qc1.gkin)
+data.qc1.mds <- cmdscale(data.qc1.dist)
+plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2", cex.axis=.7, bty='n')
+```
+
+We can see that there is possible population structure here. We should investigate this further, but for our purposes, let's just run simple K-means clustering with the number of clusters *a priori* set to $K = 2$
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+kclust <- kmeans(data.qc1.mds, centers = 2)
+plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2", cex.axis=.7, bty='n', col=kclust$cluster)
+pop <- kclust$cluster
+```
+
+We can compare subpopulations looking at the differences in the reference allele frequency using the ```pop.allele.counts``` and the ```plot.pac``` functions. Here, we just focus on chromosome 2.
+# Comparing subpopulations
+```{r pac, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+pac <- pop.allele.counts(data.qc1[,data.qc1@gtdata@chromosome==2], pop, progress=F)
+plot.pac(data.qc1[,data.qc1@gtdata@chromosome==2], allele.cnt = pac, plot.LD = T)
+```
+In a similar way, we can compute and plot fixation index $F_{ST}$:
+```{r fst, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+fst <- compute.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], pop)
+plot.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], fst)
+```
+Having defined subpopulations, we can proceed to association analyses using mixed model with genomic kinship as random effect.
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+h2h <- polygenic_hglm(formula = ct ~ sex, data.qc1.gkin, data.qc1)
+mm <- mmscore(h2h, data.qc1, strata = pop)
+par(las=1, cex.axis=.7) # Tweak graphics
+plot(mm, cex=.5, pch=19, col=c("darkgrey","grey"))
+```
+
+As we can see, there is a very strong association signal on chromosome 2. We can examine it a bit closer using the ```plot.manhattan.ld``` function.
+
+# Visualization and analyses of linkage structure
+
+Say, we would like to zoom in on chromosome 2 and visualise LD to the top-associated marker. First, we need the name and cooridinates of the marker:
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+summary(mm, top=1)
+```
+We see that the top-associated marker is **BICF2S2365880** and its position is **38256927bp**. We will zoom in on a 2Mbp region centered on the marker:
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+plot.manhattan.LD(data = data.qc1, gwas.result = mm, chr = 2, region = c(37256927,39256927), index.snp = "BICF2S2365880", legend.pos = "topright")
+```
+
+We can also use the clumping procedure as outlined in PLINK documentation [cite] to single out regions of interest.
+```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+clumps <- clump.markers(data, mm, chr = 2)
+plot.clumps(mm, clumps, 2, c(37256927,39256927))
+```
+
+Computing average heterozygosity using overlapping windows approach.
+```{r LOH, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+LW <- get.overlap.windows(data.qc1, 2, 125e3, 2500)
+het.windows <- het.overlap.wind(data.qc1, LW, F)
+```
+
+Now, having calculated average heterozygosity we can visualize them with ```plot.overlap```
+
+```{r overlap, echo=TRUE, results='show', message=TRUE, warning=F, eval=TRUE}
+plot.overlap(LW,het.windows)
+```
+
+
+We can use calculated heterozygosity to examine runs of homozygosity across selected chromosome. Let's use ```get.roh``` and check if we have any stretches of reduced heterozygosity on chromosome 2.
+Below a given threshold, all windows will be treated as homozygous.
+
+```{r get_roh, echo = TRUE, results = 'show', eval=TRUE, warning=FALSE}
+get.roh(data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30, strict = TRUE)
+```
+
+As a result we get a matrix runs coordinates, length (in windows) and first window that starts a stretch.
+
+
+To visualise LD decay on chromosome 2, one can call the ```plot.ld.decay``` function.
+```{r LD_decay, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==2])
+```
+
