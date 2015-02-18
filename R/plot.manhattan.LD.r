@@ -66,15 +66,20 @@ plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value
   }
   
   # Legend
-  if (legend.pos == "def.left") {
-    legend(startCoord + 10, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
+  if (legend.pos[1] == "def.left") {
+    legend(startCoord + 10, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
            col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))
-  } else if (legend.pos == "def.right") {
-    legend(stopCoord - 30, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
+  } else if (legend.pos[1] == "def.right") {
+    legend(stopCoord - 30, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
            col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
   } else {
-    legend(legend.pos, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
-           col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
+    if (length(legend.pos) > 1) {
+        legend(legend.pos[1], legend.pos[2], legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
+               col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
+    } else {
+        legend(legend.pos, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
+               col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
+    }
   }
   
   # Plot MAF below Manhattan (shift units lower)
