@@ -6,8 +6,8 @@
 ##' @param coords a vector of coordinates,
 ##' @param src source database, currently only canFam3 is supported,
 ##' @param scale scaling factors for x and y axis.
-##' @details Plots -log10(score) on the y axis (the higher the score is, the more probable that the hit represents an actual ERV)
-##' and coordinates in Mbp on the x axis. Width of the bars covers entire ERV. 
+##' @details Plots -log10(Retrotector score) on the y axis (the higher the score is, the more probable that the hit represents an actual ERV)
+##' and coordinates in Mbp on the x axis. Width of the bars covers entire ERV. We display >300. 
 ##' @return null 
 ##' @examples
 ##'  \dontrun{plot.erv("chr16", coords=c(1e6,2e6))

@@ -14,8 +14,8 @@
 ##' create.Haploview.info(data=data.qc2, chr=2, coords=c(3030587,5030587), outFile="~user/test.info")
 ##' }
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}
-##' @export
-create.Haploview.info <- function(data, chr, coords, outFile) {
+##' @export create.haploview.info
+create.haploview.info <- function(data, chr, coords, outFile) {
   #data  <- data@gtdata???
   if(!missing(coords)){
     region <- which(data@gtdata@chromosome == chr & map(data) > coords[1] & map(data) < coords[2])
@@ -27,3 +27,5 @@ create.Haploview.info <- function(data, chr, coords, outFile) {
   result <- data.frame(marker=data.region@gtdata@snpnames, coord=data.region@gtdata@map)
   write.table(result, outFile, append=T, row.names=F, col.names=F, quote=F, na="?", sep="\t")
 }
+
+create.Haploview.info <- create.haploview.info

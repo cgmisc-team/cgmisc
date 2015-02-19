@@ -23,10 +23,10 @@
 ##'                   index.snp="BICF2P12960", bonferroni=F, legend.pos="default")
 ##' }
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}, \code{\link[GenABEL]{scan.gwaa-class}}
-##' @export plot.manhattan.LD
+##' @export plot.manhattan.ld
 ##' 
-plot.manhattan.LD <- function(data, gwas.result, chr, region, index.snp, p.value=0.05, bonferroni=T, mafThreshold=.05, legend.pos="def.left") {  
-shift <- 2.3
+plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value=0.05, bonferroni=T, mafThreshold=.05, legend.pos="def.left") {  
+  shift <- 2.3
   topMargin <- 0
   # Helper function for retrieving MAF in a region (chromosome)
   getMAF <- function(data, region) {
@@ -66,15 +66,20 @@ shift <- 2.3
   }
   
   # Legend
-  if (legend.pos == "def.left") {
-    legend(startCoord + 10, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
+  if (legend.pos[1] == "def.left") {
+    legend(startCoord + 10, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
            col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))
-  } else if (legend.pos == "def.right") {
-    legend(stopCoord - 30, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
+  } else if (legend.pos[1] == "def.right") {
+    legend(stopCoord - 30, max(pvals) + 1, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
            col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
   } else {
-    legend(legend.pos, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=19, bty='n', 
-           col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
+    if (length(legend.pos) > 1) {
+        legend(legend.pos[1], legend.pos[2], legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
+               col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
+    } else {
+        legend(legend.pos, legend=c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]"), pch=15, bty='n', 
+               col=c("#9E0508","tomato","chartreuse3","cyan3","navy"), cex=.7, title=expression(r^2))    
+    }
   }
   
   # Plot MAF below Manhattan (shift units lower)
@@ -90,3 +95,4 @@ shift <- 2.3
   axis(4, at = c(2 - shift, 1 - shift, 0.2 - shift, 0 - shift), labels = c(.5, .25, .05, 0))
   mtext("MAF", side=2, at=0.2-shift, outer=F)
 }
+plot.manhattan.LD <- plot.manhattan.ld
