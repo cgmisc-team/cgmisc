@@ -20,6 +20,7 @@ get.roh  <- function (data, chr, LW, hetero.zyg, threshold = 0.23, strict = TRUE
   het.all  <- descriptives.marker(data)[[7]]
   n = gtype@nsnps - gtype@nids
   L = log(0.05/n) / log(1-het.all) #minimal number of SNPs
+  hetero.zyg <- na.omit(hetero.zyg)
   
   ## identifying regions with high homozygosity
   temp.roh  <- list()
