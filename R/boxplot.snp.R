@@ -9,16 +9,16 @@
 ##'@param recode if genotypes are to be recoded to 'AA','Aa','aa'.
 ##'@return null
 ##'@export 
-boxplot.snp  <- function(GWASdata, marker, trait, recode = F, ...){
+boxplot.snp  <- function(data, marker, trait, recode = F, ...){
   if(recode){
-    geno <- as.double.gwaa.data(GWASdata[,marker])
+    geno <- as.double.gwaa.data(data[,marker])
     geno[geno[,1] == 0,1] <- "AA"
     geno[geno[,1] == 1,1] <- "Aa"
     geno[geno[,1] == 2,1] <- "aa"
   }else{
-    geno <- as.genotype.gwaa.data(GWASdata[,marker])
+    geno <- as.genotype.gwaa.data(data[,marker])
   }
-  y <- phdata(GWASdata)[,trait]
+  y <- phdata(data)[,trait]
   max.y <- max(y, na.rm=T)
   box <- boxplot(y ~ as.matrix(geno), col = 'lightblue', las = 1, frame=F, cex.axis = .8,  ylim = range(pretty(c(0, max.y))))
   grid()

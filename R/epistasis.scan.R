@@ -10,20 +10,20 @@
 ##'@author Simon Forsberg  <\email{simon.forsberg@@slu.se}>
 ##'@export epistasis.scan
 
-epistasis.scan <- function(GWASdata, SNP, trait.name = NULL, pheno = NULL){
+epistasis.scan <- function(data, SNP, trait.name = NULL, pheno = NULL){
   #Performs an interaction scan, using SNP as a covariate
-  SNP.geno <- as.genotype.gwaa.data(GWASdata[,SNP])
+  SNP.geno <- as.genotype.gwaa.data(data[,SNP])
   if(!is.null(trait.name)){
-    pheno <- GWASdata@phdata[,trait.name]
+    pheno <- data@phdata[,trait.name]
   } else if(is.null(pheno)){
     stop("trait.name or pheno must be specified")
   }
   output <- list(models=list(), SNP1.p=c(), SNP2.p=c(), interaction.p=c(), model.p=c(), map=c())
-  output$map <- GWASdata@gtdata@map
+  output$map <- data@gtdata@map
   
   pb <- txtProgressBar(style=3)
-  for(SNP2 in 1:GWASdata@gtdata@nsnps){
-    SNP2.geno <- as.genotype.gwaa.data(GWASdata[,SNP2])
+  for(SNP2 in 1:data@gtdata@nsnps){
+    SNP2.geno <- as.genotype.gwaa.data(data[,SNP2])
     model <- lm(pheno ~ SNP.geno[,1]*SNP2.geno[,1] )
     model.sum <- summary(model)
     
@@ -52,7 +52,7 @@ epistasis.scan <- function(GWASdata, SNP, trait.name = NULL, pheno = NULL){
     output$SNP2.p[SNP2] <- pVal.SNP2
     output$interaction.p[SNP2] <- pVal.interaction
     output$model.p[SNP2] <- pVal.model
-    setTxtProgressBar(pb, SNP2/GWASdata@gtdata@nsnps)
+    setTxtProgressBar(pb, SNP2/data@gtdata@nsnps)
   }
   close(pb)
   return(output)

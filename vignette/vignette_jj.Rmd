@@ -89,11 +89,28 @@ We see that the top-associated marker is **BICF2S2365880** and its position is *
 plot.manhattan.LD(data = data.qc1, gwas.result = mm, chr = 2, region = c(37256927,39256927), index.snp = "BICF2S2365880", legend.pos = "topright")
 ```
 
+
+#top snps
+```{r,top_snps, echo = T, results='show', message=T, warning=F, eval=T }
+top.snps <- choose.top.snps(data = data.qc1, chr = 2, region = c(37256927,39256927), index.snp = "BICF2S2365880")
+
+print (top.snps)
+```
+
+
 We can also use the clumping procedure as outlined in PLINK documentation [cite] to single out regions of interest.
 ```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 clumps <- clump.markers(data, mm, chr = 2)
 plot.clumps(mm, clumps, 2, c(37256927,39256927))
 ```
+
+
+To visualise LD decay on chromosome 2, one can call the ```plot.ld.decay``` function.
+```{r LD_decay, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==2])
+```
+
+# Detecting runs of homozygosity
 
 Computing average heterozygosity using overlapping windows approach.
 ```{r LOH, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
@@ -112,14 +129,51 @@ We can use calculated heterozygosity to examine runs of homozygosity across sele
 Below a given threshold, all windows will be treated as homozygous.
 
 ```{r get_roh, echo = TRUE, results = 'show', eval=TRUE, warning=FALSE}
-get.roh(data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30, strict = TRUE)
+get.roh(data = data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30, strict = TRUE)
 ```
 
 As a result we get a matrix runs coordinates, length (in windows) and first window that starts a stretch.
 
 
-To visualise LD decay on chromosome 2, one can call the ```plot.ld.decay``` function.
-```{r LD_decay, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==2])
+###########
+
+For quantitative traits, the ```boxplot.snp``` function can be used to visually examine allele or genotype effect by plotting phenotype boxplots for the individuals in every genotypic class.
+The function works for both outbreed (three boxes) and inbreed (two boxes) data.
+```{r load_gen, echo=F,eval=F,results='hide', warning=F}
+require('genetics')
 ```
+
+```{r geno_box, echo = F, results='show', eval = T, warning=F}
+marker <- 'BICF2P1063345'
+trait.name <- 'response'
+boxplot.snp(data = data.qc1, marker = marker, trait = trait.name, recode = F, font = 2)
+```
+ 
+#Endogenous retroviral sequences (ERV)
+
+The get.erv returns information about endogenous retroviral sequences (ERV) in an analysed region.
+At first, we need to obtaint the list of ERV sequences from defined region of genome using ```get.erv```.
+In package, we provide collection of canine ERVs identified in canFam3.1 assembly but you can also supply any other database.
+
+Let's search for ERVs on chromosome 2:
+```{r get_erv, echo = T, results='show', eval = T, warning=F}
+
+ervs <- get.erv(chr = "chr2", coords=c(10e6, 40e6))
+
+print(ervs)
+
+```
+
+Having returned a list of ERV sequences, we are able to plot them with ```plot.erv``` function using the same region:
+```{r plot_erv, echo = T, results='show', eval=T, warning=F}
+
+plot.erv(chr = "chr10", coords = c(10e6, 40e6))
+
+```
+
+
+#Converting functions
+
+
+
 

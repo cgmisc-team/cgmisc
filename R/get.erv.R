@@ -14,12 +14,17 @@
 
 get.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db") {
   require("RSQLite")
-  src <- paste("db/", src, sep="")
+
+  for(lib in .libPaths()){
+    src2 <- system.file("db", src, mustWork = F, package = 'cgmisc', lib.loc = lib)
+    if (src != "") break;
+  }
+    
   if (is.na(chr)) {
     stop("Chromosome not valid.")
   }
   sqlite    <- dbDriver("SQLite")
-  db <- dbConnect(sqlite, src)
+  db <- dbConnect(sqlite, src2)
   query <- ""
   query <- paste("SELECT * FROM ERV WHERE chromosome == '", chr, "'", sep = "")
   if (!is.na(coords[1])) {
