@@ -248,22 +248,17 @@ Using the ```open.region.ucsc``` function, it is possible to automatically open 
 
 ## List of aliases
 
-// JJ NOTE: Not complete, to be continued...
-// JJ NOTE2: New lines!
-
-  Functions aliases:
-  |**plot.manhattan.ld**: plot.manhattan.LD
-  |**plot.ld.decay**: plot.LD.decay
-  |**phase.to.haploview**: phase2haploview  
-  |**phase.to.fasta**: phase2fasta
-  
-  
-  open.region.UCSC <- open.region.ucsc
-  gwaa2vgwas <- gwaa.to.vgwas
-  gwaa2phase <- gwaa.to.phase
-  gwaa.to.PHASE <- gwaa.to.phase
-  gwaa2bigrr <- gwaa.to.bigrr
-  gwaa.to.bigRR <- gwaa.to.bigrr
-  gwaa2bed <- gwaa.to.bed
-  get.LD.colors <- get.ld.colors
-  compute.Fstats <- compute.fstats
+List of functions aliases:
+**plot.manhattan.ld**: plot.manhattan.LD
+**plot.ld.decay**: plot.LD.decay
+**phase.to.haploview**: phase2haploview, PHASE.to.Haploview, PHASE2Haploview
+**phase.to.fasta**: phase2fasta, PHASE.to.FASTA, PHASE2FASTA
+**open.region.ucsc**: open.region.UCSC
+**gwaa.to.vgwas** : gwaa2vgwas, gwaa.to.vGWAS, gwaa2vGWAS
+**gwaa.to.phase**: gwaa2phase, gwaa.to.PHASE, gwaa2PHASE
+**gwaa.to.bigrr**: gwaa2bigrr, gwaa.to.bigRR, gwaa2bigrr 
+**gwaa.to.bed**: gwaa2bed, 
+**get.ld.colors**: get.LD.colors 
+**plot.fstats**: plot.Fst
+**compute.fstats**: compute.Fstats 
+**create.haploview.info**: create.Haploview.info
