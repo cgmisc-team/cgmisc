@@ -245,7 +245,16 @@ Using the ```open.region.ucsc``` function, it is possible to automatically open 
 ```
 
 ## Simple epistasis scan
-To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. Here, we implement a simple way of doing this by fitting linear models including two SNPs: \eqn{y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{int}*SNP*SNP_i + e}, where y is the phenotype, SNP and \eqn{SNP_i} are the genotypes at the two SNPs, and e is the residual. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. 
+To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. Here, we implement a simple way of doing this by fitting linear models including two SNPs: ${y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{int}*SNP*SNP_i + e}$, where y is the phenotype, SNP and ${SNP_i}$ are the genotypes at the two SNPs, and e is the residual. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. 
+
+```{r epistasis_scan}
+#epistasis.scan(data = data.qc1, SNP = 'BICF2S2365880', trait.name = 'response')
+```
+
+```{r box_two}
+SNP.box.twoWay()
+```
+
 
 ## List of aliases
 
