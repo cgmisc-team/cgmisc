@@ -1,12 +1,13 @@
 ##'@title epistasisScan
 ##'
 ##'@description Scans for epistasis between a specified SNP and all others.  
-##'@param GWASdata Object of class gwaa.data
-##'@param SNP The name or index of one marker/SNP in GWASdata
-##'@param trait.name The name of a phenotype in GWASdata
+##'@param data a gwaa.data class object as used by \code{\link[GenABEL]{gwaa.data-class}}
+##'@param SNP The name or index of one marker/SNP in data
+##'@param trait.name The name of a phenotype in data
 ##'@param pheno A vector with phenotypes
+##'@details The function fits a linear model, including interaction term, between SNP and all other markers in data.
 ##'@return a list with all the models (lm-objects), 
-##'the p-values of every model and the p-values of every coefficient in every model.
+##'the p-values of all models and coefficients, and the genomic coordinates of all scanned SNPs.
 ##'@author Simon Forsberg  <\email{simon.forsberg@@slu.se}>
 ##'@export epistasis.scan
 
