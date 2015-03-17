@@ -36,7 +36,7 @@ data("data")
 
 # Example analyses
 In order to illustrate how to use particular functions, we will perform a very much simplified GWAS analysis. We begin by initial quality control where we prune the data with per marker of per individual call rates below 95%. Based on 2000 randomly selected markers, we remove one (with lower call rate) from each pair of too similar (more than 95% similarity) individuals. We also set very low ($10^{-3}$) threshold for pruning on minor allele frequency (in practise only the monomorphic markers will be removed) and turn off checks based on the departure form Hardy-Weinberg equilibrium (p.level=10e-18)
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE, eval=T}
+```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T}
 qc1 <- check.marker(data, callrate = .95, perid.call = .95, ibs.threshold = .95, 
                     ibs.mrk=2000, ibs.exclude="lower", p.level=10e-18, maf=1e-3)
 data.qc1 <- data[qc1$idok, qc1$snpok]
@@ -71,13 +71,12 @@ fst <- compute.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], pop)
 plot.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], fst)
 ```
 Having defined subpopulations, we can proceed to association analyses using mixed model with genomic kinship as random effect.
-```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+```{r, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
 h2h <- polygenic_hglm(formula = ct ~ sex, data.qc1.gkin, data.qc1)
 mm <- mmscore(h2h, data.qc1, strata = pop)
 par(las=1, cex.axis=.7) # Tweak graphics
 plot(mm, cex=.5, pch=19, col=c("darkgrey","grey"))
 ```
-
 As we can see, there is a very strong association signal on chromosome 2. We can examine it a bit closer using the ```plot.manhattan.ld``` function.
 
 ## Visualization and analyses of linkage structure
@@ -158,7 +157,7 @@ get.roh(data = data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30,
 As a result we get a matrix runs coordinates, length (in windows) and first window that starts a stretch.
 
 
-## Boxplot
+## Phenotype Boxplots
 
 For quantitative traits, the ```boxplot.snp``` function can be used to visually examine allele or genotype effect by plotting phenotype boxplots for the individuals in every genotypic class.
 The function works for both outbreed (three boxes) and inbreed (two boxes) data.
@@ -167,7 +166,7 @@ The function works for both outbreed (three boxes) and inbreed (two boxes) data.
 require('genetics')
 ```
 
-```{r geno_box, echo = F, results='hide', eval = F, warning=F}
+```{r geno_box, echo = T, results='hide', eval = F, warning=F}
 marker <- 'BICF2S2365880'
 trait.name <- 'response'
 boxplot.snp(data = data.qc1, marker = marker, trait = trait.name, recode = F, font = 2)
@@ -198,26 +197,26 @@ plot.erv(chr = "chr10", coords = c(10e6, 40e6))
 
 ## Converting functions
 
-Our package provides a number of functions which enable switching between various data formats such as PHASE or FASTA. You can export ```gwaa.data-class```  used by **cgmisc** to i.e haplotype analysis software as well as convert external data format to the one used by **cgmisc**.
+Our package provides a number of functions which enable switching between various data formats such as PHASE or FASTA. You can export ```gwaa.data-class```  used by **cgmisc** to i.e haplotype analysis software as well as convert external data format to the one used by **cgmisc**.  
 
-```gwaa.to.bigrr```  The bigRR package implements a computationally-efficient generalized ridge regression (RR) algorithm for fitting models with a large number of parameters (Shen et al. 2013). ```Gwaa.to.bigrr``` function exports gwaa.data-class object to bigRR-compatible input structure.
+```gwaa.to.bigrr```  The bigRR package implements a computationally-efficient generalized ridge regression (RR) algorithm for fitting models with a large number of parameters (Shen et al. 2013). ```Gwaa.to.bigrr``` function exports gwaa.data-class object to bigRR-compatible input structure.  
 
-```gwaa.to.vgwas``` In a standard approach to GWAS, associations are detected based on differences in mean phenotypic values across genotype classes. Shen et al. (2012) have proposed an extended approach where the associations are detected based on differences in variances, not means only. They have implemented the approach in vGWAS [vGWAS] R package. ```Gwaa.to.vgwas``` converts gwaa.data-class object to a format readable by the vGWAS package.
+```gwaa.to.vgwas``` In a standard approach to GWAS, associations are detected based on differences in mean phenotypic values across genotype classes. Shen et al. (2012) have proposed an extended approach where the associations are detected based on differences in variances, not means only. They have implemented the approach in vGWAS [vGWAS] R package. ```Gwaa.to.vgwas``` converts gwaa.data-class object to a format readable by the vGWAS package.  
 
-```gwaa.to.phase``` lets user convert a GenABEL gwaa.data-class object to the PHASE input format.
+```gwaa.to.phase``` lets user convert a GenABEL gwaa.data-class object to the PHASE input format. 
 
 ```phase.to.fasta``` PHASE is a software for haplotype reconstruction  ```phase.to.fasta``` function can be used to parse a part of PHASE output to a customised FASTA format:
 ```{r haplo, tidy=FALSE, eval=FALSE, echo = TRUE}
 '>haplo_1_count_176'
 'TCGGGCTC'
 ```
-In the above example, the first line contains the name of the haplotype along with its count, the second line provides haplotype sequence. 
+In the above example, the first line contains the name of the haplotype along with its count, the second line provides haplotype sequence.  
 
-```phase.to.haploview```
+```phase.to.haploview```  
 
-```create.haploview.info```
+```create.haploview.info```  
 
-```gwaa.to.bed```
+```gwaa.to.bed```  
 
 ## Improved quantile-quantile plots
 A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to examine computed per marker p-values with respect to the theoretically expected ones. This comparison is then used to compute genomic-inflation factor ?? which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
@@ -245,8 +244,9 @@ open.region.ucsc(chr = 2, coords =  c(37256927,39256927), assembly = "canFam3")
 ## Simple epistasis scan
 To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. In the function ```epistasis.scan```, we implement a simple way of doing this by fitting linear models including two SNPs: ${y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{int}*SNP*SNP_i + e}$, where y is the phenotype, SNP and ${SNP_i}$ are the genotypes at the two SNPs, and e is the residual. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. To visualize a potential two-SNP interaction, one can use the function ```boxplot.snp.twoWay```. This function draws a two locus genotype-phenotype map by plotting phenotype boxplots for the individuals in every genotypic class, as defined by the two SNPs jointly. This gives nine or four boxes, for outbred and inbred data respectively. 
 
-```{r epistasis_scan, echo=FALSE, results='hide', message=FALSE, warning=FALSE, eval=T}
-es <- epistasis.scan(data = data.qc1[,data.qc1@gtdata@chromosome==2], SNP = 'BICF2S2365880', trait.name = 'response')
+```{r epistasis_scan, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T, tidy=FALSE}
+es <- epistasis.scan(data = data.qc1[,data.qc1@gtdata@chromosome==2], SNP = 'BICF2S2365880', 
+                     trait.name = 'response')
 ```
 
 ```{r box_two}
@@ -256,17 +256,17 @@ boxplot.snp.twoWay(data.qc1, marker1 = 'BICF2S2365880', marker2 = 'BICF2S2337600
 
 ## List of aliases
 
-List of functions aliases:
-* **plot.manhattan.ld**: plot.manhattan.LD
-* **plot.ld.decay**: plot.LD.decay 
-* **phase.to.haploview**: phase2haploview, PHASE.to.Haploview, PHASE2Haploview  
-* **phase.to.fasta**: phase2fasta, PHASE.to.FASTA, PHASE2FASTA
-* **open.region.ucsc**: open.region.UCSC
-* **gwaa.to.vgwas** : gwaa2vgwas, gwaa.to.vGWAS, gwaa2vGWAS
-* **gwaa.to.phase**: gwaa2phase, gwaa.to.PHASE, gwaa2PHASE
-* **gwaa.to.bigrr**: gwaa2bigrr, gwaa.to.bigRR, gwaa2bigrr 
-* **gwaa.to.bed**: gwaa2bed, 
-* **get.ld.colors**: get.LD.colors 
-* **plot.fstats**: plot.Fst
-* **compute.fstats**: compute.Fstats 
-* **create.haploview.info**: create.Haploview.info
+List of functions aliases:  
+**plot.manhattan.ld**: plot.manhattan.LD  
+**plot.ld.decay**: plot.LD.decay  
+**phase.to.haploview**: phase2haploview, PHASE.to.Haploview, PHASE2Haploview    
+**phase.to.fasta**: phase2fasta, PHASE.to.FASTA, PHASE2FASTA  
+**open.region.ucsc**: open.region.UCSC  
+**gwaa.to.vgwas** : gwaa2vgwas, gwaa.to.vGWAS, gwaa2vGWAS  
+**gwaa.to.phase**: gwaa2phase, gwaa.to.PHASE, gwaa2PHASE  
+**gwaa.to.bigrr**: gwaa2bigrr, gwaa.to.bigRR, gwaa2bigrr  
+**gwaa.to.bed**: gwaa2bed  
+**get.ld.colors**: get.LD.colors   
+**plot.fstats**: plot.Fst  
+**compute.fstats**: compute.Fstats   
+**create.haploview.info**: create.Haploview.info
