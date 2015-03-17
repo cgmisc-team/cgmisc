@@ -8,7 +8,7 @@ output: pdf_document
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5)
+knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy = FALSE)
 ```
 
 **cgmisc** is an R package for enhanced genome-wide association studies (GWAS) and visualisation. This document aims at guiding you through the installation process and to demonstrate package capabilities in a series of practical examples based on an example data included in the package.
@@ -22,7 +22,7 @@ install.packages("cgmisc")
 Other possibilities include using graphical user interface (GUI) of, e.g. R console or RStudio.
 
 After the package has been installed, to use the package, it is necessary to load it into environment:
-```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+```{r, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
 library("cgmisc")
 ```
 
@@ -36,7 +36,7 @@ data("data")
 
 # Example analyses
 In order to illustrate how to use particular functions, we will perform a very much simplified GWAS analysis. We begin by initial quality control where we prune the data with per marker of per individual call rates below 95%. Based on 2000 randomly selected markers, we remove one (with lower call rate) from each pair of too similar (more than 95% similarity) individuals. We also set very low ($10^{-3}$) threshold for pruning on minor allele frequency (in practise only the monomorphic markers will be removed) and turn off checks based on the departure form Hardy-Weinberg equilibrium (p.level=10e-18)
-```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T, tidy=FALSE}
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE, eval=T}
 qc1 <- check.marker(data, callrate = .95, perid.call = .95, ibs.threshold = .95, 
                     ibs.mrk=2000, ibs.exclude="lower", p.level=10e-18, maf=1e-3)
 data.qc1 <- data[qc1$idok, qc1$snpok]
@@ -113,8 +113,6 @@ print(adjacent[1:4,])
 We can also use the clumping procedure as outlined in PLINK documentation [cite] to single out regions of interest.
 As we can see, there are two clumps represented by grey and red points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
 
-//JJ NOTE: change the font color of 'red' to red and 'grey' to ... grey ;-)
-
 ```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 clumps <- clump.markers(data, mm, chr = 2)
 plot.clumps(mm, clumps, 2, c(37256927,39256927))
@@ -165,12 +163,11 @@ As a result we get a matrix runs coordinates, length (in windows) and first wind
 For quantitative traits, the ```boxplot.snp``` function can be used to visually examine allele or genotype effect by plotting phenotype boxplots for the individuals in every genotypic class.
 The function works for both outbreed (three boxes) and inbreed (two boxes) data.
 
-// JJ NOTE: How to suppress package on-load messages?
-```{r load_gen, echo=F,eval=F,results='hide', warning=F, message=F, include=FALSE}
+```{r echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
 require('genetics')
 ```
 
-```{r geno_box, echo = F, results='show', eval = T, warning=F}
+```{r geno_box, echo = F, results='hide', eval = F, warning=F}
 marker <- 'BICF2S2365880'
 trait.name <- 'response'
 boxplot.snp(data = data.qc1, marker = marker, trait = trait.name, recode = F, font = 2)
@@ -210,9 +207,10 @@ Our package provides a number of functions which enable switching between variou
 ```gwaa.to.phase``` lets user convert a GenABEL gwaa.data-class object to the PHASE input format.
 
 ```phase.to.fasta``` PHASE is a software for haplotype reconstruction  ```phase.to.fasta``` function can be used to parse a part of PHASE output to a customised FASTA format:
->haplo_1_count_176
-TCGGGCTC
-
+```{r haplo, tidy=FALSE, eval=FALSE, echo = TRUE}
+'>haplo_1_count_176'
+'TCGGGCTC'
+```
 In the above example, the first line contains the name of the haplotype along with its count, the second line provides haplotype sequence. 
 
 ```phase.to.haploview```
@@ -230,8 +228,8 @@ A quantile-quantile plot (QQ plots) is a graphical way of comparing two probabil
 ## Dog-specific utilities
 Current approaches to finding genome-wide associations in diploid organisms quite often encounter difficulties when analysing non-autosomal parts of the genome, e.g. sex chromosomes [Young et al., 2008].  In **cgmisc**, the ```chr.x.fix.canfam``` partially addresses this issue by creating an artificial pseudo-autosome which consists of pseudo-autosomal regions of the X chromosome. Currently, the function is specific to data coming from domestic dog (Canis familiaris, assemblies canFam2 and canFam3.1). 
 
-```{r x_fix, echo = T, results='show',eval=T, warning=FALSE}
-#chr.x.fix.canfam (data = data.qc1, assembly="canFam3")
+```{r x_fix, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=FALSE}
+chr.x.fix.canfam (data = data.qc1, assembly="canFam3")
 ```
 
 
@@ -240,35 +238,35 @@ Sometimes, one may wish to display p-values from a genome-wide association scan 
   
 Using the ```open.region.ucsc``` function, it is possible to automatically open an Internet browser window containing UCSC Genome Browser result for a set of predefined genomic coordinates and assembly of interest. 
 
-```{r open_ucsc}
-#open.region.ucsc(chr = 2, coords =  c(37256927,39256927), assembly = "canFam3")
+```{r open_ucsc, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
+open.region.ucsc(chr = 2, coords =  c(37256927,39256927), assembly = "canFam3")
 ```
 
 ## Simple epistasis scan
 To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. In the function ```epistasis.scan```, we implement a simple way of doing this by fitting linear models including two SNPs: ${y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{int}*SNP*SNP_i + e}$, where y is the phenotype, SNP and ${SNP_i}$ are the genotypes at the two SNPs, and e is the residual. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. To visualize a potential two-SNP interaction, one can use the function ```boxplot.snp.twoWay```. This function draws a two locus genotype-phenotype map by plotting phenotype boxplots for the individuals in every genotypic class, as defined by the two SNPs jointly. This gives nine or four boxes, for outbred and inbred data respectively. 
 
-```{r epistasis_scan}
-#epistasis.scan(data = data.qc1, SNP = 'BICF2S2365880', trait.name = 'response')
+```{r epistasis_scan, echo=FALSE, results='hide', message=FALSE, warning=FALSE, eval=T}
+es <- epistasis.scan(data = data.qc1[,data.qc1@gtdata@chromosome==2], SNP = 'BICF2S2365880', trait.name = 'response')
 ```
 
 ```{r box_two}
-SNP.box.twoWay()
+boxplot.snp.twoWay(data.qc1, marker1 = 'BICF2S2365880', marker2 = 'BICF2S2337600', trait = 'response')
 ```
 
 
 ## List of aliases
 
 List of functions aliases:
-**plot.manhattan.ld**: plot.manhattan.LD
-**plot.ld.decay**: plot.LD.decay
-**phase.to.haploview**: phase2haploview, PHASE.to.Haploview, PHASE2Haploview
-**phase.to.fasta**: phase2fasta, PHASE.to.FASTA, PHASE2FASTA
-**open.region.ucsc**: open.region.UCSC
-**gwaa.to.vgwas** : gwaa2vgwas, gwaa.to.vGWAS, gwaa2vGWAS
-**gwaa.to.phase**: gwaa2phase, gwaa.to.PHASE, gwaa2PHASE
-**gwaa.to.bigrr**: gwaa2bigrr, gwaa.to.bigRR, gwaa2bigrr 
-**gwaa.to.bed**: gwaa2bed, 
-**get.ld.colors**: get.LD.colors 
-**plot.fstats**: plot.Fst
-**compute.fstats**: compute.Fstats 
-**create.haploview.info**: create.Haploview.info
+* **plot.manhattan.ld**: plot.manhattan.LD
+* **plot.ld.decay**: plot.LD.decay 
+* **phase.to.haploview**: phase2haploview, PHASE.to.Haploview, PHASE2Haploview  
+* **phase.to.fasta**: phase2fasta, PHASE.to.FASTA, PHASE2FASTA
+* **open.region.ucsc**: open.region.UCSC
+* **gwaa.to.vgwas** : gwaa2vgwas, gwaa.to.vGWAS, gwaa2vGWAS
+* **gwaa.to.phase**: gwaa2phase, gwaa.to.PHASE, gwaa2PHASE
+* **gwaa.to.bigrr**: gwaa2bigrr, gwaa.to.bigRR, gwaa2bigrr 
+* **gwaa.to.bed**: gwaa2bed, 
+* **get.ld.colors**: get.LD.colors 
+* **plot.fstats**: plot.Fst
+* **compute.fstats**: compute.Fstats 
+* **create.haploview.info**: create.Haploview.info
