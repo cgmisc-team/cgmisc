@@ -42,7 +42,7 @@ qc1 <- check.marker(data, callrate = .95, perid.call = .95, ibs.threshold = .95,
 data.qc1 <- data[qc1$idok, qc1$snpok]
 ```
 
-Next, we analyse population structure by means of genomic-kinship:
+Next, we analyse population structure by means of genomic-kinship. Using all autosomal chromosomes, we calculate the Identity By State (IBS) matrix. In order to visualize the population structure, we then reduce the matrix to two dimensions by multidimensional scaling.
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 autosomal <- which(data.qc1@gtdata@chromosome != 39)
 data.qc1.gkin <- ibs(data.qc1, snpsubset = autosomal, weight = 'freq')
@@ -81,7 +81,7 @@ As we can see, there is a very strong association signal on chromosome 2. We can
 
 ## Visualization and analyses of linkage structure
 
-Say, we would like to zoom in on chromosome 2 and visualise LD to the top-associated marker. First, we need the name and cooridinates of the marker:
+Say, we would like to zoom in on chromosome 2 and visualise LD to the top-associated marker. First, we need the name and coordinates of the marker:
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 summary(mm, top=1)
 ```
@@ -176,7 +176,7 @@ boxplot.snp(data = data.qc1, marker = marker, trait = trait.name, recode = F, fo
 
 The get.erv returns information about endogenous retroviral sequences (ERV) in an analysed region.
 At first, we need to obtaint the list of ERV sequences from defined region of genome using ```get.erv```.
-In package, we provide collection of canine ERVs identified in canFam3.1 assembly but you can also supply any other database.
+In the **cgmisc** package, we provide collection of canine ERVs identified in canFam3.1 assembly but you can also supply any other database.
 
 Let's search for ERVs on chromosome 2:
 ```{r get_erv, echo = T, results='show', eval = T, warning=F}
@@ -219,7 +219,7 @@ In the above example, the first line contains the name of the haplotype along wi
 ```gwaa.to.bed```  
 
 ## Improved quantile-quantile plots
-A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to examine computed per marker p-values with respect to the theoretically expected ones. This comparison is then used to compute genomic-inflation factor ?? which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
+A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to compare computed per marker p-values with the ones expected under the null hypothesis. This comparison is then used to compute genomic-inflation factor ${\lambda}$ which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
 
 //JJ NOTE: Permutation tests included in qq.emp?
 
@@ -242,7 +242,7 @@ open.region.ucsc(chr = 2, coords =  c(37256927,39256927), assembly = "canFam3")
 ```
 
 ## Simple epistasis scan
-To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. In the function ```epistasis.scan```, we implement a simple way of doing this by fitting linear models including two SNPs: ${y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{int}*SNP*SNP_i + e}$, where y is the phenotype, SNP and ${SNP_i}$ are the genotypes at the two SNPs, and e is the residual. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. To visualize a potential two-SNP interaction, one can use the function ```boxplot.snp.twoWay```. This function draws a two locus genotype-phenotype map by plotting phenotype boxplots for the individuals in every genotypic class, as defined by the two SNPs jointly. This gives nine or four boxes, for outbred and inbred data respectively. 
+To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. In the function ```epistasis.scan```, we implement a simple way of doing this by fitting linear models including two SNPs: ${y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{i,int}*SNP*SNP_i + e}$, where y is the phenotype, SNP and ${SNP_i}$ are the genotypes at the two SNPs, and e is the residual. ${i = 1 ... n}$, where n is the number of SNPs in the input to the function. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. To visualize a potential two-SNP interaction, one can use the function ```boxplot.snp.twoWay```. This function draws a two locus genotype-phenotype map by plotting phenotype boxplots for the individuals in every genotypic class, as defined by the two SNPs jointly. This gives nine or four boxes, for outbred and inbred data respectively. 
 
 ```{r epistasis_scan, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T, tidy=FALSE}
 es <- epistasis.scan(data = data.qc1[,data.qc1@gtdata@chromosome==2], SNP = 'BICF2S2365880', 
