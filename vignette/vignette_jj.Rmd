@@ -56,6 +56,7 @@ We can see that there is possible population structure here. We should investiga
 kclust <- kmeans(data.qc1.mds, centers = 2)
 plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2",cex.axis=.7, 
      bty='n', col=kclust$cluster)
+# Now, we can assign our individuals to calculated clusters which represent subpopulations.
 pop <- kclust$cluster
 ```
 
@@ -110,7 +111,7 @@ adjacent <- get.adjacent.markers(data = data.qc1, marker = "BICF2S2365880" , siz
 print(adjacent[1:4,])
 ```
 
-We can also use the clumping procedure as outlined in PLINK documentation [cite] to single out regions of interest.
+We can also use the clumping procedure as outlined in PLINK documentation to single out regions of interest.
 As we can see, there are two clumps represented by grey and red points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
 
 ```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
@@ -155,17 +156,16 @@ Below a given threshold, all windows will be treated as homozygous.
 get.roh(data = data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30, strict = TRUE)
 ```
 
-As a result we get a matrix runs coordinates, length (in windows) and first window that starts a stretch.
+As a result we get a matrix with runs coordinates, length (in windows) and first window that starts a stretch.
 
 
-## Phenotype Boxplots
+## Phenotype boxplots
 
 For quantitative traits, the ```boxplot.snp``` function can be used to visually examine allele or genotype effect by plotting phenotype boxplots for the individuals in every genotypic class.
 The function works for both outbreed (three boxes) and inbreed (two boxes) data.
 
-```{r echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
-require('genetics')
-```
+#```{r echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
+#```
 
 ```{r geno_box, echo = T, results='hide', eval = F, warning=F}
 marker <- 'BICF2S2365880'
@@ -180,7 +180,7 @@ At first, we need to obtaint the list of ERV sequences from defined region of ge
 In the **cgmisc** package, we provide collection of canine ERVs identified in canFam3.1 assembly but you can also supply any other database.
 
 Let's search for ERVs on chromosome 2:
-```{r get_erv, echo = T, results='show', eval = T, warning=F}
+```{r get_erv, echo = T, results='show', eval = T, warning=F, message =FALSE}
 
 ervs <- get.erv(chr = "chr2", coords=c(10e6, 40e6))
 
@@ -221,6 +221,10 @@ In the above example, the first line contains the name of the haplotype along wi
 A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to compare computed per marker p-values with the ones expected under the null hypothesis. This comparison is then used to compute genomic-inflation factor ${\lambda}$ which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
 
 //JJ NOTE: Permutation tests included in qq.emp?
+
+```{r plot_qq, eval=TRUE, echo=TRUE}
+plot.qq(mm[,'P1df'], conf=c(0.05, 0.95), conf.type="shade", conf.col=rgb(.5,.5,1,.5), step=1)
+```
 
 
 ## Dog-specific utilities

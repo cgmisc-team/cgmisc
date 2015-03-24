@@ -10,6 +10,7 @@
 ##'@return null
 ##'@export 
 boxplot.snp  <- function(data, marker, trait, recode = F, ...){
+  require('genetics') 
   if(recode){
     geno <- as.double.gwaa.data(data[,marker])
     geno[geno[,1] == 0,1] <- "AA"

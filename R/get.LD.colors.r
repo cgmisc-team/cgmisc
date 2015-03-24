@@ -15,7 +15,6 @@
 ##' @seealso \code{\link[cgmisc]{plot.pac}}
 ##' @export get.ld.colors
 get.ld.colors <- function(data, chr, index.snp, region=NULL) {
-  require(wesanderson)
   data  <- data[,data@gtdata@chromosome==chr]
   if (!is.null(region)) {
     data <- data[,which(data@gtdata@map >= region[1] & data@gtdata@map <= region[2])]
