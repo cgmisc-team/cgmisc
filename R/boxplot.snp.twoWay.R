@@ -28,7 +28,6 @@ boxplot.snp.twoWay <- function(data, marker1, marker2, trait, legend = F, ...){
   tmp2 <- sapply(X = 2:length(unique(labels.marker2)) - 1, FUN = function(x){tmp + x*labels.marker2.nrPerClass })
   labels.marker2.at <- c(tmp, tmp2)
   axis(1, at = 1:length(labels.marker1), labels = labels.marker1, cex.axis = .8)
-  axis(3, at = labels.marker2.at, labels=unique(labels.marker2), cex.axis = .8)
   
   labels.marker2.table <- table(labels.marker2)
   j <- labels.marker2.table[1]
@@ -40,6 +39,10 @@ boxplot.snp.twoWay <- function(data, marker1, marker2, trait, legend = F, ...){
   if(legend){
     marker1.uniqGeno <- paste(unique(marker1.geno[,1]), collapse=" ")
     marker2.uniqGeno <- paste(unique(marker2.geno[,1]), collapse=" ")
-    legend("topleft", c(paste(marker1, ":", marker1.uniqGeno, collapse=""), paste(marker2, ":", marker2.uniqGeno, collapse="")), cex=.8)
+    legend("topleft", c(paste(marker2, ":", marker2.uniqGeno, collapse=""), paste(marker1, ":", marker1.uniqGeno, collapse="")), cex=.8, text.col = c("red", "black"))
+    axis(3, at = labels.marker2.at, labels=unique(labels.marker2), cex.axis = .8, col.axis = "red")
+  }
+  else{
+    axis(3, at = labels.marker2.at, labels=unique(labels.marker2), cex.axis = .8)
   }
 }
