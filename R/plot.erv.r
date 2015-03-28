@@ -19,7 +19,7 @@ plot.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db", scale=c(.2
   require("RSQLite")
   
   for(lib in .libPaths()){
-    src2 <- system.file("db", src, mustWork =F, package = 'cgmisc', lib.loc = lib)
+    src2 <- system.file("data", src, mustWork =F, package = 'cgmisc', lib.loc = lib)
     if (src != "") break;
   }
   
