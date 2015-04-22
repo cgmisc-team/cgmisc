@@ -14,7 +14,7 @@ knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy = FALSE)
 **cgmisc** is an R package for enhanced genome-wide association studies (GWAS) and visualisation. This document aims at guiding you through the installation process and to demonstrate package capabilities in a series of practical examples based on an example data included in the package.
 
 # Package installation
-The **cgmisc** package is available on GitHub repository and can be easily installed with the help of devotees package:
+The **cgmisc** package is available on GitHub repository and can be easily installed with the help of devtools package:
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=F}
 install.packages('devtools') # Install devotees if not installed
