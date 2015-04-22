@@ -3,7 +3,7 @@ title: 'cgmisc: package tutorial'
 author: Marcin Kierczak, Jagoda Jablonska, Simon Forsberg, Matteo Bianchi, Katarina
   Tengvall, Mats Pettersson, Jennifer Meadows, Patric Jern, Orjan Carlborg, Kerstin
   Lindblad-Toh
-date: "2 Feb 2015"
+date: "22 April 2015"
 output: pdf_document
 ---
 
@@ -14,12 +14,13 @@ knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy = FALSE)
 **cgmisc** is an R package for enhanced genome-wide association studies (GWAS) and visualisation. This document aims at guiding you through the installation process and to demonstrate package capabilities in a series of practical examples based on an example data included in the package.
 
 # Package installation
-The **cgmisc** package can be installed in the same way as any other R package. One way is to issue the following command in R console:
+The **cgmisc** package is available on GitHub repository and can be easily installed with the help of devotees package:
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=F}
-install.packages("cgmisc")
+install.packages('devtools') # Install devotees if not installed
+library(devtools) 
+install_github('mk-lab/cgmisc')
 ```
-Other possibilities include using graphical user interface (GUI) of, e.g. R console or RStudio.
 
 After the package has been installed, to use the package, it is necessary to load it into environment:
 ```{r, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
@@ -127,12 +128,12 @@ plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==2])
 
 ## Detecting runs of homozygosity
 
-Computing average heterozygosity using overlapping windows approach.
-
 The ```get.overlapping.windows``` function divides the selected chromosome (or the whole genome) into overlapping chunks of given size and overlap.
 The function returns a list containing window coordinates along with a logical matrix where each window is represented by a row and the logical value per-marker is set to _true_ if the marker is contained within the window and to _false_ otherwise. One can specify (in bp) size of a window as well as overlap between windows. 
 
 We will divide chromosome 2 into overlapping windows and then use them to calculate mean heterozygosity and identify runs of homozygosity.
+
+# Computing average heterozygosity using overlapping windows approach.
 
 In order to calculate the average heterozygosity in the set of overlapping windows, we can use the ```het.overlap.windows``` function.
 Heterozygosity is evaluated based on allelic frequencies of markers in particular overlapping windows and the basic Hardy-Weinberg theorem equation. 
@@ -164,10 +165,7 @@ As a result we get a matrix with runs coordinates, length (in windows) and first
 For quantitative traits, the ```boxplot.snp``` function can be used to visually examine allele or genotype effect by plotting phenotype boxplots for the individuals in every genotypic class.
 The function works for both outbreed (three boxes) and inbreed (two boxes) data.
 
-#```{r echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
-#```
-
-```{r geno_box, echo = T, results='hide', eval = F, warning=F}
+```{r geno_box, echo = T, results='show', eval = T, warning=F, message = F}
 marker <- 'BICF2S2365880'
 trait.name <- 'response'
 boxplot.snp(data = data.qc1, marker = marker, trait = trait.name, recode = F, font = 2)
