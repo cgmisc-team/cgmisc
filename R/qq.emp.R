@@ -11,11 +11,10 @@
 ##' @return NULL
 ##' @examples
 ##'  \dontrun{
-##'  qq.emp(obs=data.mm[,'Pc1df], conf=c(0.05, 0.95), result = result[,'Pc1df'],step=10, legend=T, plot.emp=T, conf.level=.95)
+##'  qq.emp(obs=data.mm[,'Pc1df], conf=c(0.05, 0.95), result = result[,'Pc1df'], step=10, legend=T, plot.emp=T, conf.level=.95)
 ##'  }
 ##' @keywords permutations emp
 ##' @export qq.emp
-
 
 qq.emp <- function(obs, conf=c(0.05, 0.95), result, step=10, legend=T, plot.emp=T, conf.level=.95) {
   N <- length(obs)

@@ -102,6 +102,12 @@ plot.manhattan.LD(data = data.qc1, gwas.result = mm, chr = 2, region = c(3725692
                   index.snp = "BICF2S2365880", legend.pos = "topright")
 ```
 
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+fpath <- system.file("extdata", "canis_familiaris.prot.bed", package="cgmisc")
+plot.manhattan.genes(data = data.qc1, gwas.result = mm, chr = 2, 
+                     region = c(37256927,39256927), 
+                     index.snp = "BICF2S2365880", bed.path=fpath)
+```
 
 To extract markers from a given genomic region that are in high LD to a given index marker the ```choose.top.snps``` function can be used.
 ```{r,top_snps, echo = T, results='show', message=T, warning=F, eval=T, tidy = FALSE }

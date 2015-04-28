@@ -1,10 +1,50 @@
-plot.manhattan <- function(data, gwas.result, chr, region, index.snp, p.value=0.05, mafThreshold=.05) {  
-
-  library(grid)
+##' @title Plot LD pattern and MAF in a Manhattan plot
+##' 
+##' @description Function for plotting local LD pattern (relative to a pre-selected marker) on a 
+##' Manhattan plot resulting from genome-wide association study (GWAS). Each marker on the plot is 
+##' colored according to its LD with the reference marker. Color codes are not continuous, but LD is 
+##' discretized into LD intervals. This is useful for examining signals found in a GWAS study. 
+##' In addition, minor allele frequency will be plotted in the lower panel.
+##' @param data a gwaa.data class object as used by \code{\link[GenABEL]{gwaa.data-class}}
+##' @param gwas.result a scan.gwaa class object as used by \code{\link[GenABEL]{scan.gwaa-class}}
+##' @param chr chromosome number (name) to be displayed
+##' @param region a vector of two coordinates to display
+##' @param index.snp index marker of the reference SNP (name of the marker)
+##' @param p.value p-value threshold to visualize using red dashed line
+##' @param bonferroni logical indicating whether Bonferroni-correction shall be used for the displayed p-value threshold
+##' @param mafThreshold  threshold value for minor allele frequency (MAF) -- displayed as a red line on the lower panel
+##' @param legend.pos a string specifying position of the legend on the plot: "def.left", "def.right" or any other accepted by \code{\link{legend}}
+##' @return NULL
+##' @author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>
+##' @keywords Manhattan LD linkage disequilibrium genetics
+##' @examples 
+##' \dontrun{
+##' plot.manhattan.genes(data=data.mh1.qc1, gwas.result=mm.mh1, chr=36, region=c(16e6,21e6), 
+##'                   index.snp="BICF2P12960", bonferroni=F, legend.pos="default")
+##' }
+##' @seealso \code{\link[GenABEL]{gwaa.data-class}}, \code{\link[GenABEL]{scan.gwaa-class}}
+##' @export plot.manhattan.genes
+##'
+plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.value=0.05, mafThreshold=.05, bed.path=NULL) {  
+  require(grid)
   require(ggplot2)
-  require(wq)
-  source("src/plot.genes.R")
+  #require(wq)
+  #source("src/plot.genes.R")
 
+  # layOut is copied from the old version of the wq package. 
+  # The layOut function is no longer provided by the wq. 
+  layOut <- function (...) {
+    require(grid)
+    x <- list(...)
+    n <- max(sapply(x, function(x) max(x[[2]])))
+    p <- max(sapply(x, function(x) max(x[[3]])))
+    pushViewport(viewport(layout = grid.layout(n, p)))
+    for (i in seq_len(length(x))) {
+      print(x[[i]][[1]], vp = viewport(layout.pos.row = x[[i]][[2]], 
+                                       layout.pos.col = x[[i]][[3]]))
+    }
+  }
+  
   getMAF <- function(data, region) {
     summ <- summary(data[,region])
     tmp_maf <- (2 * summ$P.22 + summ$P.12) / (2 * summ$NoMeasured)
@@ -41,7 +81,7 @@ plot.manhattan <- function(data, gwas.result, chr, region, index.snp, p.value=0.
   manhattan_plot <- ggplot(df2, aes(x=markers.coords, y=pvals, colour = r2col)) +
     coord_cartesian(xlim = region) +
     scale_colour_manual(values=gwas_palette, name=expression(r^2)) +
-    geom_point(size=3) +
+    geom_point(size=2) +
     ylab(expression(-log[10](p-value))) +
     theme_bw() +
     theme(plot.margin=unit(c(5,7,0,5),"mm"), legend.position=c(0.9,0.8), panel.border=element_blank()) +
@@ -54,11 +94,12 @@ plot.manhattan <- function(data, gwas.result, chr, region, index.snp, p.value=0.
     ylab("MAF") +
     geom_hline(aes(yintercept=mafThreshold), color = "tomato") +
     theme_bw() +
-    theme(plot.margin=unit(c(0,7,0,4),"mm"), legend.position="none", panel.border=element_blank()) +
+    theme(plot.margin=unit(c(0,7,0,4),"mm"), legend.position="none", panel.border=element_blank(),
+          legend.text=element_text(size=3), legend.background = element_blank()) +
     theme(axis.line = element_line(color = 'grey'), axis.text.x=element_blank(),
           axis.title.x=element_blank())
   
-  gene_plot <- plot.genes(region, "data/canis_familiaris.prot.bed")
+  gene_plot <- plot.genes(region, chr, bed.path=bed.path)
   
   layOut(list(manhattan_plot, 1:4, 1),
          list(maf_plot, 5, 1),

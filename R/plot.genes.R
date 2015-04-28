@@ -14,7 +14,7 @@
 ##'(see: https://www.broadinstitute.org/ftp/pub/vgb/dog/trackHub/hub.txt).
 ##'@return ggplot2 plot
 ##'@export 
-plot.genes <- function(region, bed.path="extdata/canis_familiaris.protein_coding_chr2.bed") {
+plot.genes <- function(region, chr, bed.path=NULL) {
   require(GenomicRanges)
   require(rtracklayer)
   require(ggplot2)
