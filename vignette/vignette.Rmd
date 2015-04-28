@@ -4,7 +4,12 @@ author: Marcin Kierczak, Jagoda Jabłońska, Simon Forsberg, Matteo Bianchi, Kat
   Tengvall, Mats Pettersson, Jennifer Meadows, Patric Jern, Orjan Carlborg, Kerstin
   Lindblad-Toh
 date: "22 April 2015"
-output: pdf_document
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+  html_document:
+    toc: yes
 ---
 
 ```{r global_options, include=FALSE}
@@ -53,7 +58,7 @@ plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2", cex.axis=.7,
 ```
 
 We can see that there is possible population structure here. We should investigate this further, but for our purposes, let's just run simple K-means clustering with the number of clusters *a priori* set to $K = 2$
-```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T, fig.width=4.5}
+```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T, fig.width=4.5, fig.align='center'}
 kclust <- kmeans(data.qc1.mds, centers = 2)
 plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2",cex.axis=.7, 
      bty='n', col=kclust$cluster)
@@ -196,7 +201,7 @@ plot.erv(chr = "chr10", coords = c(10e6, 40e6))
 ```
 
 
-## Converting functions
+## Conversion functions
 
 Our package provides a number of functions which enable switching between various data formats such as PHASE or FASTA. You can export ```gwaa.data-class```  used by **cgmisc** to i.e haplotype analysis software as well as convert external data format to the one used by **cgmisc**.  
 
@@ -221,9 +226,8 @@ In the above example, the first line contains the name of the haplotype along wi
 A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to compare computed per marker p-values with the ones expected under the null hypothesis. This comparison is then used to compute genomic-inflation factor ${\lambda}$ which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
 
 //JJ NOTE: Permutation tests included in qq.emp?
-
-```{r plot_qq, fig.width=4.5, eval=TRUE, echo=TRUE}
-plot.qq(mm[,'P1df'], conf=c(0.05, 0.95), conf.type="shade", conf.col=rgb(.5,.5,1,.5), step=1)
+```{r plot_qq, fig.width=480, fig.height=480, fig.align='center', dev='png', eval=TRUE, echo=TRUE}
+plot.qq(mm[,'P1df'], conf=c(0.05, 0.95), conf.type="shade", conf.col=rgb(.5,.5,1,.5), step=100)
 ```
 
 
@@ -233,7 +237,6 @@ Current approaches to finding genome-wide associations in diploid organisms quit
 ```{r x_fix, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=FALSE}
 chr.x.fix.canfam (data = data.qc1, assembly="canFam3")
 ```
-
 
 ## Interacting with the UCSC genome browser
 Sometimes, one may wish to display p-values from a genome-wide association scan directly in UCSC Genome Browser (Kent et al., 2002) to easily align annotations with the signals of interest. This can be done with ```gwaa.to.bed``` function that exports coordinates and  p-values from gwaa.data-scan into bed file that can easily be used to set a custom path in the UCSC Genome Browser.
