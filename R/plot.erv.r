@@ -15,7 +15,7 @@
 ##' @keywords plot, ERV
 ##' @export
 
-plot.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db", scale=c(.2,.1)) {
+plot.erv <- function(chr=NA, coords=c(NA,NA), src="extdata/canFam3cgmisc.db", scale=c(.2,.1)) {
   require("RSQLite")
   
   for(lib in .libPaths()){

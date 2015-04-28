@@ -5,9 +5,16 @@
 ##'@author Veronika Scholz <\email{veronikascholz@@gmail.com}>
 ##'@param region \code{\link[GenomicRanges]{IRanges}}
 ##'@param bed.path is a path to a bed file containing gene information.
-##'@return null
+##'@details When using UCSC-provided bigBed annotation files you need to first use the 
+##'bigBedToBed tool (available from: http://hgdownload.cse.ucsc.edu/admin/exe/YOUR_OS_DIRECTORY) to 
+##'get the right format. At this point you can also extract the desired chromosome.
+##'Then you need to strip the last column of the bed file using, for instance awk: 
+##'awk '{out=""; for(i=1;i<=15;i++){out=out" "$i}; print out}' my.bed > myFinal.bed
+##'Here, we provide a Broad Improved Canine Annotation v.1 protein coding genes for the canine chromosome 2 
+##'(see: https://www.broadinstitute.org/ftp/pub/vgb/dog/trackHub/hub.txt).
+##'@return ggplot2 plot
 ##'@export 
-plot.genes <- function(region, bed.path) {
+plot.genes <- function(region, bed.path="extdata/canis_familiaris.protein_coding_chr2.bed") {
   require(GenomicRanges)
   require(rtracklayer)
   require(ggplot2)
