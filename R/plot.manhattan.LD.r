@@ -25,7 +25,9 @@
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}, \code{\link[GenABEL]{scan.gwaa-class}}
 ##' @export plot.manhattan.ld
 ##' 
-plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value=0.05, bonferroni=T, mafThreshold=.05, legend.pos="def.left") {  
+plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value = 0.05, bonferroni = T, mafThreshold = .05, legend.pos = 'def.left') {  
+  opar <- par()
+  par(las = 2)
   shift <- 2.3
   topMargin <- 0
   # Helper function for retrieving MAF in a region (chromosome)
@@ -94,8 +96,9 @@ plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value
   # Plot axes
   step <- (stopCoord - startCoord) / 5
   axis(1, at = seq(startCoord, stopCoord, by=step), labels=format(seq(startCoord, stopCoord, by=step)/1e6, scientific=F, digits=3))
-  axis(2, at = 0:(max(pvals) + topMargin + 1))
+  axis(2, at = 0:(max(pvals) + topMargin + 1), las=2)
   axis(4, at = c(2 - shift, 1 - shift, 0.2 - shift, 0 - shift), labels = c(.5, .25, .05, 0))
   mtext("MAF", side=2, at=0.2-shift, outer=F)
+  par(opar)
 }
 plot.manhattan.LD <- plot.manhattan.ld

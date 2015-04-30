@@ -1,9 +1,9 @@
 ---
 title: 'cgmisc: package tutorial'
 author: Marcin Kierczak, Jagoda Jabłońska, Simon Forsberg, Matteo Bianchi, Katarina
-  Tengvall, Mats Pettersson, Jennifer Meadows, Patric Jern, Orjan Carlborg, Kerstin
+  Tengvall, Mats Pettersson, Veronika Scholz, Jennifer Meadows, Patric Jern, Orjan Carlborg, Kerstin
   Lindblad-Toh
-date: "22 April 2015"
+date: "30 April 2015"
 output:
   pdf_document:
     latex_engine: xelatex
@@ -13,8 +13,10 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
+require(knitr)
 knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy=FALSE, cache=T)
 ```
+# Synopsis
 
 **cgmisc** is an R package for enhanced genome-wide association studies (GWAS) and visualisation. This document aims at guiding you through the installation process and to demonstrate package capabilities in a series of practical examples based on an example data included in the package.
 
@@ -24,12 +26,12 @@ The **cgmisc** package is available on GitHub repository and can be easily insta
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=F}
 install.packages('devtools') # Install devotees if not installed
 library(devtools) 
-install_github('mk-lab/cgmisc')
+install_github('cgmisc-team/cgmisc')
 ```
 
 After the package has been installed, to use the package, it is necessary to load it into environment:
 ```{r, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
-library("cgmisc")
+library('cgmisc')
 ```
 
 # Loading data
@@ -37,14 +39,20 @@ Whenever possible, the **cgmisc** package uses data structures used by the GenAB
 The package is shipped with an example dataset called **cgmisc_data** that contains genotyping data (Illumina, canFam2) for N=207 German shepherds originally collected for the project described in (Tengvall et al., 2012). The phenotypes, though, have been simulated in order to be able to illustrate various features of **cgmisc**. To load the example dataset, use the following command:
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-data("data")
+data('data')
 ```
 
 # Example analyses
 In order to illustrate how to use particular functions, we will perform a very much simplified GWAS analysis. We begin by initial quality control where we prune the data with per marker of per individual call rates below 95%. Based on 2000 randomly selected markers, we remove one (with lower call rate) from each pair of too similar (more than 95% similarity) individuals. We also set very low ($10^{-3}$) threshold for pruning on minor allele frequency (in practise only the monomorphic markers will be removed) and turn off checks based on the departure form Hardy-Weinberg equilibrium (p.level=10e-18)
 ```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T}
-qc1 <- check.marker(data, callrate = .95, perid.call = .95, ibs.threshold = .95, 
-                    ibs.mrk=2000, ibs.exclude="lower", p.level=10e-18, maf=1e-3)
+qc1 <- check.marker(data = data, 
+                    callrate = .95, 
+                    perid.call = .95, 
+                    ibs.threshold = .95, 
+                    ibs.mrk = 2000, 
+                    ibs.exclude = "lower", 
+                    p.level = 10e-18, 
+                    maf = 1e-3)
 data.qc1 <- data[qc1$idok, qc1$snpok]
 ```
 
@@ -54,15 +62,19 @@ autosomal <- which(data.qc1@gtdata@chromosome != 39)
 data.qc1.gkin <- ibs(data.qc1, snpsubset = autosomal, weight = 'freq')
 data.qc1.dist <- as.dist(0.5 - data.qc1.gkin)
 data.qc1.mds <- cmdscale(data.qc1.dist)
-plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2", cex.axis=.7, bty='n')
+plot(data.qc1.mds, pch = 19, cex = .5, las = 1, 
+     xlab = 'MDS1', ylab = 'MDS2', 
+     cex.axis = .7, bty = 'n')
 ```
 
 We can see that there is possible population structure here. We should investigate this further, but for our purposes, let's just run simple K-means clustering with the number of clusters *a priori* set to $K = 2$
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T, fig.width=4.5, fig.align='center'}
 kclust <- kmeans(data.qc1.mds, centers = 2)
-plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2",cex.axis=.7, 
-     bty='n', col=kclust$cluster)
-# Now, we can assign our individuals to the calculated clusters which represent subpopulations.
+plot(data.qc1.mds, pch = 19, cex = .5, las = 1, 
+     xlab = 'MDS1', ylab = 'MDS2', cex.axis = .7, 
+     bty = 'n', col = kclust$cluster)
+# Now, we can assign our individuals to the calculated 
+# clusters which represent subpopulations.
 pop <- kclust$cluster
 ```
 
@@ -71,22 +83,34 @@ We can compare subpopulations looking at the differences in the reference allele
 ## Comparing subpopulations
 
 ```{r pac, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-pac <- pop.allele.counts(data.qc1[,data.qc1@gtdata@chromosome==28], pop, progress=F)
-plot.pac(data.qc1[,data.qc1@gtdata@chromosome==28], allele.cnt = pac, 
-         plot.LD = T, legend.pos='topleft')
+pac <- pop.allele.counts(data = data.qc1[ ,data.qc1@gtdata@chromosome == 28], 
+                         pops = pop, 
+                         progress=F)
+plot.pac(data = data.qc1[ ,data.qc1@gtdata@chromosome == 28], 
+         allele.cnt = pac, 
+         plot.LD = T, 
+         legend.pos='topleft')
 ```
 In a similar way, we can compute and plot fixation index $F_{ST}$:
 ```{r fst, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-fst <- compute.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], pop)
-plot.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], fst)
+fst <- compute.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], 
+                      pops = pop)
+plot.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], 
+            fstats = fst)
 ```
 Having defined subpopulations, we can proceed to association analyses using mixed model with genomic kinship as random effect.
 ```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T}
-h2h <- polygenic(formula = ct ~ sex, data.qc1.gkin, 
-                 data.qc1, llfun='polylik')
-mm <- mmscore(h2h, data.qc1, strata = pop)
-par(las=1, cex.axis=.7) # Tweak graphics
-plot(mm, cex=.5, pch=19, col=c("darkgrey","grey"))
+h2h <- polygenic(formula = ct ~ sex, 
+                 kinship.matrix = data.qc1.gkin, 
+                 data = data.qc1, 
+                 llfun = 'polylik')
+mm <- mmscore(h2object = h2h, data = data.qc1, strata = pop)
+```
+
+```{r manhattanPlot, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T, dev='pdf', fig.align='center'}
+par(las = 1, cex.axis = .7) # Tweak graphics
+plot(mm, cex = .5, pch = 19, 
+     col = c('darkgrey', 'grey'))
 ```
 As we can see, there is a very strong association signal on chromosome 2. We can examine it a bit closer using the ```plot.manhattan.ld``` function.
 
@@ -94,49 +118,64 @@ As we can see, there is a very strong association signal on chromosome 2. We can
 
 Say, we would like to zoom in on chromosome 2 and visualise LD to the top-associated marker. First, we need the name and coordinates of the marker:
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-summary(mm, top=1)
+summary(mm, top = 1)
 ```
-We see that the top-associated marker is **BICF2S2365880** and its position is **38256927bp**. We will zoom in on a 2Mbp region centered on the marker using ```plot.manhattan.ld```
-Aforementioned function produces a standard so-called Manhattan plot with color-coded linkage disequilibrium (LD) to a specific reference marker measured by r2. Given genotyping data (as GenABEL gwaa.data-class object) and GWAS result in the form of p-values vector together with genetic coordinates of a region to be plotted (up to entire chromosome),  plot.manhattan.ld produces a plot with genomic coordinates on the x-axis and -log10(p-value) on the Y axis. Linkage disequilibrium to a reference marker is represented by specific colours. By default, colours represent 5 discrete intervals of r2: [1.0, 0.8[; [0.8, 0.6[; [0.6, 0.4[; [0.4, 0.2[; [0.2, 0[, where: [a, b[ = {x ??? | b ??? x > b}. These intervals can be altered using function parameters.
+We see that the top-associated marker is **BICF2S2365880** and its position is **38256927bp**. We will zoom in on a 2 Mbp region centered on the marker using ```plot.manhattan.ld```
+The aforementioned function produces a standard so-called Manhattan plot with color-coded linkage disequilibrium (LD) to a specific reference marker measured by r2. Given genotyping data (as GenABEL gwaa.data-class object) and GWAS result in the form of p-values vector together with genetic coordinates of a region to be plotted (up to entire chromosome),  plot.manhattan.ld produces a plot with genomic coordinates on the x-axis and -log10(p-value) on the Y axis. Linkage disequilibrium to a reference marker is represented by specific colours. By default, colours represent 5 discrete intervals of r2: [1.0, 0.8[; [0.8, 0.6[; [0.6, 0.4[; [0.4, 0.2[; [0.2, 0[, where: [a, b[ := {x: a >= x > b}. These intervals can be altered using function parameters.
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-plot.manhattan.LD(data = data.qc1, gwas.result = mm, chr = 2, region = c(37256927,39256927), 
-                  index.snp = "BICF2S2365880", legend.pos = "topleft")
+plot.manhattan.LD(data = data.qc1, 
+                  gwas.result = mm, 
+                  chr = 2, 
+                  region = c(37256927, 39256927), 
+                  index.snp = 'BICF2S2365880', 
+                  legend.pos = 'topleft')
 ```
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-fpath <- system.file("extdata", "canis_familiaris.prot.bed", package="cgmisc")
-plot.manhattan.genes(data = data.qc1, gwas.result = mm, chr = 2, 
-                     region = c(37256927,39256927), 
-                     index.snp = "BICF2S2365880", bed.path=fpath)
+fpath <- system.file('extdata', 'canis_familiaris.prot.bed', package = 'cgmisc')
+plot.manhattan.genes(data = data.qc1, 
+                     gwas.result = mm, 
+                     chr = 2, 
+                     region = c(37256927, 39256927), 
+                     index.snp = 'BICF2S2365880', 
+                     bed.path=fpath)
 ```
 
 To extract markers from a given genomic region that are in high LD to a given index marker the ```choose.top.snps``` function can be used.
 ```{r,top_snps, echo = T, results='show', message=T, warning=F, eval=T, tidy = FALSE }
-top.snps <- choose.top.snps(data = data.qc1, chr = 2, region = c(37256927,39256927), 
-                            index.snp = "BICF2S2365880")
-
+top.snps <- choose.top.snps(data = data.qc1, 
+                            chr = 2, 
+                            region = c(37256927, 39256927), 
+                            index.snp = 'BICF2S2365880')
 print (top.snps[1:4,])
 ```
 
 
 To extract markers within the user-defined (in bp) neighborhood of a given marker, one can use the ```get.adjacent.markers``` function. 
 ```{r get_adjacent, echo = T, results='show',message=T, warning=F, eval=TRUE}
-adjacent <- get.adjacent.markers(data = data.qc1, marker = "BICF2S2365880" , size.bp=1e4) 
-print(adjacent[1:4,])
+adjacent <- get.adjacent.markers(data = data.qc1, 
+                                 marker = 'BICF2S2365880', 
+                                 size.bp = 1e4) 
+print(adjacent[1:4, ])
 ```
 
 We can also use the clumping procedure as outlined in PLINK documentation to single out regions of interest.
 As we can see, there are two clumps represented by grey and red points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
 
 ```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-clumps <- clump.markers(data, mm, chr = 2)
-plot.clumps(mm, clumps, 2, c(37256927,39256927))
+clumps <- clump.markers(data = data, 
+                        gwas.result = mm, 
+                        chr = 2)
+plot.clumps(gwas.result = mm, 
+            clumps = clumps, 
+            chr = 2, 
+            region = c(37256927, 39256927))
 ```
 
 To visualise LD decay on chromosome 28, one can call the ```plot.ld.decay``` function.
 ```{r LD_decay, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==28])
+plot.LD.decay(data = data.qc1[ ,data.qc1@gtdata@chromosome == 28])
 ```
 
 ## Detecting runs of homozygosity
@@ -152,23 +191,30 @@ In order to calculate the average heterozygosity in the set of overlapping windo
 Heterozygosity is evaluated based on allelic frequencies of markers in particular overlapping windows and the basic Hardy-Weinberg theorem equation. 
 The values range from 0 to 1 and correspond to the probability that the given set of loci, represented by the window, is heterozygous.
 ```{r LOH, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-LW <- get.overlap.windows(data = data.qc1,chr =  2, size = 125e3, overlap = 2500)
-het.windows <- het.overlap.wind(data.qc1, LW, F)
+my.LW <- get.overlap.windows(data = data.qc1, 
+                          chr =  2, 
+                          size = 125e3, 
+                          overlap = 2500)
+het.windows <- het.overlap.wind(data = data.qc1, 
+                                LW = my.LW, 
+                                progress = F)
 ```
-
 Now, having calculated average heterozygosity we can visualize them with ```plot.overlap```
-
 ```{r overlap, echo=TRUE, results='show', message=TRUE, warning=F, eval=TRUE}
-plot.overlap(LW, het.windows)
+plot.overlap(LW = my.LW, heter.zyg = het.windows)
 ```
 
 We can use calculated heterozygosity to examine runs of homozygosity across selected chromosome. Let's use ```get.roh``` and check if we have any stretches of reduced heterozygosity on chromosome 2.
 Below a given threshold, all windows will be treated as homozygous.
 
 ```{r get_roh, echo = TRUE, results = 'show', eval=TRUE, warning=FALSE}
-get.roh(data = data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30, strict = TRUE)
+get.roh(data = data.qc1, 
+        chr = 2, 
+        LW = my.LW, 
+        hetero.zyg = het.windows, 
+        threshold = 0.30, 
+        strict = TRUE)
 ```
-
 As a result we get a matrix with runs coordinates, length (in windows) and first window that starts a stretch.
 
 ## Phenotype boxplots
@@ -179,7 +225,11 @@ The function works for both outbreed (three boxes) and inbreed (two boxes) data.
 ```{r geno_box, echo = T, results='show', eval = T, warning=F, message = F}
 marker <- 'BICF2S2365880'
 trait.name <- 'response'
-boxplot.snp(data = data.qc1, marker = marker, trait = trait.name, recode = F, font = 2)
+boxplot.snp(data = data.qc1, 
+            marker = marker, 
+            trait = trait.name, 
+            recode = F, 
+            font = 2)
 ```
  
 ## Endogenous retroviral sequences (ERV)
@@ -190,13 +240,13 @@ In the **cgmisc** package, we provide collection of canine ERVs identified in ca
 
 Let's search for ERVs on chromosome 2:
 ```{r get_erv, echo = T, results='show', eval = T, warning=F, message =FALSE}
-ervs <- get.erv(chr = "chr2", coords=c(10e6, 40e6))
-print(ervs[1:4,])
+ervs <- get.erv(chr = 'chr2', coords = c(10e6, 40e6))
+print(ervs[1:4, ])
 ```
 
 Having returned a list of ERV sequences, we are able to plot them with ```plot.erv``` function using the same region:
 ```{r plot_erv, echo = T, results='show', eval=T, warning=F}
-plot.erv(chr = "chr10", coords = c(10e6, 40e6))
+plot.erv(chr = 'chr10', coords = c(10e6, 40e6))
 ```
 
 ## Conversion functions
@@ -223,27 +273,40 @@ In the above example, the first line contains the name of the haplotype along wi
 ## Improved quantile-quantile plots
 A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to compare computed per marker p-values with the ones expected under the null hypothesis. This comparison is then used to compute genomic-inflation factor ${\lambda}$ which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
 
-```{r plot_qq, fig.align='center', dev='pdf', eval=TRUE, echo=TRUE, results='hide'}
+```{r plot_qq_perm, eval=TRUE, echo=TRUE, results='hide'}
 # Perform permutation tests
-h2h <- polygenic(formula = ct ~ sex, data.qc1.gkin, data.qc1, llfun='polylik')
+h2h <- polygenic(formula = ct ~ sex, 
+                 kinship.matrix = data.qc1.gkin, 
+                 data = data.qc1, 
+                 llfun = 'polylik')
 result <- c()
 h2h.tmp <- h2h
-pb <- txtProgressBar(min=0, max=30, initial=0, style=3)
+pb <- txtProgressBar(min = 0, max = 30, initial = 0, style = 3)
 for (i in 1:30) {
   h2h.tmp$grresidualY <- sample(h2h$grresidualY)
-  tmp <- qtscore(h2h.tmp$grresidualY, data.qc1, strata = pop, clambda = F)
+  tmp <- qtscore(h2h.tmp$grresidualY, 
+                 data = data.qc1, 
+                 strata = pop, 
+                 clambda = F)
   result <- rbind(result, sort(-log10(tmp@results$P1df)))
-  setTxtProgressBar(pb,i,label = "Perm. test")
+  setTxtProgressBar(pb, i)
 }
+```
+
+```{r plot_qq, fig.align='center', dev='quartz_jpeg', eval=TRUE, echo=TRUE, results='hide', fig.width=580, fig.height=580}
 plot.qq(obs = mm[,'P1df'], emp = result, plot.emp = T, step = 100)
-plot.qq(data = data.qc1, obs = mm[,'P1df'], emp = h2h, N = 10, plot.emp = T, step = 100)
+#plot.qq(data = data.qc1, 
+#        obs = mm[,'P1df'], 
+#        emp = h2h, 
+#        N = 10, 
+#        plot.emp = T, step = 100)
 ```
 
 ## Dog-specific utilities
 Current approaches to finding genome-wide associations in diploid organisms quite often encounter difficulties when analysing non-autosomal parts of the genome, e.g. sex chromosomes [Young et al., 2008].  In **cgmisc**, the ```chr.x.fix.canfam``` partially addresses this issue by creating an artificial pseudo-autosome which consists of pseudo-autosomal regions of the X chromosome. Currently, the function is specific to data coming from domestic dog (Canis familiaris, assemblies canFam2 and canFam3.1). 
 
 ```{r x_fix, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=FALSE}
-chr.x.fix.canfam (data = data.qc1, assembly="canFam3")
+chr.x.fix.canfam (data = data.qc1, assembly = 'canFam3')
 ```
 
 ## Interacting with the UCSC genome browser
@@ -252,19 +315,24 @@ Sometimes, one may wish to display p-values from a genome-wide association scan 
 Using the ```open.region.ucsc``` function, it is possible to automatically open an Internet browser window containing UCSC Genome Browser result for a set of predefined genomic coordinates and assembly of interest. 
 
 ```{r open_ucsc, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=F}
-open.region.ucsc(chr = 2, coords =  c(37256927,39256927), assembly = "canFam3")
+open.region.ucsc(chr = 2, 
+                 coords =  c(37256927, 39256927), 
+                 assembly = 'canFam3')
 ```
 
 ## Simple epistasis scan
 To gain further understanding of the genetic architecture underlying our trait, we might want to search for potential epistasis between pairs of SNPs. In the function ```epistasis.scan```, we implement a simple way of doing this by fitting linear models including two SNPs: ${y = \beta_0 + \beta_1*SNP + \beta_i*SNP_i + \beta_{i,int}*SNP*SNP_i + e}$, where y is the phenotype, SNP and ${SNP_i}$ are the genotypes at the two SNPs, and e is the residual. ${i = 1 ... n}$, where n is the number of SNPs in the input to the function. The function takes a SNP, phenotypes, and a gwaa.data-class object as input. It then fits linear models between SNP and all markers/SNPs in the gwaa.data-class object. To visualize a potential two-SNP interaction, one can use the function ```boxplot.snp.twoWay```. This function draws a two locus genotype-phenotype map by plotting phenotype boxplots for the individuals in every genotypic class, as defined by the two SNPs jointly. This gives nine or four boxes, for outbred and inbred data respectively. 
 
 ```{r epistasis_scan, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T, tidy=FALSE}
-es <- epistasis.scan(data = data.qc1[,data.qc1@gtdata@chromosome==2], SNP = 'BICF2S2365880', 
+es <- epistasis.scan(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], 
+                     SNP = 'BICF2S2365880', 
                      trait.name = 'response')
 ```
 
 ```{r box_two, fig.align='center', dev='pdf', eval=TRUE, echo=TRUE, results='hide'}
-boxplot.snp.twoWay(data.qc1, marker1 = 'BICF2S2365880', marker2 = 'BICF2S2337600', 
+boxplot.snp.twoWay(data.qc1, 
+                   marker1 = 'BICF2S2365880', 
+                   marker2 = 'BICF2S2337600', 
                    trait = 'response')
 ```
 
