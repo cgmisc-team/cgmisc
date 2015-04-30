@@ -1,76 +1,109 @@
-##' @title Plotting a QQ-plot with desired confidence intervals. 
+##' @title QQ plot with empirical p-values
 ##' 
-##' @description Plots a QQ-plot with -log10(p-value) on both axes 
-##' and displays computed confidence intervals. 
-##' @details Calculation of confidence intervals: 
-##' The j-th order statistic from a uniform(0,1) sample has a beta(j,n-j+1) distribution. 
-##' For details see Casella & Berger.
-##' 
-##' step goes from 1 up. Step=1 - slow and fine determination of confidence interval. 
-##' Step=10 - fast and coarse determination of the confidence interval.
-##' 
-##' @references Casella & Berger, 2002, 2nd edition, pg 230, Duxbury.
+##' @description Plots qq plot with empirical values and empirical confidence intervals
 ##' @author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>
-##' @param pvals a vector of empirical p-values
-##' @param conf a vector of the two thresholds for confidence interval 
-##' @param conf.type type of confidence interval plotting, conf.type is either "shade" or "line"
-##' @param conf.col color for plotting confidence interval
+##' @param data a gwaa.data-class object used to fit the original model
+##' @param obs observed values from association test 
+##' @param emp vector of empirical p-values or  a list, result of running polygenic model
+##' @param N if polygenic model supplied, a number of permutations to run
 ##' @param step computation coarseness step
+##' @param legend if the legend is to be plotted
+##' @param plot.emp plotting empirical values
+##' @param conf.level confidence level (0.95 by default)
+##' @param show.pb a logical indicating whether progress bar will be shown
+##' @conf a vector defininy the lower and the upper confidence interval, default 5% CI.
 ##' @return NULL
 ##' @examples
 ##'  \dontrun{
-##'  an0 <- qtscore(bt~antibodyLevel,data.orig)
-##'  pvals <- an0[,"P1df"]
-##'  plot.qq(pvals, conf=c(0.05, 0.95), conf.type="lines", conf.col="tomato", step=10)
+##'  qq.emp(obs=data.mm[,'Pc1df], conf=c(0.025, 0.975), emp = result[,'Pc1df'], step=10, legend=T, plot.emp=T, conf.level=.95)
 ##'  }
-##' @keywords bed, gwas, p-values
-##' @export plot.qq
-plot.qq <- function(pvals, conf=c(0.05, 0.95), conf.type="shade", conf.col=rgb(.5,.5,1,.5), step=1) {
-  lower <- conf[1]
-  upper <- conf[2]
-  N <- length(pvals)
-  pvals <- -log10(pvals)
-  expected <- -log10(1:N/N)
-  maximal<- pmax(pvals, expected)
-  cUpp <- vector()
-  cLow <- vector()
+##' @keywords permutations emp
+##' @export qq.emp
+plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, conf.level=.95, conf=c(0.025, 0.975), show.pb=T) {
+  require(GenABEL)
+  N <- length(obs)
+  obs <- -log10(obs)
+  exp <- -log10(1:N/N)
+  exp.s <- sort(exp)
+  obs.s <- sort(obs)
   indices <- seq(from = 1, to = N, by = step)
-  for (i in indices) {
-    cUpp[i] <- qbeta(upper,i,N-i+1)
-    cLow[i] <- qbeta(lower,i,N-i+1)
-  }
-  # QQ-plot
-  qqplot(expected, pvals, ylim=c(0,max(pvals)), xlim=c(0,max(expected)), pch=19, cex=0.25, bty='n',
-         las = 1, 
-         xlab= expression(Expected~~-log[10](p-value)), 
-         ylab=expression(Observed~~-log[10](p-value))
-  ) 
+  
+  # Plotting empty graph
+  plot(exp, obs, type='n', xaxt='n', yaxt='n', xlab="", ylab=expression(observed~~-log[10](p)), 
+       cex.lab=.8, bty='n', mgp=c(2, 1, 0))
+  xr <- par("xaxp")[1:2]
+  yr <- par("yaxp")[1:2]
+  # abline(v=seq(xr[1], xr[2], 0.5), lty=3, col="grey")
+  # abline(h=seq(yr[1], yr[2], 0.5), lty=3, col="grey")
   grid()
-  if (conf.type == "lines") {
-    points(expected[indices], -log10(cUpp[indices]), type="l", col=conf.col)
-    points(expected[indices], -log10(cLow[indices]), type="l", col=conf.col)
+  axis(1, cex.axis=.8, col="darkgrey")
+  axis(2, cex.axis=.8, col="darkgrey", las=1)
+  mtext(expression(expected~~-log[10](p)), 1, 2, cex=.8, col="black") 
+  # mtext(expression(-log[10](p)), 2, 2, cex=.8, col="black") 
+   
+  # Perform permutations if necessary
+  if (class(emp) == "polygenic") {
+    if (is.null(data)) {
+      stop("Error! gwaa.data not supplied!")
+    }
+    perm.result <- c()
+    h2h <- emp
+    h2h.tmp <- emp
+    if (show.pb) {
+      pb <- txtProgressBar(min=0, max=N, initial=0, style=3)
+    }
+    for (i in 1:N) {
+      h2h.tmp$grresidualY <- sample(h2h$grresidualY)
+      tmp <- qtscore(h2h.tmp$grresidualY, data, clambda = F)
+      #perm.result <- rbind(perm.result, sort(-log10(tmp@results$P1df)))
+      if (show.pb) { 
+        setTxtProgressBar(pb, i)
+      }
+    }
+  emp <- perm.result
   }
-  else if (conf.type == "shade") {
-    polygon(c(min(expected[indices]),max(expected[indices]),expected[indices]), 
-            c(min(-log10(cUpp[indices])),max(-log10(cUpp[indices])),-log10(cLow[indices])),
-            col=conf.col, border=NA)
+  
+  # Plot empirical confidence intervals
+  if (!is.null(emp) & plot.emp) {
+    mean_p <- apply(emp, 2, mean)
+    quant <- apply(emp, 2, quantile, probs=conf)
+    points(exp.s[indices], quant[2,indices], pch=19, cex=.5, type='l', col="black", lty=1)
+    points(exp.s[indices], quant[1,indices], pch=19, cex=.5, type='l', col="black", lty=1)
+    points(exp.s[indices], mean_p[indices], pch=19, cex=.5, type='l', col="black", lty=5, lwd=1)
   }
-  abline(0, 1, col= 'red')
   
-  res <- lm(sort(pvals)~sort(expected))
-  y  <- res$coefficients[2]*expected + res$coefficients[1]  #equation of regression line 
-    
- val <- pvals / y
- # val > 1 - above the line
- # val < 1 - under the line
- 
- p <- c()
- for(i in 1:length(pvals)){
-   if(val[i] > 10e4){
-     p  <- c(p,pvals[i])
-   }
- }
+  # Theor p-val conf.intervals
+  if (!is.null(conf)) {
+    cUpp <- vector()
+    cLow <- vector()
+    for (i in indices) {
+      cUpp[i] <- qbeta(conf[1], i, N-i+1)
+      cLow[i] <- qbeta(conf[2], i, N-i+1)
+    }
+    points(exp[indices], -log10(cUpp[indices]), type="l", col="tomato", lty=1)
+    points(exp[indices], -log10(cLow[indices]), type="l", col="tomato", lty=1)
+  }
   
-  #abline(res$coefficients[1], b = res$coefficients[2])
-  mtext(text = "QQ-plot", side = 3, font = 2, cex = 1.25, line = 1.25)
+  # Theoretical distribution 
+  abline(a=0, b=1, col="tomato", lty=5, lwd=1)
+  
+  # Plot observed p-values
+  # points(exp.s, obs.s, col="slateblue", cex=.7, type='l')
+  points(exp.s, obs.s, col="slateblue", cex=.5, pch=19)
+  
+  if (!is.null(emp) & !is.null(conf.level)) {
+    mins <- apply(emp, 1, min)
+    ttest <- t.test(mins, mu=mean(mins), conf.level=conf.level)
+    threshold <- ttest$conf.int[2]
+    abline(h=-log10(threshold), col="darkgrey", lty=1, lwd=1)
+    mtext(text = round(-log10(threshold), digits = 1), 2, line = 0, cex = .7, adj = 1.5, , at = -log10(threshold), col="darkgrey")
+  }
+  
+  if (legend) {
+    legend("topleft", 
+           legend=c("theor. distr.","theor. conf. int.", "emp. distr.","emp. conf. int.", "emp. thr."), 
+           pch=c(NA,NA,NA,NA,NA), col=c("tomato","tomato","black","black", "darkgrey"),
+           lty=c(5,1,5,1,1), box.lwd = 0, cex=.8)
+  }
 }
+

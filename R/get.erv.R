@@ -11,15 +11,17 @@
 ##'  }
 ##' @keywords get, ERV
 ##' @export
-
 get.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db") {
   require("RSQLite")
 
-  for(lib in .libPaths()){
-    src2 <- system.file("data", src, mustWork = F, package = 'cgmisc', lib.loc = lib)
+  for (lib in .libPaths()){
+    src2 <- system.file("extdata", src, mustWork = F, package = 'cgmisc', lib.loc = lib)
     if (src != "") break;
   }
-    
+  # If user provided the path
+  if (src2 == "") { 
+    src2 <- src
+  }  
   if (is.na(chr)) {
     stop("Chromosome not valid.")
   }

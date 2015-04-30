@@ -30,14 +30,15 @@ plot.fstats <- function(data, fstats, ...) {
 
   max.y <- max(myfst, na.rm = T)
   plot(myfst, type='h', col=color, xlab=prefix, ylab=expression(F[ST]),
-       xaxt='n', las=1, bty='n', ylim = range(pretty(c(0, max.y))),  panel.first =grid())
+       xaxt='n', las=1, bty='n', ylim = range(pretty(c(0, max.y))),  
+       panel.first=grid(), cex.axis=.8)
   
   axis.start <- min(data@gtdata@map)
   axis.stop <- max(data@gtdata@map)
   
   tmp <- seq(0,length(data@gtdata@map), by=100)
   
-  axis(1, at=tmp, 
+  axis(1, at=tmp, cex.axis=.8,
        labels=round(seq(axis.start,axis.stop, along.with=tmp)/divisor,digits=2))
 }
 

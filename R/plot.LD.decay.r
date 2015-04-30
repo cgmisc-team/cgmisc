@@ -35,11 +35,11 @@ plot.ld.decay <- function(data, N=200, dmin=NA, dmax=NA, ...){
   dist <- bpts[1:length(pts)]
   max.y <- max(pts, na.rm = T)
   min.y <- min(pts, na.rm = T)
-  plot(dist, pts, cex=.5, col='olivedrab', xlab="distance in bp", ylab="r2", type='n', las=1, bty='n',ylim = range(pretty(c(min.y, max.y))), ...)
-  grid()
+  plot(dist, pts, cex=.5, col='olivedrab', xlab="distance in bp", ylab=expression(r^2), 
+       type='n', las=1, bty='n',ylim = range(pretty(c(min.y, max.y))), panel.first=grid(nx=10), ...)
   abline(v=seq(1,max(dist), by=1e6), lty=3, col="grey")
   points(dist, pts, type='l', cex=.5, col='olivedrab')
   points(dist, pts2, type='l', cex=.5, col='tomato')
-  legend("topright", bty='n', legend=c("mean", "median"), col=c("olivedrab","tomato"), lty=1)
+  legend("topright", bty='n', legend=c("mean", "median"), col=c("olivedrab","tomato"), lty=1, cex = .8)
 }
 plot.LD.decay <- plot.ld.decay

@@ -62,7 +62,7 @@ We can see that there is possible population structure here. We should investiga
 kclust <- kmeans(data.qc1.mds, centers = 2)
 plot(data.qc1.mds, pch=19, cex=.5, las=1, xlab="MDS1", ylab="MDS2",cex.axis=.7, 
      bty='n', col=kclust$cluster)
-# Now, we can assign our individuals to calculated clusters which represent subpopulations.
+# Now, we can assign our individuals to the calculated clusters which represent subpopulations.
 pop <- kclust$cluster
 ```
 
@@ -71,8 +71,9 @@ We can compare subpopulations looking at the differences in the reference allele
 ## Comparing subpopulations
 
 ```{r pac, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-pac <- pop.allele.counts(data.qc1[,data.qc1@gtdata@chromosome==2], pop, progress=F)
-plot.pac(data.qc1[,data.qc1@gtdata@chromosome==2], allele.cnt = pac, plot.LD = T)
+pac <- pop.allele.counts(data.qc1[,data.qc1@gtdata@chromosome==28], pop, progress=F)
+plot.pac(data.qc1[,data.qc1@gtdata@chromosome==28], allele.cnt = pac, 
+         plot.LD = T, legend.pos='topleft')
 ```
 In a similar way, we can compute and plot fixation index $F_{ST}$:
 ```{r fst, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
@@ -80,8 +81,9 @@ fst <- compute.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], pop)
 plot.fstats(data.qc1[,data.qc1@gtdata@chromosome==2], fst)
 ```
 Having defined subpopulations, we can proceed to association analyses using mixed model with genomic kinship as random effect.
-```{r, echo=TRUE, results='show', message=FALSE, warning=FALSE, eval=T}
-h2h <- polygenic_hglm(formula = ct ~ sex, data.qc1.gkin, data.qc1)
+```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE, eval=T}
+h2h <- polygenic(formula = ct ~ sex, data.qc1.gkin, 
+                 data.qc1, llfun='polylik')
 mm <- mmscore(h2h, data.qc1, strata = pop)
 par(las=1, cex.axis=.7) # Tweak graphics
 plot(mm, cex=.5, pch=19, col=c("darkgrey","grey"))
@@ -99,7 +101,7 @@ Aforementioned function produces a standard so-called Manhattan plot with color-
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 plot.manhattan.LD(data = data.qc1, gwas.result = mm, chr = 2, region = c(37256927,39256927), 
-                  index.snp = "BICF2S2365880", legend.pos = "topright")
+                  index.snp = "BICF2S2365880", legend.pos = "topleft")
 ```
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
@@ -121,7 +123,6 @@ print (top.snps[1:4,])
 To extract markers within the user-defined (in bp) neighborhood of a given marker, one can use the ```get.adjacent.markers``` function. 
 ```{r get_adjacent, echo = T, results='show',message=T, warning=F, eval=TRUE}
 adjacent <- get.adjacent.markers(data = data.qc1, marker = "BICF2S2365880" , size.bp=1e4) 
-
 print(adjacent[1:4,])
 ```
 
@@ -133,10 +134,9 @@ clumps <- clump.markers(data, mm, chr = 2)
 plot.clumps(mm, clumps, 2, c(37256927,39256927))
 ```
 
-
-To visualise LD decay on chromosome 2, one can call the ```plot.ld.decay``` function.
+To visualise LD decay on chromosome 28, one can call the ```plot.ld.decay``` function.
 ```{r LD_decay, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==2])
+plot.LD.decay(data.qc1[,data.qc1@gtdata@chromosome==28])
 ```
 
 ## Detecting runs of homozygosity
@@ -159,9 +159,8 @@ het.windows <- het.overlap.wind(data.qc1, LW, F)
 Now, having calculated average heterozygosity we can visualize them with ```plot.overlap```
 
 ```{r overlap, echo=TRUE, results='show', message=TRUE, warning=F, eval=TRUE}
-plot.overlap(LW,het.windows)
+plot.overlap(LW, het.windows)
 ```
-
 
 We can use calculated heterozygosity to examine runs of homozygosity across selected chromosome. Let's use ```get.roh``` and check if we have any stretches of reduced heterozygosity on chromosome 2.
 Below a given threshold, all windows will be treated as homozygous.
@@ -171,7 +170,6 @@ get.roh(data = data.qc1, chr=2, LW=LW, hetero.zyg=het.windows, threshold = 0.30,
 ```
 
 As a result we get a matrix with runs coordinates, length (in windows) and first window that starts a stretch.
-
 
 ## Phenotype boxplots
 
@@ -192,20 +190,14 @@ In the **cgmisc** package, we provide collection of canine ERVs identified in ca
 
 Let's search for ERVs on chromosome 2:
 ```{r get_erv, echo = T, results='show', eval = T, warning=F, message =FALSE}
-
 ervs <- get.erv(chr = "chr2", coords=c(10e6, 40e6))
-
 print(ervs[1:4,])
-
 ```
 
 Having returned a list of ERV sequences, we are able to plot them with ```plot.erv``` function using the same region:
 ```{r plot_erv, echo = T, results='show', eval=T, warning=F}
-
 plot.erv(chr = "chr10", coords = c(10e6, 40e6))
-
 ```
-
 
 ## Conversion functions
 
@@ -218,7 +210,7 @@ Our package provides a number of functions which enable switching between variou
 ```gwaa.to.phase``` lets user convert a GenABEL gwaa.data-class object to the PHASE input format. 
 
 ```phase.to.fasta``` PHASE is a software for haplotype reconstruction  ```phase.to.fasta``` function can be used to parse a part of PHASE output to a customised FASTA format:
-```{r haplo, tidy=FALSE, eval=FALSE, echo = TRUE}
+```{r haplo, tidy=FALSE, eval=FALSE, echo=TRUE}
 '>haplo_1_count_176'
 'TCGGGCTC'
 ```
@@ -231,11 +223,21 @@ In the above example, the first line contains the name of the haplotype along wi
 ## Improved quantile-quantile plots
 A quantile-quantile plot (QQ plots) is a graphical way of comparing two probability distributions. In GWAS studies, they are commonly used to compare computed per marker p-values with the ones expected under the null hypothesis. This comparison is then used to compute genomic-inflation factor ${\lambda}$ which is a good measure of the degree of confounding caused by population structure. The **cgmisc** package contains two functions for better visualization and improved interpretation of standard QQ plots: ```plot.qq``` and ```qq.emp```. The first function plots expected vs. observed distribution of p-values and shows theoretical confidence interval computed using approach outlined in Casella & Berger 2002). The ```qq.emp``` function, apart from showing theoretical confidence interval, also performs a number of randomization tests (shuffling the phenotypic value) to determine empirical confidence interval which, due to LD, is often narrower than the theoretical one. 
 
-//JJ NOTE: Permutation tests included in qq.emp?
-```{r plot_qq, fig.width=480, fig.height=480, fig.align='center', dev='png', eval=TRUE, echo=TRUE}
-plot.qq(mm[,'P1df'], conf=c(0.05, 0.95), conf.type="shade", conf.col=rgb(.5,.5,1,.5), step=100)
+```{r plot_qq, fig.align='center', dev='pdf', eval=TRUE, echo=TRUE, results='hide'}
+# Perform permutation tests
+h2h <- polygenic(formula = ct ~ sex, data.qc1.gkin, data.qc1, llfun='polylik')
+result <- c()
+h2h.tmp <- h2h
+pb <- txtProgressBar(min=0, max=30, initial=0, style=3)
+for (i in 1:30) {
+  h2h.tmp$grresidualY <- sample(h2h$grresidualY)
+  tmp <- qtscore(h2h.tmp$grresidualY, data.qc1, strata = pop, clambda = F)
+  result <- rbind(result, sort(-log10(tmp@results$P1df)))
+  setTxtProgressBar(pb,i,label = "Perm. test")
+}
+plot.qq(obs = mm[,'P1df'], emp = result, plot.emp = T, step = 100)
+plot.qq(data = data.qc1, obs = mm[,'P1df'], emp = h2h, N = 10, plot.emp = T, step = 100)
 ```
-
 
 ## Dog-specific utilities
 Current approaches to finding genome-wide associations in diploid organisms quite often encounter difficulties when analysing non-autosomal parts of the genome, e.g. sex chromosomes [Young et al., 2008].  In **cgmisc**, the ```chr.x.fix.canfam``` partially addresses this issue by creating an artificial pseudo-autosome which consists of pseudo-autosomal regions of the X chromosome. Currently, the function is specific to data coming from domestic dog (Canis familiaris, assemblies canFam2 and canFam3.1). 
@@ -261,11 +263,10 @@ es <- epistasis.scan(data = data.qc1[,data.qc1@gtdata@chromosome==2], SNP = 'BIC
                      trait.name = 'response')
 ```
 
-```{r box_two}
+```{r box_two, fig.align='center', dev='pdf', eval=TRUE, echo=TRUE, results='hide'}
 boxplot.snp.twoWay(data.qc1, marker1 = 'BICF2S2365880', marker2 = 'BICF2S2337600', 
                    trait = 'response')
 ```
-
 
 ## List of aliases
 

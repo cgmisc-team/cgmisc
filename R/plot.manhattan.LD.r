@@ -49,9 +49,12 @@ plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value
   idx.marker <- which(data@gtdata@snpnames == index.snp)
   idx.marker.coords <- data@gtdata@map[idx.marker]
   pvals <- -log10(gwas.result@results$P1df[markers])
-  plot(markers.coords, pvals, type='n', xlab="Position (Mb)", ylab=expression(-log[10](p-value)), ylim=c(-shift, max(pvals) + 3), axes=F)
+  plot(markers.coords, pvals, type='n', xlab="Position (Mb)", 
+       ylab=expression(-log[10](p-value)), 
+       ylim=c(-shift, max(pvals) + 3), 
+       axes=F, panel.first=grid(), las=2)
   # Plot grid
-  abline(h=seq(.5, max(pvals) + topMargin, .5), col="grey", lty=3)
+  #abline(h=seq(.5, max(pvals) + topMargin, .5), col="grey", lty=3)
   #points(idx.marker.coords, -log10(gwas.mm@results$P1df[idx.marker]), col="red", pch=19, cex=1)
   r2vec <- r2matrix[index.snp,]
   r2vec[is.na(r2vec)] <- -1
