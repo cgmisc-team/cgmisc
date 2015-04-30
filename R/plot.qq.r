@@ -102,8 +102,12 @@ plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, co
   if (legend) {
     legend("topleft", 
            legend=c("theor. distr.","theor. conf. int.", "emp. distr.","emp. conf. int.", "emp. thr."), 
-           pch=c(NA,NA,NA,NA,NA), col=c("tomato","tomato","black","black", "darkgrey"),
-           lty=c(5,1,5,1,1), box.lwd = 0, cex=.8)
+           pch=c(NA,NA,NA,NA,NA), 
+           col=c("tomato","tomato","black","black", "darkgrey"),
+           lty=c(5,1,5,1,1), 
+           box.lwd = 0, 
+           cex=.8, 
+           bty='n')
   }
 }
 
