@@ -21,12 +21,12 @@
 ##' @export qq.emp
 plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, conf.level=.95, conf=c(0.025, 0.975), show.pb=T) {
   require(GenABEL)
-  N <- length(obs)
+  n <- length(obs)
   obs <- -log10(obs)
-  exp <- -log10(1:N/N)
+  exp <- -log10(1:n/n)
   exp.s <- sort(exp)
   obs.s <- sort(obs)
-  indices <- seq(from = 1, to = N, by = step)
+  indices <- seq(from = 1, to = n, by = step)
   
   # Plotting empty graph
   plot(exp, obs, type='n', xaxt='n', yaxt='n', xlab="", ylab=expression(observed~~-log[10](p)), 
@@ -62,6 +62,7 @@ plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, co
     }
   emp <- perm.result
   }
+  
   
   # Plot empirical confidence intervals
   if (!is.null(emp) & plot.emp) {

@@ -34,12 +34,12 @@ plot.clumps <- function(gwas.result, clumps, chr, region, clambda = F) {
          ylim = c(-length(clumps) - 1, max(pvals)), las = 2)
     grid()
     step <- (max(coords) - min(coords)) / 5
-    axis(1, at = seq(min(coords), max(coords), by=step), font= 2,
+    axis(1, at = seq(min(coords), max(coords), by=step),
          labels = format(seq(min(coords), max(coords), by=step)/1e6, 
                        scientific=F, digits=3))
     axis(2, at = seq(0, max(pvals), 2), 
-         labels = T, font = 2, las = 1, cex.axis = 0.6)
-    #axis(2, at=seq(-1, -1-length(clumps), -1),labels=abs(seq(-1, -1-length(clumps), -1)))
+         labels = T, las = 1, cex.axis = 0.6)
+    #axis(4, at=seq(-1, -1-length(clumps), -1),labels=abs(seq(-1, -1-length(clumps), -1)))
     mtext('Position (Mb)', 1, 3)
     #mtext(expression(clumps~'            '~-log[10](p-value)), 2, 3)
     mtext(expression(-log[10](p-value)), 2, 3)
