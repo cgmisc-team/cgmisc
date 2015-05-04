@@ -4,6 +4,7 @@ author: Marcin Kierczak, Jagoda Jabłońska, Simon Forsberg, Matteo Bianchi, Kat
   Tengvall, Mats Pettersson, Veronika Scholz, Jennifer Meadows, Patric Jern, Örjan Carlborg, Kerstin
   Lindblad-Toh
 date: "04 May 2015"
+bibliography: vignette.bib
 output:
   pdf_document:
     latex_engine: xelatex
@@ -14,7 +15,7 @@ output:
 
 ```{r global_options, include=FALSE}
 require(knitr)
-knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy=FALSE, cache=F)
+knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy=FALSE, cache=T)
 ```
 # Synopsis
 
@@ -309,7 +310,7 @@ chr.x.fix.canfam (data = data.qc1, assembly = 'canFam3')
 ```
 
 ## Interacting with the UCSC genome browser
-Sometimes, one may wish to display p-values from a genome-wide association scan directly in UCSC Genome Browser (Kent et al., 2002) to easily align annotations with the signals of interest. This can be done with ```gwaa.to.bed``` function that exports coordinates and  p-values from gwaa.data-scan into bed file that can easily be used to set a custom path in the UCSC Genome Browser.
+Sometimes, one may wish to display p-values from a genome-wide association scan directly in UCSC Genome Browser [@kent_2002] to easily align annotations with the signals of interest. This can be done with ```gwaa.to.bed``` function that exports coordinates and  p-values from gwaa.data-scan into bed file that can easily be used to set a custom path in the UCSC Genome Browser.
   
 Using the ```open.region.ucsc``` function, it is possible to automatically open an Internet browser window containing UCSC Genome Browser result for a set of predefined genomic coordinates and assembly of interest. 
 
@@ -351,3 +352,5 @@ List of functions aliases:
 **plot.fstats**: plot.Fst  
 **compute.fstats**: compute.Fstats   
 **create.haploview.info**: create.Haploview.info
+
+# References
