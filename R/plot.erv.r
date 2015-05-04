@@ -38,6 +38,6 @@ plot.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db", scale=c(.2
   }
   opar <- par()
   par(xpd=TRUE) 
-  legend(1,-1.5, col=c("slateblue","olivedrab"), legend=c("+ strand","- strand"), bty = 'n', pch=15, cex=.8) 
+  legend(my.xlim[1],-1.5, col=c("slateblue","olivedrab"), legend=c("+ strand","- strand"), bty = 'n', pch=15, cex=.8) 
   par(opar) 
 }
