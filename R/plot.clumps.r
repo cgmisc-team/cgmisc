@@ -44,7 +44,7 @@ plot.clumps <- function(gwas.result, clumps, chr, region, clambda = F) {
     #mtext(expression(clumps~'            '~-log[10](p-value)), 2, 3)
     mtext(expression(-log[10](p-value)), 2, 3)
     points(coords, pvals, pch=19, cex=.7)
-    mycols <- colorRampPalette(colors=c("slateblue","grey","red"))
+    mycols <- colorRampPalette(colors=c("slateblue","grey"))
     cols <- mycols(length(clumps))
     for (i in 1:length(clumps)) {
       x <- rep(min(clumps[[i]]$coord), times=2)
