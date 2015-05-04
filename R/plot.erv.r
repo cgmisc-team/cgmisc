@@ -34,6 +34,10 @@ plot.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db", scale=c(.2
     }
     polygon(c(r$start, r$end, r$end, r$start, r$start), 
             c(0,0,log10(r$score),log10(r$score), 0), col = scol, border = 1)
-    points(mean(c(r$start, r$end)), log10(r$score), col = scol, pch=19, cex=.8)
+    points(mean(c(r$start, r$end)), log10(r$score), col = scol, pch=15, cex=.8)
   }
+  opar <- par()
+  par(xpd=TRUE) 
+  legend(1,-1.5, col=c("slateblue","olivedrab"), legend=c("+ strand","- strand"), bty = 'n', pch=15, cex=.8) 
+  par(opar) 
 }

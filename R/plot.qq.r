@@ -4,12 +4,12 @@
 ##' @author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>
 ##' @param data a gwaa.data-class object used to fit the original model
 ##' @param obs observed values from association test 
-##' @param emp vector of empirical p-values or  a list, result of running polygenic model
+##' @param emp a matrix of empirical p-values (permutation per row) or a list, result of running polygenic model
 ##' @param N if polygenic model supplied, a number of permutations to run
 ##' @param step computation coarseness step
 ##' @param legend if the legend is to be plotted
 ##' @param plot.emp plotting empirical values
-##' @param conf.level confidence level (0.95 by default)
+##' @param conf.level confidence threshold (0.95 by default)
 ##' @param show.pb a logical indicating whether progress bar will be shown
 ##' @conf a vector defininy the lower and the upper confidence interval, default 5% CI.
 ##' @return NULL
@@ -21,12 +21,12 @@
 ##' @export qq.emp
 plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, conf.level=.95, conf=c(0.025, 0.975), show.pb=T) {
   require(GenABEL)
-  n <- length(obs)
+  n.obs <- length(obs)
   obs <- -log10(obs)
-  exp <- -log10(1:n/n)
+  exp <- -log10(1:n.obs/n.obs)
   exp.s <- sort(exp)
   obs.s <- sort(obs)
-  indices <- seq(from = 1, to = n, by = step)
+  indices <- seq(from = 1, to = n.obs, by = step)
   
   # Plotting empty graph
   plot(exp, obs, type='n', xaxt='n', yaxt='n', xlab="", ylab=expression(observed~~-log[10](p)), 
@@ -55,7 +55,7 @@ plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, co
     for (i in 1:N) {
       h2h.tmp$grresidualY <- sample(h2h$grresidualY)
       tmp <- qtscore(h2h.tmp$grresidualY, data, clambda = F)
-      #perm.result <- rbind(perm.result, sort(-log10(tmp@results$P1df)))
+      perm.result <- rbind(perm.result, sort(-log10(tmp@results$P1df)))
       if (show.pb) { 
         setTxtProgressBar(pb, i)
       }
@@ -78,8 +78,8 @@ plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, co
     cUpp <- vector()
     cLow <- vector()
     for (i in indices) {
-      cUpp[i] <- qbeta(conf[1], i, N-i+1)
-      cLow[i] <- qbeta(conf[2], i, N-i+1)
+      cUpp[i] <- qbeta(conf[1], i, n.obs-i+1)
+      cLow[i] <- qbeta(conf[2], i, n.obs-i+1)
     }
     points(exp[indices], -log10(cUpp[indices]), type="l", col="tomato", lty=1)
     points(exp[indices], -log10(cLow[indices]), type="l", col="tomato", lty=1)

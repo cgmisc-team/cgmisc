@@ -1,4 +1,4 @@
-##'@title Get adjacent markers
+##'@title Get adjacent markers within a distance around the given marker
 ##'@description Returns markers adjacent to a given marker (within a preset distance).
 ##'@author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>
 ##'@param data a gwaa.data class object as used by the \code{\link[GenABEL]{gwaa.data-class}},

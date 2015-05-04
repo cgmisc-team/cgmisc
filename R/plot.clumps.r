@@ -54,7 +54,7 @@ plot.clumps <- function(gwas.result, clumps, chr, region, clambda = F) {
       #points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], type='l', lwd=2)
       points(clumps[[i]]$coord, -log10(clumps[[i]]$pval), col=cols[i], cex=.9, pch=19)
       #abline(v=(min(clumps[[i]]$coord)+max(clumps[[i]]$coord))/2, col="tomato", lty=2)
-      points(clumps[[i]]$coord, rep(-1-i, times=length(clumps[[i]]$coord)), col=cols[i], pch=19, cex=.9)
+      #points(clumps[[i]]$coord, rep(-1-i, times=length(clumps[[i]]$coord)), col=cols[i], pch=19, cex=.9)
     }
   }
   else { stop("The list of clumps is empty!") }

@@ -29,6 +29,6 @@ choose.top.snps <- function(data, chr, region, index.snp) {
   ret.mark  <- rev(sort(r2matrix[index.snp, which(r2col == 'a' | r2col == 'b' | r2col == 'f' )]))
   snps  <- as.vector(names(ret.mark))
   coords  <- data[,snps]@gtdata@map
-  all  <- data.frame(marker=ret.mark, coord=coords) 
+  all  <- data.frame(r2=ret.mark, coord=coords) 
   return(all)
 }
