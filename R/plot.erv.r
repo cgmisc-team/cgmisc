@@ -37,6 +37,6 @@ plot.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db", scale=c(.2
     points(mean(c(r$start, r$end)), log10(r$score), col = scol, pch=15, cex=.8)
   }
   par(xpd=TRUE) 
-  legend(my.xlim[1],-1.0, col=c("slateblue","olivedrab"), legend=c("+ strand","- strand"), bty = 'n', pch=15, cex=.8) 
+  legend(my.xlim[1],-.7, col=c("slateblue","olivedrab"), legend=c("+ strand","- strand"), bty = 'n', pch=15, cex=.8) 
   par(xpd=FALSE) 
 }
