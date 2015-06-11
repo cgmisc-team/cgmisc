@@ -2,13 +2,13 @@
 ##'
 ##'@description Plots average heterozygosities for overlapping windows and the distribution of heterozygosity.
 ##'@author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>, Jagoda Jablonska <\email{jagoda100jablonska@@gmail.com}>
-##'@param LW a list of windows and coordinates returned by \code{get.overlapping.windows} function
-##'@param heter.zyg a matrix of heterozygosities returned by \code{\link[cgmisc]{het.for.overlap.wind}}
+##'@param LW a list of windows and coordinates returned by \code{get.overlap.windows} function
+##'@param heter.zyg a matrix of heterozygosities returned by \code{\link[cgmisc]{het.overlap.wind}}
 ##'@return null
-##'@seealso \code{\link[cgmisc]{get.overlapping.windows}}, \code{\link[cgmisc]{het.for.overlap.wind}}
+##'@seealso \code{\link[cgmisc]{get.overlap.windows}}, \code{\link[cgmisc]{het.overlap.wind}}
 ##'@keywords heterozygosity, window 
 ##'
-##'@export
+##'@export plot.overlap
 
 plot.overlap  <- function(LW, heter.zyg, ...){
   mids  <- as.vector(LW[[1]][[2]])

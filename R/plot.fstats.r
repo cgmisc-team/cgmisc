@@ -9,7 +9,9 @@
 ##' \dontrun{plot.fstats(data, fst)}
 ##' @keywords plot FST, fst, Fst, fstats, populations, subpopulations
 ##' @seealso \code{\link[cgmisc]{compute.fstats}}, \code{\link[cgmisc]{fstats.result-class}}
-##' @export plot.Fstats
+##' @export plot.fstats plot.Fst
+##' @aliases plot.Fst
+
 plot.fstats <- function(data, fstats, ...) {
   chr.mid <- c()
   for (chr in unique(as.numeric(data@gtdata@chromosome))) {

@@ -1,12 +1,12 @@
 ##'@title Calculates heterozygosity for windows
 ##'@description Calculates average heterozygosity for overlapping windows 
-##'produced by \code{get.overlapping.windows} function
+##'produced by \code{get.overlap.windows} function
 ##'@author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>, Jagoda Jablonska <\email{jagoda100jablonska@@gmail.com}>
 ##'@param data data object in \code{\link[GenABEL]{gwaa.data-class}}
-##'@param LW a list of windows and coordinates produced by \code{get.overlapping.windows} function.
+##'@param LW a list of windows and coordinates produced by \code{get.overlap.windows} function.
 ##'@param progress logical if the progress bar is to be displayed
 ##'@return Matrix of average heterozygosities for every window
-##'@seealso \code{\link[cgmisc]{get.overlapping.windows}}
+##'@seealso \code{\link[cgmisc]{get.overlap.windows}}
 ##'@keywords heterozygosity, window 
 ##'
 ##'@export het.overlap.wind

@@ -9,7 +9,8 @@
 ##'  \dontrun{vGWAS.input.data <- gwaa2vgwas(data=cgmiscdat1, "trait1")}
 ##' @keywords GenABEL, vGWAS, convert, gwaa
 ##' @seealso \code{\link[GenABEL]{GenABEL}}, \code{\link[vGWAS]{vGWAS}}
-##' @export gwaa.to.vgwas
+##' @export gwaa.to.vgwas gwaa2vgwas gwaa.to.vGWAS gwaa2vGWAS
+##' @aliases gwaa2vgwas gwaa.to.vGWAS gwaa2vGWAS
 
 gwaa.to.vgwas <- function(data, trait.name) {
   if (!require(vGWAS)) {

@@ -11,7 +11,8 @@
 ##'  phase2fasta(input=con)
 ##' }
 ##' @keywords fasta, gwas, p-values
-##' @export phase.to.fasta
+##' @export phase.to.fasta phase2fasta PHASE.to.FASTA PHASE2FASTA
+##' @aliases phase2fasta PHASE.to.FASTA PHASE2FASTA
  
 phase.to.fasta <- function(input, output=NULL, filter=NULL) {
   require(stringr)

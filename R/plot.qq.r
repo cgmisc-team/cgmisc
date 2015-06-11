@@ -11,14 +11,14 @@
 ##' @param plot.emp plotting empirical values
 ##' @param conf.level confidence threshold (0.95 by default)
 ##' @param show.pb a logical indicating whether progress bar will be shown
-##' @conf a vector defininy the lower and the upper confidence interval, default 5% CI.
+##' @param conf a vector defininy the lower and the upper confidence interval, default 5% CI.
 ##' @return NULL
 ##' @examples
 ##'  \dontrun{
-##'  qq.emp(obs=data.mm[,'Pc1df], conf=c(0.025, 0.975), emp = result[,'Pc1df'], step=10, legend=T, plot.emp=T, conf.level=.95)
+##'  plot.qq(obs=data.mm[,'Pc1df], conf=c(0.025, 0.975), emp = result[,'Pc1df'], step=10, legend=T, plot.emp=T, conf.level=.95)
 ##'  }
 ##' @keywords permutations emp
-##' @export qq.emp
+##' @export plot.qq
 plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, conf.level=.95, conf=c(0.025, 0.975), show.pb=T) {
   require(GenABEL)
   n.obs <- length(obs)

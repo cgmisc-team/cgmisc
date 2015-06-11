@@ -9,10 +9,10 @@
 ##'@param overlap size of the overlap.
 ##'
 ##'@return List containing windows coordinates and LW matrix with windows and markers.
-##'@seealso \code{\link[cgmisc]{het.for.overlap.wind}}
+##'@seealso \code{\link[cgmisc]{het.overlap.wind}}
 ##'@keywords overlapping, windows 
 ##'
-##'@export
+##'@export get.overlap.windows 
 
 get.overlap.windows <- function(data, chr, size = 125e4, overlap = 25e2) {
   if(!missing(chr)){

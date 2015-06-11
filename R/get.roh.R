@@ -3,13 +3,13 @@
 ##'@author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>, Jagoda Jablonska <\email{jagoda100jablonska@@gmail.com}>
 ##'@param data a gwaa.data class object as used by \code{\link[GenABEL]{gwaa.data-class}}
 ##'@param chr number of chromosome 
-##'@param LW a matrix of windows coordinares returned by \code{get.overlapping.windows} function
-##'@param hetero.zyg a matrix of average heterozygosities for windows returned by \code{het.for.overlap.wind} function
+##'@param LW a matrix of windows coordinares returned by \code{get.overlap.windows} function
+##'@param hetero.zyg a matrix of average heterozygosities for windows returned by \code{het.overlap.wind} function
 ##'@param threshold threshold of homozygosity. All windows with homozygosity below this limit will be treated as homozygous.
 ##'@param strict if one window with lower homozygosity should be tolerated
 ##'@return matrix with columns respectively : 1) number of first window of run, 2) coordinate of first window in a run,
 ##'3) coordinate of last window in a run, 4) length of run (number of windows)
-##'@seealso \code{\link[cgmisc]{get.overlapping.windows}} \code{\link[cgmisc]{het.overlap.wind}}
+##'@seealso \code{\link[cgmisc]{get.overlap.windows}} \code{\link[cgmisc]{het.overlap.wind}}
 ##'@keywords heterozygosity, homozygosity, overlapping window 
 ##'
 ##'@export get.roh
