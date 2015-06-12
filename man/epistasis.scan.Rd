@@ -2,7 +2,7 @@
 % Please edit documentation in R/epistasis.scan.R
 \name{epistasis.scan}
 \alias{epistasis.scan}
-\title{epistasisScan}
+\title{epistasis scan}
 \usage{
 epistasis.scan(data, SNP, trait.name = NULL, pheno = NULL)
 }
