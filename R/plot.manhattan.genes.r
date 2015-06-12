@@ -36,12 +36,14 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
   layOut <- function (...) {
     require(grid)
     x <- list(...)
-    n <- max(sapply(x, function(x) max(x[[2]])))
-    p <- max(sapply(x, function(x) max(x[[3]])))
+    n <- max(sapply(x, function(x) max(x[[2]]))) 
+    p <- max(sapply(x, function(x) max(x[[3]])))    
     pushViewport(viewport(layout = grid.layout(n, p)))
+    
     for (i in seq_len(length(x))) {
       print(x[[i]][[1]], vp = viewport(layout.pos.row = x[[i]][[2]], 
                                        layout.pos.col = x[[i]][[3]]))
+      
     }
   }
   
@@ -68,6 +70,7 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
   markers <- which(data@gtdata@snpnames %in% names(area)) 
   markers.coords <<- data@gtdata@map[markers]
   pvals <- -log10(gwas.result@results$P1df[markers])
+
   
   r2vec <- r2matrix[index.snp,]
   r2vec[is.na(r2vec)] <- -1
@@ -78,7 +81,7 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
   maf <- getMAF(myChromosome, area)
   maf2 <<- pmin(maf$maf, (1 - maf$maf))
   gwas_palette <- rev(c("#9E0508","tomato","chartreuse3","cyan3","navy","black"))
-  
+
   # First plot the manhattan plot
   manhattan_plot <- ggplot(df2, aes(x=markers.coords, y=pvals, colour = r2col)) +
     coord_cartesian(xlim = region) +
@@ -89,7 +92,7 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
                        values=gwas_palette,
                        labels = c(112, 15, 15, 15, 15, 15)) +
     geom_point(size=2) +
-    geom_point(data=df2[index.snp,], aes(x=df2[index.snp,1], y=df2[index.snp,2]),
+    geom_point(data=df2[index.snp,], aes_string(x=df2[index.snp,1], y=df2[index.snp,2]),
                colour="black", shape=21, fill="white", size=2, guide = 'legend') +
     ylab(expression(-log[10](p-value))) +
     theme_bw() +
@@ -98,7 +101,7 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
           legend.key.height = unit(4, "mm")) + 
     theme(axis.line = element_line(color = 'grey'), axis.text.x=element_blank(),
           axis.title.x=element_blank())
-
+    
   
   # Second plot showing the minor allele frequency
   maf_plot <- ggplot(df2, aes(x=markers.coords, y=(maf2))) +
@@ -111,11 +114,12 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
           legend.text=element_text(size=2), legend.background = element_blank()) +
     theme(axis.line = element_line(color = 'grey'), axis.text.x=element_blank(),
           axis.title.x=element_blank())
+    
   
   # Third plot showing the genes in the specified region
   gene_plot <- plot.genes(region, chr, bed.path=bed.path)
-  
   layOut(list(manhattan_plot, 1:4, 1),
          list(maf_plot, 5, 1),
          list(gene_plot, 6:7, 1))
+  
 }
