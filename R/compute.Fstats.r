@@ -24,7 +24,8 @@
 ##' }
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}, \code{\link[cgmisc]{fstats.result}}
 ##' @keywords FST fixation index population structure heterozygosity
-##' @export compute.fstats
+##' @export compute.fstats compute.Fstats
+##' @aliases compute.Fstats
 ##' 
 compute.fstats <- function(data, pops) {
   # Copyright Marcin.Kierczak@slu.se

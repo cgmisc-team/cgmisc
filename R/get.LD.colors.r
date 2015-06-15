@@ -13,7 +13,8 @@
 ##'  }
 ##' @keywords plot, LD, colours
 ##' @seealso \code{\link[cgmisc]{plot.pac}}
-##' @export get.ld.colors
+##' @export get.ld.colors get.LD.colors
+##' @aliases get.LD.colors
 get.ld.colors <- function(data, chr, index.snp, region=NULL) {
   data  <- data[,data@gtdata@chromosome==chr]
   if (!is.null(region)) {

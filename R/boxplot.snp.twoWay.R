@@ -10,7 +10,7 @@
 ##'@param trait The name of a phenotype in data
 ##'@param legend If TRUE, a legend showing the alternative genotypes for the two SNPs will be added to the plot.
 ##'@return null
-##'@author Simon Forsberg  <\email{simon.forsberg@slu.se}>
+##'@author Simon Forsberg  <\email{simon.forsberg@@slu.se}>
 ##'@export boxplot.snp.twoWay
 ##'
 boxplot.snp.twoWay <- function(data, marker1, marker2, trait, legend = F, ...){

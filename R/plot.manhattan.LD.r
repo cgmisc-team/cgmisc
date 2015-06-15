@@ -23,7 +23,8 @@
 ##'                   index.snp="BICF2P12960", bonferroni=F, legend.pos="default")
 ##' }
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}, \code{\link[GenABEL]{scan.gwaa-class}}
-##' @export plot.manhattan.ld
+##' @export plot.manhattan.ld plot.manhattan.LD
+##' @aliases plot.manhattan.LD
 ##' 
 plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value = 0.05, bonferroni = T, mafThreshold = .05, legend.pos = 'def.left') {  
   opar <- par()

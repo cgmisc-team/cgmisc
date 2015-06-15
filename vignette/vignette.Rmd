@@ -15,7 +15,7 @@ output:
 
 ```{r global_options, include=FALSE}
 require(knitr)
-knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy=FALSE, cache=T)
+knitr::opts_chunk$set(fig.width=8.2, fig.height=4.5, tidy=FALSE, cache=F)
 ```
 # Synopsis
 

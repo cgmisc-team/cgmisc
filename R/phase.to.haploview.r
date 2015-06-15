@@ -11,7 +11,8 @@
 ##'  phase2haploview(input=con)
 ##' }
 ##' @keywords PHASE, HaploView, convert
-##' @export phase.to.haploview
+##' @export phase.to.haploview phase2haploview PHASE.to.Haploview PHASE2Haploview
+##' @aliases phase2haploview PHASE.to.Haploview PHASE2Haploview
 
 phase.to.haploview <- function(input, output=NULL) {
   require(stringr)

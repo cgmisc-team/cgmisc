@@ -14,7 +14,8 @@
 ##' plot.LD.decay(data=dat, N=200, dmin=0, dmax=1e6, main="Chr3")
 ##' }
 ##' @keywords LD, LD decay, plot, r2
-##' @export plot.ld.decay
+##' @export plot.ld.decay plot.LD.decay
+##' @aliases plot.LD.decay
 
 plot.ld.decay <- function(data, N=200, dmin=NA, dmax=NA, ...){
   m <- as.matrix(data@gtdata@map)
@@ -42,4 +43,5 @@ plot.ld.decay <- function(data, N=200, dmin=NA, dmax=NA, ...){
   points(dist, pts2, type='l', cex=.5, col='tomato')
   legend("topright", bty='n', legend=c("mean", "median"), col=c("olivedrab","tomato"), lty=1, cex = .8)
 }
+
 plot.LD.decay <- plot.ld.decay

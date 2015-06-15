@@ -44,6 +44,9 @@ plot.genes <- function(region, chr, bed.path=NULL) {
   gene_plot <- ggplot(df_unique, aes(xmin = df_unique$start, xmax = df_unique$end,
                                      ymin = df_unique$ymin, ymax = df_unique$ymin + 0.7)) +
     coord_cartesian(xlim = region) +
+    scale_x_continuous(breaks = seq(region[1], region[2], 1000000),
+                       labels = round(seq(region[1], region[2], 1000000), 2)) +
+    
     scale_y_continuous(expand=c(0.1,0.3)) +
     xlab("Position (Mb)") +
     geom_rect(alpha =0.2, color = rgb(0,114,178, maxColorValue=256), 

@@ -16,7 +16,8 @@
 ##'  gwas.region.bed(chr, range, gwas, fname="my_output.bed")
 ##'  }
 ##' @keywords bed, gwas, p-values
-##' @export gwaa.to.bed
+##' @export gwaa.to.bed gwaa2bed
+##' @aliases gwaa2bed
 gwaa.to.bed  <- function(chr, range, gwas, fname="output.bed") {
   range <- format(range, scientific=F)
   cat(paste("browser position chr",chr,":",range[1],"-",range[2], sep=""), file=fname, append=F, sep="\n")

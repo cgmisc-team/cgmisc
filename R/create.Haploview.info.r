@@ -14,7 +14,9 @@
 ##' create.Haploview.info(data=data.qc2, chr=2, coords=c(3030587,5030587), outFile="~user/test.info")
 ##' }
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}
-##' @export create.haploview.info
+##' @export create.haploview.info create.Haploview.info
+##' @aliases create.Haploview.info
+
 create.haploview.info <- function(data, chr, coords, outFile) {
   #data  <- data@gtdata???
   if(!missing(coords)){

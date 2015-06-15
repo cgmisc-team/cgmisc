@@ -7,7 +7,8 @@
 ##' @param coords a vector of two values, if the argument is missing the entire chromosome will be taken into consideration
 ##' @param assembly type of assembly (camFam2 or camFam3)
 ##' @return null
-##' @export open.region.ucsc
+##' @export open.region.ucsc open.region.UCSC
+##' @aliases open.region.UCSC
 
 open.region.ucsc <- function(chr, coords, assembly = "canFam3"){
   options("scipen" = 10)  

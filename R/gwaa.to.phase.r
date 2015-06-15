@@ -14,7 +14,9 @@
 ##' gwaa2PHASE(data=data.qc2, chr=2, coords=c(3030587,5030587), outFile="~user/test.phase")
 ##' }
 ##' @seealso \code{\link[GenABEL]{gwaa.data-class}}
-##' @export gwaa.to.phase
+##' @export gwaa.to.phase gwaa2phase gwaa.to.PHASE gwaa2PHASE
+##' @aliases gwaa2phase gwaa.to.PHASE gwaa2PHASE
+
 gwaa.to.phase <- function(data, chr, coords = NULL, outFile){
   if(!is.null(coords) & length(coords) == 2){
     region <- which(data@gtdata@chromosome == chr & data@gtdata@map > coords[1] & data@gtdata@map < coords[2])

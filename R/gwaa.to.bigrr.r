@@ -14,7 +14,8 @@
 ##'    bigRR.data <- gwaa2bigRR(~sex, data.qc0, gt)
 ##'} 
 ##'    
-##' @export 
+##' @export gwaa.to.bigrr gwaa2bigrr gwaa.to.bigRR gwaa2bigRR
+##' @aliases gwaa2bigrr gwaa.to.bigRR gwaa2bigRR
 
 gwaa.to.bigrr <- function(formula, data, trait) {
   # Copyright Marcin.Kierczak@slu.se<mailto:Marcin.Kierczak@slu.se>
