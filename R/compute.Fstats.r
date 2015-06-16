@@ -41,6 +41,9 @@
 ##' @aliases compute.Fstats
 ##' 
 compute.fstats <- function(data, pops) {
+  if (sum(pops[pops == 0]) > 0) {
+    pops <- pops + 1
+  }
   pop.names <- unique(pops)
   if (length(pop.names) > 2) {
     stop("Fst computation impossible for more than two populations!")
@@ -104,12 +107,13 @@ compute.fstats <- function(data, pops) {
   
   # Nei's Fst estimate
   p.avg <- (p1+p2)/2
-  FST.Nei <- ((p1-p2)^2) / 2*p.avg*(1 - p.avg)
-  tmp.nom <- (n1*n2)/(n1+n2)*2/(n1+n2-2)*(n1*p1*q1+n2*p2*q2)
-  tmp.denom <- (n1*n2)/(n1+n2)*(p1-p2)^2 + ((2*n1*n2)/(n1+n2)-1)*1/(n1+n2-2)*(n1*p1*q1+n2*p2*q2)
+  FST.Nei <- (p1-p2)^2 / (2*p.avg*(1 - p.avg))
   
   # Weir and Cockerham's Fst estimate
+  tmp.nom <- (n1*n2)/(n1+n2)*2/(n1+n2-2)*(n1*p1*q1+n2*p2*q2)
+  tmp.denom <- (n1*n2)/(n1+n2)*(p1-p2)^2 + ((2*n1*n2)/(n1+n2)-1)*1/(n1+n2-2)*(n1*p1*q1+n2*p2*q2)
   FST.WC <-  1 - tmp.nom/tmp.denom
+  
   glob <- data.frame(p.bar=p.bar, q.bar=q.bar, HI=HI, HS=HS, HT=HT, FIS=FIS, FIT=FIT, FST.WC=FST.WC, FST.Nei=FST.Nei, FST.Hudson=FST.Hudson, FST.naive=FST)
   result <- new("fstats.result", pops=subpop_data, glob=glob)
   result
