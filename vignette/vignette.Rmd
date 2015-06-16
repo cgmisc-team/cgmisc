@@ -40,7 +40,7 @@ Whenever possible, the **cgmisc** package works with data structures implemented
 The package is shipped with an example dataset called **cgmisc_data**. The example dataset contains genotyping data (Illumina CanineHD array, canFam2 assembly) for N=207 German shepherds originally collected for the project described in [@tengvall_2012]. However, to illustrate various features of the **cgmisc** package, the phenotypes included in the example dataset have been simulated. Use the following command to load the example dataset:
 
 ```{r, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-data('data')
+data('cgmisc_data')
 ```
 Now, once the data have been loaded, we can start analyses.
 

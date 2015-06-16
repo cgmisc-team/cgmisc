@@ -24,6 +24,8 @@
 ##'   \item FST.Nei -- Nei's estimate.
 ##'   \item FST.Hudson -- Hudson's estimate (recommended by Bahtia et al., 2014)
 ##' }
+##' NOTE! Some of the estimates may return negative values if the individuals 
+##' from different populations are genetically more closely related than within each population.
 ##' @return an \code{\link[cgmisc]{fstats.result}} class object
 ##' @references 
 ##' Bahtia G, Patterson N, Sankararaman S, Price AL (2014). "Estimating and interpreting FST: The impact of rare variants". 
@@ -94,15 +96,16 @@ compute.fstats <- function(data, pops) {
   FIS <- (HS - HI) / HS 
   FST <- (HT - HS) / HT
   FIT <- (HT - HI) / HT
+  
   # Hudson's Fst estimate
   p1 <- subpop_data[[pop.names[1]]][,"p"]
   q1 <- 1 - p1
-  n1 <- length(pops[pops == pop.names[1]])
+  n1 <- sum(pops %in% pop.names[1])
   p2 <- subpop_data[[pop.names[2]]][,"p"]
   q2 <- 1 - p2
-  n2 <- length(pops[pops == pop.names[2]])
-  tmp.nom <- ((p1 - p2)^2) - (p1*q1/(n1-1)) - (p2*q2/(n2-1))
-  tmp.denom <- p1*q2 + p2*q1
+  n2 <- sum(pops %in% pop.names[2])
+  tmp.nom <- (p1 - p2)^2 - ((p1*q1)/(n1-1)) - ((p2*q2)/(n2-1))
+  tmp.denom <- (p1*q2) + (p2*q1)
   FST.Hudson <- tmp.nom/tmp.denom
   
   # Nei's Fst estimate
