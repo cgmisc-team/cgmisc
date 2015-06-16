@@ -94,7 +94,7 @@ We can compare subpopulations by, e.g. looking at the differences in the referen
 
 We can perform Fisher's exact test on the observed per-population reference allele counts and the counts expected assuming null hypothesis of no population structure (all individuals drawn from the same population). Significant deviations from this expected frequency mark divergent regions.
 
-```{r pac, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
+```{r pac, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T, cache=FALSE}
 pac <- pop.allele.counts(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], 
                          pops = pop, 
                          progress=F)
@@ -179,7 +179,7 @@ print(adjacent[1:4, ])
 
 ## Clumping procedure
 
-We can also use the clumping procedure as outlined in PLINK documentation [@plink] to single out regions of interest. As we can see, there are two clumps represented by grey and red points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
+We can also use the clumping procedure as outlined in PLINK documentation [@plink_clumpdoc] to single out regions of interest. As we can see, there are two clumps represented by grey and violet points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
 
 ```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 clumps <- clump.markers(data = data, 
@@ -243,13 +243,13 @@ plot.LD.decay(data = data.qc1[ ,data.qc1@gtdata@chromosome == 28])
 
 ## Detecting runs of homozygosity
 
-The ```get.overlapping.windows``` function divides the selected chromosome (or the whole genome) into overlapping chunks of given size and overlap.
+The ```get.overlap.windows``` function divides the selected chromosome (or the whole genome) into overlapping chunks of given size and overlap.
 The function returns a list containing window coordinates along with a logical matrix where each window is represented by a row and the logical value per-marker is set to _true_ if the marker is contained within the window and to _false_ otherwise. One can specify (in bp) size of a window as well as overlap between windows. If overlap is set to 0, non-overlapping windows will be used.
 
 We will divide chromosome 2 into overlapping windows and then use them to calculate mean heterozygosity and identify runs of homozygosity:
 
 ```{r my.LW, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
-my.LW <- get.overlapping.windows(data = data.qc1, 
+my.LW <- get.overlap.windows(data = data.qc1, 
                           chr =  2, 
                           size = 125e3, 
                           overlap = 2500)

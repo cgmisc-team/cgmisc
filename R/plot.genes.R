@@ -48,7 +48,7 @@ plot.genes <- function(region, chr, bed.path=NULL) {
                        labels = round(seq(region[1], region[2], 1000000), 2)) +
     
     scale_y_continuous(expand=c(0.1,0.3)) +
-    xlab("Position (Mb)") +
+    xlab("Position (bp)") +
     geom_rect(alpha =0.2, color = rgb(0,114,178, maxColorValue=256), 
               fill = rgb(0,114,178, maxColorValue=256)) +
     geom_segment(aes(x=df_unique$seg_start, xend= df_unique$seg_end,

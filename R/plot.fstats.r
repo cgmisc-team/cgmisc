@@ -4,6 +4,8 @@
 ##' @author Marcin Kierczak <\email{Marcin.Kierczak@@imbim.uu.se}>
 ##' @param data an object of the \code{\link[GenABEL]{gwaa.data-class}}
 ##' @param fstats an object of the \code{\link[cgmisc]{fstats.result-class}}
+##' @param est.type Fst estimate to be plotted: 'WC' (Weir and Cockerham's), 'Nei', 'Hudson' (default) or
+##' 'naive' (based on Sewall Wright's original FST).
 ##' @return NULL
 ##' @examples
 ##' \dontrun{plot.fstats(data, fst)}
@@ -12,13 +14,22 @@
 ##' @export plot.fstats plot.Fst
 ##' @aliases plot.Fst
 
-plot.fstats <- function(data, fstats, ...) {
+plot.fstats <- function(data, fstats, est.type='Hudson', ...) {
   chr.mid <- c()
   for (chr in unique(as.numeric(data@gtdata@chromosome))) {
     coord <- which(as.numeric(data@gtdata@chromosome) == chr)
     chr.mid <- get.chr.midpoints(data)
   }
-  myfst <- fstats@glob$FST
+  if (est.type == 'naive') {
+    myfst <- fstats@glob$FST.naive
+  } else if (est.type == 'Nei') {
+    myfst <- fstats@glob$FST.Nei
+  } else if (est.type == 'WC') {
+    myfst <- fstats@glob$FST.WC
+  } else {
+    myfst <- fstats@glob$FST.Hudson
+  }
+
   color <- 'lightsalmon'
 
   range <- max(data@gtdata@map) - min(data@gtdata@map) 
@@ -43,5 +54,4 @@ plot.fstats <- function(data, fstats, ...) {
   axis(1, at=tmp, cex.axis=.8,
        labels=round(seq(axis.start,axis.stop, along.with=tmp)/divisor,digits=2))
 }
-
 plot.Fst <- plot.fstats

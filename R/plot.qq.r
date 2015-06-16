@@ -17,7 +17,6 @@
 ##'  \dontrun{
 ##'  plot.qq(obs=data.mm[,'Pc1df], conf=c(0.025, 0.975), emp = result[,'Pc1df'], step=10, legend=T, plot.emp=T, conf.level=.95)
 ##'  }
-##' @keywords permutations emp
 ##' @export plot.qq
 plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, conf.level=.95, conf=c(0.025, 0.975), show.pb=T) {
   require(GenABEL)

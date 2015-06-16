@@ -58,7 +58,7 @@ plot.pac <- function(data, allele.cnt, plot.LD=F, legend.pos='default', ...) {
     }
     tmp <- seq(0,length(data@gtdata@map), by=100)
     axis(1, at=tmp, cex.axis=.8,
-         labels=round(seq(axis.start,axis.stop, along.with=tmp)/divisor,digits=2))
+         labels=round(seq(floor(axis.start/divisor),ceiling(axis.stop/divisor), along.with=tmp),digits=2))
     
     #plot legend
     if (!is.null(legend.pos)) {

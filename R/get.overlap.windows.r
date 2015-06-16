@@ -14,7 +14,7 @@
 ##'
 ##'@export get.overlap.windows 
 
-get.overlapping.windows <- function(data, chr, size = 125e4, overlap = 25e2) {
+get.overlap.windows <- function(data, chr, size = 125e4, overlap = 25e2) {
   if(!missing(chr)){
     data<-data[,data@gtdata@chromosome == chr]
   } else {
