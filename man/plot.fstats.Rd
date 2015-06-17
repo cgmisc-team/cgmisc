@@ -5,12 +5,15 @@
 \alias{plot.fstats}
 \title{Plot results of \code{compute.fstats}}
 \usage{
-plot.fstats(data, fstats, ...)
+plot.fstats(data, fstats, est.type = "Hudson", ...)
 }
 \arguments{
 \item{data}{an object of the \code{\link[GenABEL]{gwaa.data-class}}}
 
 \item{fstats}{an object of the \code{\link[cgmisc]{fstats.result-class}}}
+
+\item{est.type}{Fst estimate to be plotted: 'WC' (Weir and Cockerham's), 'Nei', 'Hudson' (default) or
+'naive' (based on Sewall Wright's original FST).}
 }
 \description{
 Plot results obtained using \code{\link[cgmisc]{compute.fstats}} function.

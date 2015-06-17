@@ -17,8 +17,8 @@ an \code{\link[cgmisc]{fstats.result}} class object
 }
 \description{
 Fixation index Fst is a measure of population differentiation due to genetic structure.
-Given a set of genotypes in two populations, the function computes fixation index
-Fst and corresponding indices: Fit and Fis.
+Given a set of genotypes in two populations, the function computes various estimates of fixation index
+Fst and, for Wright's Fst, also corresponding indices: Fit and Fis.
 }
 \details{
 \itemize{
@@ -28,6 +28,18 @@ Fst and corresponding indices: Fit and Fis.
   population 1 and 1 marks an individual belonging to population 2. Often, the vector is a result
   of clustering in MDS-scaled genomic kinship space
 }
+
+Currently, the function returns four different FST estimates (after Bhatia et al., 2014, also Holsinger et al., 2009):
+\itemize{
+  \item FST.naive -- a na\"ive $F_{ST}$ estimate based on the original definition by Sewall Wright.
+  This estimate should be treated with caution as it does not take into account statistical
+  sampling bias.
+  \item FST.WC -- Weir and Cockerham's estimate.
+  \item FST.Nei -- Nei's estimate.
+  \item FST.Hudson -- Hudson's estimate (recommended by Bhatia et al., 2014)
+}
+NOTE! Some of the estimates may return negative values if the individuals
+from different populations are genetically more closely related than within each population.
 }
 \examples{
 \dontrun{
@@ -38,6 +50,8 @@ fstats  <- compute.Fstats(data, pops)
 Marcin Kierczak <\email{Marcin.Kierczak@slu.se}>
 }
 \references{
+Bhatia G, Patterson N, Sankararaman S, Price AL (2014). "Estimating and interpreting FST: The impact of rare variants".
+Genome Research 23: 1514-1521.
 Holsinger, Kent E.; Bruce S. Weir (2009). "Genetics in geographically structured populations:
 defining, estimating and interpreting FST". Nat Rev Genet 10 (9): 639-650. doi:10.1038/nrg2611. ISSN 1471-0056. PMID 19687804.
 }

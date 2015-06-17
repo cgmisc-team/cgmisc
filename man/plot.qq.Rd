@@ -39,6 +39,4 @@ Plots qq plot with empirical values and empirical confidence intervals
 \author{
 Marcin Kierczak <\email{Marcin.Kierczak@imbim.uu.se}>
 }
-\keyword{emp}
-\keyword{permutations}
 
