@@ -56,7 +56,7 @@ plot.pac <- function(data, allele.cnt, plot.LD=F, legend.pos='default', ...) {
       colors <- get.LD.colors(data, chr=chromosomes[1], index.snp)
       points(-log10(pvals), col=as.character(colors[[1]]), pch=as.numeric(colors[[2]]), cex=.7)    
     }
-    tmp <- seq(0,length(data@gtdata@map), by=100)
+    tmp <- seq(0,length(data@gtdata@map) + 100, by=100)
     axis(1, at=tmp, cex.axis=.8,
          labels=round(seq(axis.start/divisor, axis.stop/divisor, along.with=tmp), digits=2))
     

@@ -3,7 +3,7 @@ title: 'cgmisc: package tutorial'
 author: Marcin Kierczak, Jagoda Jabłońska, Simon Forsberg, Matteo Bianchi, Katarina
   Tengvall, Mats Pettersson, Veronika Scholz, Jennifer Meadows, Patric Jern, Örjan Carlborg, Kerstin
   Lindblad-Toh
-date: "05 May 2015"
+date: "17 June 2015"
 bibliography: vignette.bib
 output:
   pdf_document:
@@ -110,7 +110,8 @@ In a similar way, we can compute and plot fixation index $F_{ST}$:
 fst <- compute.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], 
                       pops = pop)
 plot.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], 
-            fstats = fst)
+            fstats = fst, 
+            est.type = 'naive')
 ```
 
 ## Association analyses
@@ -179,7 +180,7 @@ print(adjacent[1:4, ])
 
 ## Clumping procedure
 
-We can also use the clumping procedure as outlined in PLINK documentation [@plink_clumpdoc] to single out regions of interest. As we can see, there are two clumps represented by grey and violet points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
+We can also use the clumping procedure as outlined in PLINK documentation (http://pngu.mgh.harvard.edu/purcell/plink/clump.shtml) to single out regions of interest. As we can see, there are two clumps represented by grey and violet points respectively. The clumps are shown on both the standard Manhattan plot (upper panel) and, for improved clarity, also on a dedicated clump panel (lower panel). In short: a clump contains markers in high LD that are also significantly associated with the examined trait. 
 
 ```{r clumping, echo=TRUE, results='show', message=TRUE, warning=FALSE, eval=T}
 clumps <- clump.markers(data = data, 

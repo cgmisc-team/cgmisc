@@ -31,8 +31,11 @@ plot.fstats <- function(data, fstats, est.type='Hudson', ...) {
   }
 
   color <- 'lightsalmon'
-
-  range <- max(data@gtdata@map) - min(data@gtdata@map) 
+  
+  axis.start <- data@gtdata@map[1]
+  axis.stop <- rev(data@gtdata@map)[1]
+  
+  range <- axis.stop - axis.start
   if (range < 1e6) {
     divisor <- 1e3
     prefix <- "kbp"
@@ -45,11 +48,8 @@ plot.fstats <- function(data, fstats, est.type='Hudson', ...) {
   plot(myfst, type='h', col=color, xlab=prefix, ylab=expression(F[ST]),
        xaxt='n', las=1, bty='n', ylim = range(pretty(c(0, max.y))),  
        panel.first=grid(), cex.axis=.8)
-  
-  axis.start <- min(data@gtdata@map)
-  axis.stop <- max(data@gtdata@map)
-  
-  tmp <- seq(0,length(data@gtdata@map), by=100)
+    
+  tmp <- seq(0,length(data@gtdata@map)+100, by=100)
   
   axis(1, at=tmp, cex.axis=.8,
        labels=round(seq(axis.start,axis.stop, along.with=tmp)/divisor,digits=2))

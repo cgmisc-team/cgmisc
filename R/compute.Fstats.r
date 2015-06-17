@@ -15,20 +15,20 @@
 ##'   of clustering in MDS-scaled genomic kinship space
 ##' }
 ##' 
-##' Currently, the function returns four different FST estimates (after Bahtia et al., 2014, also Holsinger et al., 2009):
+##' Currently, the function returns four different FST estimates (after Bhatia et al., 2014, also Holsinger et al., 2009):
 ##' \itemize{
 ##'   \item FST.naive -- a na\"ive $F_{ST}$ estimate based on the original definition by Sewall Wright. 
 ##'   This estimate should be treated with caution as it does not take into account statistical 
 ##'   sampling bias.
 ##'   \item FST.WC -- Weir and Cockerham's estimate.
 ##'   \item FST.Nei -- Nei's estimate.
-##'   \item FST.Hudson -- Hudson's estimate (recommended by Bahtia et al., 2014)
+##'   \item FST.Hudson -- Hudson's estimate (recommended by Bhatia et al., 2014)
 ##' }
 ##' NOTE! Some of the estimates may return negative values if the individuals 
 ##' from different populations are genetically more closely related than within each population.
 ##' @return an \code{\link[cgmisc]{fstats.result}} class object
 ##' @references 
-##' Bahtia G, Patterson N, Sankararaman S, Price AL (2014). "Estimating and interpreting FST: The impact of rare variants". 
+##' Bhatia G, Patterson N, Sankararaman S, Price AL (2014). "Estimating and interpreting FST: The impact of rare variants". 
 ##' Genome Research 23: 1514-1521.
 ##' Holsinger, Kent E.; Bruce S. Weir (2009). "Genetics in geographically structured populations: 
 ##' defining, estimating and interpreting FST". Nat Rev Genet 10 (9): 639-650. doi:10.1038/nrg2611. ISSN 1471-0056. PMID 19687804.
