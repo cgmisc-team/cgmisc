@@ -74,7 +74,7 @@ plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.va
   
   r2vec <- r2matrix[index.snp,]
   r2vec[is.na(r2vec)] <- -1
-  r2col <<- cut(r2vec, breaks=c(1.0,0.8,0.6,0.4,0.2,0.0,-1), 
+  r2col <<- cut(r2vec, breaks=c(1.1,0.8,0.6,0.4,0.2,0.0,-1), 
                labels=rev(c("(0.8-1.0]","(0.6-0.8]", "(0.4-0.6]", "(0.2-0.4]", "[0.0-0.2]", "INDEX")), include.lowest=T)
   
   df2 <<- data.frame(markers = markers.coords, pvals = pvals)
