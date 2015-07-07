@@ -18,5 +18,16 @@ genome-wide association study (GWAS) analyses. \n")
                             "\n","Author:",Author,
                             "\n","License",License,"\n\n", Title))
   
+  #install Bioconductor packages if necessary
+  
+  source("http://bioconductor.org/biocLite.R", echo = FALSE, verbose = FALSE)
+  
+  if(!require(GenomicRanges)){
+    biocLite("GenomicRanges")
+  }
+  
+  if(!require(rtracklayer)){
+    biocLite("rtracklayer")
+  }
 
 }
