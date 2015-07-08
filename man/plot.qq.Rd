@@ -24,7 +24,7 @@ plot.qq(data = NULL, obs, emp, N = 30, step = 10, legend = T,
 
 \item{conf.level}{confidence threshold (0.95 by default)}
 
-\item{conf}{a vector defininy the lower and the upper confidence interval, default 5% CI.}
+\item{conf}{a vector defininy the lower and the upper confidence interval, default 5 percent CI.}
 
 \item{show.pb}{a logical indicating whether progress bar will be shown}
 }
@@ -39,4 +39,5 @@ Plots qq plot with empirical values and empirical confidence intervals
 \author{
 Marcin Kierczak <\email{Marcin.Kierczak@imbim.uu.se}>
 }
+
 
