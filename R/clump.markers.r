@@ -64,7 +64,7 @@ clump.markers <- function(data, gwas.result, chr=1, bp.dist=250e3, p1=0.0001, p2
           print(p)
         }
       }
-      else {warning("No clumps found in dataset!")}
+      #else {warning("No clumps found in dataset!")}
       used[clump] <- 1
     }
   }

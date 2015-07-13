@@ -9,7 +9,7 @@ Depends:
     GenABEL,
     ggplot2,
     grid,
-    genetics
+    genetics,
 VignetteBuilder: knitr
 Suggests:
     knitr

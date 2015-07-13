@@ -31,6 +31,10 @@ genome-wide association study (GWAS) analyses. \n")
     biocLite("rtracklayer")
   }
   
+  if(!require(RSQLite)){
+    install.packages('RSQLite', repos='http://cran.us.r-project.org')
+  }
+  
   #chceck versions of dependencies
   
   packages <- c(GenABEL='1.7.4', ggplot2='1.0.1', grid='3.1.1', genetics='1.3.8.1')
