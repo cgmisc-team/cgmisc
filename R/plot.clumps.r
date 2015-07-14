@@ -15,6 +15,7 @@
 ##' @seealso \code{\link[cgmisc]{clump.markers}}
 ##' @export plot.clumps
 plot.clumps <- function(gwas.result, clumps, chr, region, clambda = F) {
+  par(las=0)
   if (length(clumps) > 0) {
     par(mfrow=c(1,1))
     minCoord <- region[1]
@@ -26,23 +27,20 @@ plot.clumps <- function(gwas.result, clumps, chr, region, clambda = F) {
     if (clambda) {
       pvals <- -log10(gwas.result@results$Pc1df[region])
     } else {
-      pvals <- -log10(gwas.result@results$Pc1df[region])
+      pvals <- -log10(gwas.result@results$P1df[region])
     }
     coords <- gwas.result@annotation$Position[region]
     plot(coords, pvals, pch=19, cex=1, ann = FALSE, xaxt='n', yaxt='n', 
-         bty='n', type = 'n', 
-         ylim = c(-length(clumps) - 1, max(pvals)), las = 2)
+         bty='n', type = 'n',
+         ylim = c(-length(clumps) - 1, max(pvals)))
     grid()
     step <- (max(coords) - min(coords)) / 5
     axis(1, at = seq(min(coords), max(coords), by=step),
          labels = format(seq(min(coords), max(coords), by=step)/1e6, 
                        scientific=F, digits=3))
-    axis(2, at = seq(0, max(pvals), 2), 
-         labels = T, las = 1, cex.axis = 0.6)
-    #axis(4, at=seq(-1, -1-length(clumps), -1),labels=abs(seq(-1, -1-length(clumps), -1)))
+    axis(2, at = seq(0, max(pvals), 2), labels = T, cex.axis = 0.6, las=2)
     mtext('Position (Mb)', 1, 3)
-    #mtext(expression(clumps~'            '~-log[10](p-value)), 2, 3)
-    mtext(expression(-log[10](p-value)), 2, 3)
+    mtext(expression(-log[10](p-value)), 2, 3, srt=90)
     points(coords, pvals, pch=19, cex=.7)
     mycols <- colorRampPalette(colors=c("slateblue","grey"))
     cols <- mycols(length(clumps))
