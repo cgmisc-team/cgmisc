@@ -11,7 +11,7 @@
 ##' @param plot.emp plotting empirical values
 ##' @param conf.level confidence threshold (0.95 by default)
 ##' @param show.pb a logical indicating whether progress bar will be shown
-##' @param conf a vector defininy the lower and the upper confidence interval, default 5% CI.
+##' @param conf a vector defininy the lower and the upper confidence interval, default 5\% CI.
 ##' @return NULL
 ##' @examples
 ##'  \dontrun{
