@@ -74,5 +74,9 @@ clump.markers <- function(data, gwas.result, chr=1, bp.dist=250e3, p1=0.0001, p2
     image(d, col=rev(heat.colors(100)), main="distance matrix")
     image(clumpmatrix, col=c("cornsilk1","blue","tomato","red"), main="clumping matrix")
   }
+  if (length(clumps) == 0) {
+    warning("No clumps found in dataset!")
+  }
+  
   clumps
 }
