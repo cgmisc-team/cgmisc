@@ -27,7 +27,7 @@
 ##' @aliases plot.manhattan.LD
 ##' 
 plot.manhattan.ld <- function(data, gwas.result, chr, region, index.snp, p.value = 0.05, bonferroni = T, mafThreshold = .05, legend.pos = 'def.left') {  
-  opar <- par()
+  opar <- par(no.readonly = T)
   par(las = 2)
   shift <- 2.3
   topMargin <- 0
