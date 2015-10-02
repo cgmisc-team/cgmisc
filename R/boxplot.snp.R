@@ -21,7 +21,8 @@ boxplot.snp  <- function(data, marker, trait, recode = F, ...){
   }
   y <- phdata(data)[,trait]
   max.y <- max(y, na.rm=T)
-  box <- boxplot(y ~ as.matrix(geno), col = 'lightblue', las = 1, frame=F, cex.axis = .8,  ylim = range(pretty(c(0, max.y))), ...)
+  min.y <- min(y, na.rm=T)
+  box <- boxplot(y ~ as.matrix(geno), col = 'lightblue', las = 1, frame=F, cex.axis = .8,  ylim = range(pretty(c(min.y, max.y))), ...)
   grid()
   axis(1, at=1:length(box$n), labels=paste("n =", box$n), line=2, lty=0)
   axis(1, labels=FALSE)
