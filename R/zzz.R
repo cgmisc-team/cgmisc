@@ -20,15 +20,14 @@ genome-wide association study (GWAS) analyses. \n")
                             "\n","License",License,"\n\n", Title,"\n"))
   
   #install Bioconductor packages if necessary
-  
-  source("http://bioconductor.org/biocLite.R", echo = FALSE, verbose = FALSE)
+  #source("http://bioconductor.org/biocLite.R", echo = FALSE, verbose = FALSE)
   
   if(!require(GenomicRanges)){
-    biocLite("GenomicRanges")
+    BiocManager::install("GenomicRanges")
   }
   
   if(!require(rtracklayer)){
-    biocLite("rtracklayer")
+    BiocManager::install("rtracklayer")
   }
   
   if(!require(RSQLite)){

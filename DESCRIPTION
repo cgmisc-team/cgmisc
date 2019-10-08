@@ -1,6 +1,6 @@
 Package: cgmisc
-Version: 2.9.10
-Date: 2015-07-14
+Version: 2.9.11
+Date: 2019-10-08
 Title: Various functions useful in computational genetics, e.g. in GWAS.
 Author: Marcin Kierczak <marcin.kierczak@imbim.uu.se>
 Maintainer: Marcin Kierczak <marcin.kierczak@imbim.uu.se>
@@ -10,6 +10,7 @@ Depends:
     ggplot2,
     grid,
     genetics,
+    BiocManager
 VignetteBuilder: knitr
 Suggests:
     knitr
