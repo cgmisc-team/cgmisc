@@ -14,7 +14,7 @@ To install using the tarball, open a terminal and type:
 
 ## Selected publications
 
-Here we list some selected publications where cgmisc was used:
+Here we list some selected publications where cgmisc has been helpful:
 
 1. [Mikkola LI et al. Novel protective and risk loci in hip dysplasia in German Shepherds. PLoS Genetics 2019.](https://doi.org/10.1371/journal.pgen.1008197)
 
