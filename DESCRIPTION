@@ -11,7 +11,9 @@ Depends:
     genetics,
     BiocManager
 VignetteBuilder: knitr
-Remotes: cran/GenABEL
+Remotes: 
+	cran/GenABEL, 
+	cran/GenABEL.data
 Suggests:
     knitr,
     GenABEL
