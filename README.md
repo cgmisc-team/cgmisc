@@ -1,3 +1,5 @@
+(https://travis-ci.org/cgmisc-team/cgmisc.svg?branch=master)
+
 ## Introduction
 
 **cgmisc** is a R package that enables enhanced data analysis and visualisation of results from GWAS. The package contains several utilities and modules that complement and enhance the functionality of existing softwares. It also provides several tools for advanced visualisation of genomic data and utilises the power of the R language to aid in preparation of publication-quality figures. Some of the package functions are specific for the domestic dog (Canis familiaris) data.
