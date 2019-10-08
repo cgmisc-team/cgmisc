@@ -12,10 +12,11 @@ Depends:
     BiocManager
 VignetteBuilder: knitr
 Remotes: 
-	cran/GenABEL, 
-	cran/GenABEL.data
+	cran/GenABEL.data, 
+	cran/GenABEL
 Suggests:
     knitr,
+    GenABEL.data,
     GenABEL
 Description: Package contains various functions useful in computational
     genetics, especially in genome-wide association studies.
