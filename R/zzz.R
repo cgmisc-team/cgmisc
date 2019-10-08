@@ -22,18 +22,6 @@ genome-wide association study (GWAS) analyses. \n")
   #install Bioconductor packages if necessary
   #source("http://bioconductor.org/biocLite.R", echo = FALSE, verbose = FALSE)
   
-  if(!require(GenomicRanges)){
-    BiocManager::install("GenomicRanges")
-  }
-  
-  if(!require(rtracklayer)){
-    BiocManager::install("rtracklayer")
-  }
-  
-  if(!require(RSQLite)){
-    install.packages('RSQLite', repos='http://cran.us.r-project.org')
-  }
-  
   #chceck versions of dependencies
   
   packages <- c(GenABEL='1.7.4', ggplot2='1.0.1', grid='3.1.1', genetics='1.3.8.1')

@@ -20,7 +20,6 @@
 gwaa.to.bigrr <- function(formula, data, trait) {
   # Copyright Marcin.Kierczak@slu.se<mailto:Marcin.Kierczak@slu.se>
   # v. 1.1b, 07.11.2013
-  require(bigRR)
   Z1 <- as.matrix(as.numeric(data@gtdata))
   # Imputation
   for (i in 1:dim(Z1)[2]) {

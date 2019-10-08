@@ -13,9 +13,6 @@
 ##' @aliases gwaa2vgwas gwaa.to.vGWAS gwaa2vGWAS
 
 gwaa.to.vgwas <- function(data, trait.name) {
-  if (!require(vGWAS)) {
-    stop("ERROR! Library vGWAS couldn't be loaded.")
-  }
   chr <- as.numeric(chromosome(gtdata(data)))
   map <- as.numeric(map(gtdata(data)))
   geno <- sub("/","", as.matrix(as.character((data))))

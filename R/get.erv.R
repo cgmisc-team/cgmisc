@@ -12,8 +12,6 @@
 ##' @keywords get, ERV
 ##' @export
 get.erv <- function(chr=NA, coords=c(NA,NA), src="canFam3cgmisc.db") {
-  require("RSQLite")
-
   for (lib in .libPaths()){
     src2 <- system.file("extdata", src, mustWork = F, package = 'cgmisc', lib.loc = lib)
     if (src != "") break;

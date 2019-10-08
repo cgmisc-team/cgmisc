@@ -50,7 +50,6 @@ compute.fstats <- function(data, pops) {
   if (length(pop.names) > 2) {
     stop("Fst computation impossible for more than two populations!")
   }
-  require("GenABEL")
   geno.double <- as.double.snp.data(data@gtdata)
   subpop_data <- list()
   sum.obs.het <- rep(0, times=dim(geno.double)[2])

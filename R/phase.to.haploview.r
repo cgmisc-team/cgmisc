@@ -15,7 +15,6 @@
 ##' @aliases phase2haploview PHASE.to.Haploview PHASE2Haploview
 
 phase.to.haploview <- function(input, output=NULL) {
-  require(stringr)
   f <- readLines(input)
   start <- grep("BEGIN LIST_SUMMARY",f)
   end <- grep("END LIST_SUMMARY",f)

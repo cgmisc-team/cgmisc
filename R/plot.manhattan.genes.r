@@ -26,15 +26,10 @@
 ##' @export plot.manhattan.genes
 ##'
 plot.manhattan.genes <- function(data, gwas.result, chr, region, index.snp, p.value=0.05, mafThreshold=.05, bed.path=NULL) {  
-  require(grid)
-  require(ggplot2)
-  #require(wq)
-  #source("src/plot.genes.R")
 
   # layOut is copied from the old version of the wq package. 
   # The layOut function is no longer provided by the wq. 
   layOut <- function (...) {
-    require(grid)
     x <- list(...)
     n <- max(sapply(x, function(x) max(x[[2]]))) 
     p <- max(sapply(x, function(x) max(x[[3]])))    

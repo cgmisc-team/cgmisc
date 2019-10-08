@@ -19,7 +19,6 @@
 ##'  }
 ##' @export plot.qq
 plot.qq <- function(data=NULL, obs, emp, N=30, step=10, legend=T, plot.emp=T, conf.level=.95, conf=c(0.025, 0.975), show.pb=T) {
-  require(GenABEL)
   n.obs <- length(obs)
   obs <- -log10(obs)
   exp <- -log10(1:n.obs/n.obs)

@@ -15,11 +15,6 @@
 ##'@return ggplot2 plot
 ##'@export 
 plot.genes <- function(region, chr, bed.path=NULL) {
-  require(GenomicRanges)
-  require(rtracklayer)
-  require(ggplot2)
-  require(grid)
-  
   targetRanges <- IRanges(region[1], region[2])
   reads <- import.bed(con=bed.path, asRangedData=F)
   gr <- GRanges(seqnames=Rle(paste("chr", chr, sep="")), targetRanges)

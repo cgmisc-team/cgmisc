@@ -15,7 +15,6 @@
 ##' @aliases phase2fasta PHASE.to.FASTA PHASE2FASTA
  
 phase.to.fasta <- function(input, output=NULL, filter=NULL) {
-  require(stringr)
   f <- readLines(input)
   start <- grep("BEGIN LIST_SUMMARY",f)
   end <- grep("END LIST_SUMMARY",f)
