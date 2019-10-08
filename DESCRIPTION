@@ -6,14 +6,14 @@ Author: Marcin Kierczak <marcin.kierczak@imbim.uu.se>
 Maintainer: Marcin Kierczak <marcin.kierczak@imbim.uu.se>
 Depends:
     R (>= 3.0.1),
-    GenABEL,
     ggplot2,
     grid,
     genetics,
     BiocManager
 VignetteBuilder: knitr
 Suggests:
-    knitr
+    knitr,
+    GenABEL
 Description: Package contains various functions useful in computational
     genetics, especially in genome-wide association studies.
 License: GPL (>=2.10)
