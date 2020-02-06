@@ -24,3 +24,5 @@ Suggests:
 Description: Package contains various functions useful in computational
     genetics, especially in genome-wide association studies.
 License: GPL (>=2.10)
+URL: https://github.com/cgmisc-team/cgmisc
+BugReports: https://github.com/cgmisc-team/cgmisc/issues

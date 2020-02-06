@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/cgmisc-team/cgmisc.svg?branch=master)](https://travis-ci.org/cgmisc-team/cgmisc)
+<!-- badges: start -->
+[![R build status](https://github.com/cgmisc-team/cgmisc/workflows/R-CMD-check/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions)
+<!-- badges: end -->
 
 ## Introduction
 
