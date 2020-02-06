@@ -16,9 +16,13 @@ We recommend installing *cgmisc* by using:
 To install using the tarball, open a terminal and type: 
 `R CMD INSTALL cgmisc_[version].tar.gz`
 
-## Selected publications
+## How to cite `cgmisc`
+Kierczak M, Jablonska J, Forsberg SKG, Bianchi M, Tengvall K, Pettersson M, Scholz V, Meadows JRS, Jern P, Carlborg O Lindblad-Toh K. cgmisc: enhanced genome-wide association analyses and visualization. Bioinformatics. Oxford University Press; 2015;31: 3830-3831. 
+doi:10.1093/bioinformatics/btv426
 
-Here we list some selected publications where cgmisc has been helpful:
+## Selected publications using `cgmisc`
+
+Here we list some publications where cgmisc has been helpful:
 
 * [Weich K. et al. Pigment Intensity in Dogs is Associated with a Copy Number Variant Upstream of KITLG. Genes 2020.](https://doi.org/10.3390/genes11010075)
 
