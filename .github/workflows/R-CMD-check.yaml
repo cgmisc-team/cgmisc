@@ -4,16 +4,18 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
-   runs-on: ${{ matrix.config.os }}
-   
-   name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    
     strategy:
       fail-fast: true
       matrix:
         config:
         - { os: macOS-latest, r: '3.5'}
-
+    
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      
     steps:
       - uses: actions/checkout@v1
       - uses: r-lib/actions/setup-r@master
