@@ -5,7 +5,8 @@ Title: Various functions useful in computational genetics, e.g. in GWAS
 Author: Marcin Kierczak <marcin.kierczak@scilifelab.se>
 Maintainer: Marcin Kierczak <marcin.kierczak@scilifelab.se>
 Depends:
-    R (>= 3.0.1),
+    R (>= 3.0.1)
+Imports:
     ggplot2,
     grid,
     genetics,
