@@ -1,23 +1,20 @@
-Package: cgmisc
+Package: cgmiscA
 Version: 2.9.12
-Date: 2019-10-08
-Title: Various functions useful in computational genetics, e.g. in GWAS
-Author: Marcin Kierczak <marcin.kierczak@scilifelab.se>
+Date: 2020-02-17
+Title: Various    functions useful in computational genetics, e.g. in GWAS
+Authors@R: as.person(c(
+    "Marcin Kierczak <marcin.kierczak@scilifelab.se> [aut, cre]", 
+    "Jagoda Jablonska [aut]",
+    "Simon CG Forsberg [aut]",
+    "Veronika Scholz [ctb]"
+  ))
 Maintainer: Marcin Kierczak <marcin.kierczak@scilifelab.se>
+LazyData: true
 Depends:
-    R (>= 3.0.1)
-Imports:
-    ggplot2,
-    grid,
-    genetics,
-    BiocManager,
-    RSQLite,
-    GenomicRanges,
-    rtracklayer
+    R (>= 3.6)
+Imports:      
+    ggplot2, grid, genetics, BiocManager, RSQLite, GenomicRanges, rtracklayer
 VignetteBuilder: knitr
-Remotes: 
-	cran/GenABEL.data, 
-	cran/GenABEL
 Suggests:
     knitr,
     GenABEL.data,
