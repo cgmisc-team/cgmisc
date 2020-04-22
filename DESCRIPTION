@@ -13,10 +13,9 @@ LazyData: true
 Depends:
     R (>= 3.6)
 Imports:      
-    ggplot2, grid, genetics, BiocManager, RSQLite, GenomicRanges, rtracklayer
+    ggplot2, grid, genetics, BiocManager, RSQLite, GenomicRanges, rtracklayer, knitr
 VignetteBuilder: knitr
 Suggests:
-    knitr,
     GenABEL.data,
     GenABEL
 Description: Package contains various functions useful in computational
