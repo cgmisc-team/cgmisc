@@ -24,6 +24,8 @@ doi:10.1093/bioinformatics/btv426
 
 Here we list some publications where cgmisc has been helpful:
 
+* [Bianchi M. et al. Whole-genome genotyping and resequencing reveal the association of a deletion in the complex interferon alpha gene cluster with hypothyroidism in dogs. BMC Genomics 2020.](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6700-3)
+
 * [Weich K. et al. Pigment Intensity in Dogs is Associated with a Copy Number Variant Upstream of KITLG. Genes 2020.](https://doi.org/10.3390/genes11010075)
 
 * [Mikkola LI et al. Novel protective and risk loci in hip dysplasia in German Shepherds. PLoS Genetics 2019.](https://doi.org/10.1371/journal.pgen.1008197)

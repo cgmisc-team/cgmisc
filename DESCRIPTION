@@ -1,4 +1,4 @@
-Package: cgmiscA
+Package: cgmisc
 Version: 2.9.12
 Date: 2020-02-17
 Title: Various    functions useful in computational genetics, e.g. in GWAS
@@ -22,5 +22,7 @@ Suggests:
 Description: Package contains various functions useful in computational
     genetics, especially in genome-wide association studies.
 License: GPL (>=2.10)
+Encoding: UTF-8
+Language: en-US
 URL: https://github.com/cgmisc-team/cgmisc
 BugReports: https://github.com/cgmisc-team/cgmisc/issues
