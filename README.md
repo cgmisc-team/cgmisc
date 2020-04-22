@@ -14,7 +14,7 @@ Beginning from version 2.9.11, we are no longer using releases system. Instead, 
 
 *  `install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz", type='source', repos=NULL)`  
 
-*  `install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz", type='source', repos=NULL`  
+*  `install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz", type='source', repos=NULL)`  
 
 ## Installation 
 We recommend installing *cgmisc* by using:
