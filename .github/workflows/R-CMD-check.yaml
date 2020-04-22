@@ -23,7 +23,8 @@ jobs:
         run: |
           install.packages(c("remotes", "rcmdcheck"))
 	  if (!requireNamespace("BiocManager", quietly = TRUE)) {
-		iinstall.packages("BiocManager")
+		install.packages("BiocManager")
+	  }
 	  BiocManager::install("rtracklayer")
 	  BiocManager::install("GenomicRanges")
           remotes::install_deps(dependencies = 'Imports')
