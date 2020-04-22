@@ -22,8 +22,8 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck", "BiocManager"))
-	  BiocManager::install("rtracklayer")
-	  BiocManager::install("GenomicRanges")
+          BiocManager::install("rtracklayer")
+          BiocManager::install("GenomicRanges")
           remotes::install_deps(dependencies = 'Imports')
         shell: Rscript {0}
       - name: Check
