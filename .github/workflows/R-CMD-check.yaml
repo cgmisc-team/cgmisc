@@ -25,5 +25,4 @@ jobs:
           remotes::install_deps(dependencies = 'Imports')
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
-        shell: Rscript {0}
+        run: Rscript -e "rcmdcheck::rcmdcheck(args='--no-manual', error_on='error', check_dir='check')"
