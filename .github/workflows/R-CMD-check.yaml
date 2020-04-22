@@ -27,9 +27,9 @@ jobs:
           install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz", type="source", repos=NULL)
           install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz", type="source", repos=NULL)
           remotes::install_deps(dependencies = 'Imports')
-        shell: Rscript {0}  
-
-    - name: Check
+        shell: Rscript {0}
+     
+     - name: Check
       run: Rscript -e "rcmdcheck::rcmdcheck(args='--no-manual', error_on='error', check_dir='check')"
     
     - name: Test coverage
