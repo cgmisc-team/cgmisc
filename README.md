@@ -27,7 +27,7 @@ To install using the tarball, open a terminal and type:
 Kierczak M, Jablonska J, Forsberg SKG, Bianchi M, Tengvall K, Pettersson M, Scholz V, Meadows JRS, Jern P, Carlborg O Lindblad-Toh K. cgmisc: enhanced genome-wide association analyses and visualization. Bioinformatics. Oxford University Press; 2015;31: 3830-3831. 
 doi:10.1093/bioinformatics/btv426
 
-## Selected publications using `cgmisc`
+## Selected publications that used `cgmisc`
 
 Here we list some publications where cgmisc has been helpful:
 
