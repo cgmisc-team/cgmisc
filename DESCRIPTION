@@ -12,12 +12,13 @@ Maintainer: Marcin Kierczak <marcin.kierczak@scilifelab.se>
 LazyData: true
 Depends:
     R (>= 3.6)
-Imports:      
+Imports: 
     ggplot2, grid, genetics, BiocManager, RSQLite, GenomicRanges, rtracklayer, knitr
 VignetteBuilder: knitr
 Suggests:
     GenABEL.data,
-    GenABEL
+    GenABEL,
+    testthat
 Description: Package contains various functions useful in computational
     genetics, especially in genome-wide association studies.
 License: GPL (>=2.10)
