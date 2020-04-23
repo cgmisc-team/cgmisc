@@ -41,3 +41,8 @@ test_that("check LD plot", {
   dev.off()
   expect_true(isSimilar(file = tmp, "EB352A3471E1E2D2"))
 })
+
+test_that('selection of top snps', {
+  top.snps <- choose.top.snps(data = data.qc1, chr = 2, region = c(37256927, 39256927), index.snp = 'BICF2S2365880')
+  expect_equal_to_reference(top.snps, 'top.snps.rds')
+})
