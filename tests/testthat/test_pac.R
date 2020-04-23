@@ -58,7 +58,10 @@ test_that('clumping works', {
 
 test_that('get overlapping windows', {
   my.LW <- get.overlap.windows(data = data.qc1, chr = 2, size = 125e3, overlap = 2500)
+  het.windows <- het.overlap.wind(data = data.qc1, LW = my.LW, progress = F)
   expect_equal_to_reference(my.LW, 'LW.windows.rds')
+  expect_equal(het.windows[c(349, 350), 2], c(0.3915125, NA), tolerance=1e-3)
+  expect_equal(dim(het.windows), c(694, 2))
 })
 
 test_that('getting chromosome midpoints', {
