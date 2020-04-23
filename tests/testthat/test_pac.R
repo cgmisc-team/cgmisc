@@ -4,6 +4,7 @@ library(visualTest)
 
 data.qc1 <- readRDS('data.qc1.rds')
 pop <- readRDS('pop.rds')
+mm <- readRDS('mm.rds')
 
 test_that("pop allele counts work", {
   pac <- pop.allele.counts(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], pops = pop, progress=F)
@@ -31,4 +32,12 @@ test_that("get adjacent markers works", {
   expect_equal(adjacent[1,1], 1)
   expect_equal(adjacent['dog234', 'BICF2S2365880'], 0)
   expect_equal(adjacent['dog235', 'BICF2P425207'], 2)
+})
+
+test_that("check LD plot", {
+  tmp <- tempfile(fileext = ".png")
+  png(filename = tmp)
+  plot.manhattan.LD(data = data.qc1, gwas.result = mm, chr = 2, region = c(37256927, 39256927), index.snp = 'BICF2S2365880', legend.pos = 'topleft')
+  dev.off()
+  expect_true(isSimilar(file = tmp, "EB352A3471E1E2D2"))
 })
