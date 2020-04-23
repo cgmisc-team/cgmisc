@@ -26,6 +26,7 @@ jobs:
           BiocManager::install("GenomicRanges")
           install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz", type="source", repos=NULL)
           install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz", type="source", repos=NULL)
+          source("https://install-github.me/mangothecat/visualTest")
           remotes::install_deps(dependencies = 'Imports')
         shell: Rscript {0}     
       - name: Check
