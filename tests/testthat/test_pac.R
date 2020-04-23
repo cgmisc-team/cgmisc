@@ -46,3 +46,14 @@ test_that('selection of top snps', {
   top.snps <- choose.top.snps(data = data.qc1, chr = 2, region = c(37256927, 39256927), index.snp = 'BICF2S2365880')
   expect_equal_to_reference(top.snps, 'top.snps.rds')
 })
+
+test_that('clumping works', {
+  clumps <- clump.markers(data = data, gwas.result = mm,
+                          chr = 2)
+  expect_equal_to_reference(clumps, 'clumps.rds')
+})
+
+test_that('get overlapping windows', {
+  my.LW <- get.overlap.windows(data = data.qc1, chr = 2, size = 125e3, overlap = 2500)
+  expect_equal_to_reference(my.LW, 'LW.windows.rds')
+})
