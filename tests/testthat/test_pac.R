@@ -21,6 +21,9 @@ test_that("pop allele counts work", {
 test_that("F_ST computations work", {
   fst <- compute.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], pops = pop)
   expect_equal_to_reference(fst, 'fst.rds')
+  pop2 <- pop
+  pop2[2] <- 3
+  expect_error(compute.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], pops = pop2))
 })
 
 test_that("get adjacent markers works", {
@@ -57,3 +60,13 @@ test_that('get overlapping windows', {
   my.LW <- get.overlap.windows(data = data.qc1, chr = 2, size = 125e3, overlap = 2500)
   expect_equal_to_reference(my.LW, 'LW.windows.rds')
 })
+
+test_that('getting chromosome midpoints', {
+  midpoints <- get.chr.midpoints(data.qc1)
+  expect_equal(midpoints[c(1, 27)], c(3255, 100594))
+  data.tmp <- data.qc1
+  data.tmp@gtdata@chromosome <- as.factor(NULL)
+  expect_error(get.chr.midpoints(data.tmp))
+})
+
+
