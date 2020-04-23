@@ -2,9 +2,10 @@ library(cgmisc)
 library(GenABEL)
 library(visualTest)
 
+data.qc1 <- readRDS('data.qc1.rds')
+pop <- readRDS('pop.rds')
+
 test_that("pop allele counts work", {
-  data.qc1 <- readRDS('data.qc1.rds')
-  pop <- readRDS('pop.rds')
   pac <- pop.allele.counts(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], pops = pop, progress=F)
   expect_equal_to_reference(pac, 'pac.rds')
   
@@ -14,4 +15,20 @@ test_that("pop allele counts work", {
   plot.pac(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], allele.cnt = pac, plot.LD = T, legend.pos='topleft')
   dev.off()
   expect_true(isSimilar(file = tmp, fingerprint = "E9379273B462B1C1"))
+})
+
+test_that("F_ST computations work", {
+  fst <- compute.fstats(data = data.qc1[ ,data.qc1@gtdata@chromosome == 2], pops = pop)
+  expect_equal_to_reference(fst, 'fst.rds')
+})
+
+test_that("get adjacent markers works", {
+  adjacent <- get.adjacent.markers(data = data.qc1,
+                                 marker = 'BICF2S2365880',
+                                 size.bp = 1e4)
+  expect_equal(dim(adjacent), c(205, 2))
+  expect_equal(colnames(adjacent), c("BICF2P425207", "BICF2S2365880"))
+  expect_equal(adjacent[1,1], 1)
+  expect_equal(adjacent['dog234', 'BICF2S2365880'], 0)
+  expect_equal(adjacent['dog235', 'BICF2P425207'], 2)
 })
