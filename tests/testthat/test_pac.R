@@ -57,6 +57,8 @@ test_that('clumping works', {
   expect_equal_to_reference(clumps, 'clumps.rds')
 })
 
+
+
 test_that('get overlapping windows', {
   my.LW <- get.overlap.windows(data = data.qc1, chr = 2, size = 125e3, overlap = 2500)
   het.windows <- het.overlap.wind(data = data.qc1, LW = my.LW, progress = F)
