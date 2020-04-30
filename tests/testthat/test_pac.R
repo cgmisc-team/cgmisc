@@ -87,4 +87,9 @@ test_that('getting chromosome midpoints', {
   expect_error(get.chr.midpoints(data.tmp))
 })
 
+test_that('get.erv test', {
+  ervs <- get.erv(chr = 'chr2', coords = c(10e6, 40e6))
+  expect_equal(ervs[ervs$id == 2738, 'length'], 14763)
+})
+
 
