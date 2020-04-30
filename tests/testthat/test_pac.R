@@ -2,6 +2,7 @@ library(cgmisc)
 library(GenABEL)
 library(visualTest)
 
+#setwd('tests/testthat/')
 data.qc1 <- readRDS('data.qc1.rds')
 pop <- readRDS('pop.rds')
 mm <- readRDS('mm.rds')
@@ -59,9 +60,19 @@ test_that('clumping works', {
 test_that('get overlapping windows', {
   my.LW <- get.overlap.windows(data = data.qc1, chr = 2, size = 125e3, overlap = 2500)
   het.windows <- het.overlap.wind(data = data.qc1, LW = my.LW, progress = F)
+  roh1 <- get.roh(data = data.qc1, chr = 2,
+          LW = my.LW,
+          hetero.zyg = het.windows, threshold = 0.30,
+          strict = TRUE)
+  roh2 <- get.roh(data = data.qc1, chr = 2,
+                  LW = my.LW,
+                  hetero.zyg = het.windows, threshold = 0.25,
+                  strict = FALSE)
   expect_equal_to_reference(my.LW, 'LW.windows.rds')
   expect_equal(het.windows[c(349, 350), 2], c(0.3915125, NA), tolerance=1e-3)
   expect_equal(dim(het.windows), c(694, 2))
+  expect_equal_to_reference(roh1, 'roh1.rds')
+  expect_equal_to_reference(roh2, 'roh2.rds')
 })
 
 test_that('getting chromosome midpoints', {
