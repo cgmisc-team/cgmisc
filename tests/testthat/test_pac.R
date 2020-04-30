@@ -47,8 +47,8 @@ test_that("check LD plot", {
 })
 
 test_that('selection of top snps', {
-  top.snps <- choose.top.snps(data = data.qc1, chr = 2, region = c(37256927, 39256927), index.snp = 'BICF2S2365880')
-  expect_equal_to_reference(top.snps, 'top.snps.rds')
+  top_snps <- choose.top.snps(data = data.qc1, chr = 2, region = c(37256927, 39256927), index.snp = 'BICF2S2365880')
+  expect_equal_to_reference(top_snps, 'top_snps.rds')
 })
 
 test_that('clumping works', {
