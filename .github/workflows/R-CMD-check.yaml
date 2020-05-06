@@ -21,7 +21,7 @@ jobs:
       - uses: r-lib/actions/setup-r@master
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr", "png", "DBI"))
+          install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr", "png", "RSQLite",v"DBI"))
           BiocManager::install("rtracklayer")
           BiocManager::install("GenomicRanges")
           install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz", type="source", repos=NULL)

@@ -1,6 +1,7 @@
 library(cgmisc)
 library(GenABEL)
 library(visualTest)
+library(RSQLite)
 library(DBI)
 
 #setwd('tests/testthat/')
