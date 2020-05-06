@@ -104,6 +104,6 @@ test_that('plot.qq works', {
         N = 10,
         plot.emp = T, step = 100)
   dev.off()
-  qq_fp <- print(visualTest::getFingerprint(file = 'plot_qq.png'))
-  expect_true(isSimilar(file = tmp, "EF1FB274E0E1A144"))
+  qq_fp <- visualTest::getFingerprint(file = 'plot_qq.png')
+  expect_true(isSimilar(file = tmp, qq_fp))
 })
