@@ -1,6 +1,7 @@
 library(cgmisc)
 library(GenABEL)
 library(visualTest)
+library(DBI)
 
 #setwd('tests/testthat/')
 data.qc1 <- readRDS('data.qc1.rds')
@@ -58,8 +59,6 @@ test_that('clumping works', {
                           chr = 2)
   expect_equal_to_reference(clumps, 'clumps.rds')
 })
-
-
 
 test_that('get overlapping windows', {
   my.LW <- get.overlap.windows(data = data.qc1, chr = 2, size = 125e3, overlap = 2500)
