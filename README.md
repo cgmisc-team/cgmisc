@@ -1,10 +1,13 @@
 <!-- badges: start -->
+
+# cgmisc <img src="assets/cgmisc_logo_small.png" align="right" width="120" />
+
 [![R build status](https://github.com/cgmisc-team/cgmisc/workflows/R-CMD-check/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions)
 [![Coverage status](https://codecov.io/gh/cgmisc-team/cgmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/cgmisc-team/cgmisc?branch=master)
 <!-- badges: end -->
 
-## Introduction
-![cgmisc](assets/cgmisc_logo_small.png "cgmisc logo")
+## Overview
+
 **cgmisc** is a R package that enables enhanced data analysis and visualisation of results from GWAS. The package contains several utilities and modules that complement and enhance the functionality of existing softwares. It also provides several tools for advanced visualisation of genomic data and utilises the power of the R language to aid in preparation of publication-quality figures. Some of the package functions are specific for the domestic dog (*Canis familiaris*) data.
 
 ## Release philosophy
