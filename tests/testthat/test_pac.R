@@ -92,18 +92,18 @@ test_that('get.erv test', {
   expect_equal(ervs[ervs$id == 2738, 'length'], 14763)
 })
 
-test_that('plot.qq works', {
-  autosomal <- which(data.qc1@gtdata@chromosome != 39) # 39 is the canine X chromosome
-  data.qc1.gkin <- ibs(data.qc1, snpsubset = autosomal, weight = 'freq')
-  h2h <- polygenic(formula = ct ~ sex, kinship.matrix = data.qc1.gkin,
-                 data = data.qc1, llfun = 'polylik')
-  tmp <- tempfile(fileext = ".png")
-  png(filename = tmp)
-  plot.qq(data = data.qc1, obs = mm[,'P1df'],
-        emp = h2h,
-        N = 10,
-        plot.emp = T, step = 100)
-  dev.off()
-  qq_fp <- visualTest::getFingerprint(file = 'plot_qq.png')
-  expect_true(isSimilar(file = tmp, qq_fp))
-})
+# test_that('plot.qq works', {
+#   autosomal <- which(data.qc1@gtdata@chromosome != 39) # 39 is the canine X chromosome
+#   data.qc1.gkin <- ibs(data.qc1, snpsubset = autosomal, weight = 'freq')
+#   h2h <- polygenic(formula = ct ~ sex, kinship.matrix = data.qc1.gkin,
+#                  data = data.qc1, llfun = 'polylik')
+#   tmp <- tempfile(fileext = ".png")
+#   png(filename = tmp)
+#   plot.qq(data = data.qc1, obs = mm[,'P1df'],
+#         emp = h2h,
+#         N = 10,
+#         plot.emp = T, step = 100)
+#   dev.off()
+#   qq_fp <- visualTest::getFingerprint(file = 'plot_qq.png')
+#   testthat::expect_true(isSimilar(file = tmp, qq_fp))
+# })

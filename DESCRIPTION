@@ -13,7 +13,7 @@ LazyData: true
 Depends:
     R (>= 3.6)
 Imports: 
-    ggplot2, grid, genetics, BiocManager, RSQLite, GenomicRanges, rtracklayer, knitr, DBI
+    ggplot2, grid, genetics, BiocManager, RSQLite, GenomicRanges, rtracklayer, knitr, DBI, utils
 VignetteBuilder: knitr
 Suggests:
     GenABEL.data,
