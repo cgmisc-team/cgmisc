@@ -21,7 +21,10 @@ Beginning from version 2.9.11, we are no longer using releases system. Instead, 
 *  `install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz", type='source', repos=NULL)`  
 
 ## Installation 
-We recommend installing *cgmisc* by using:
+For you who are familiar with Docker, there is a `cgmisc` container available from the DockerHub, so that you can just:
+`docker pull quiestrho/cgmisc:latest`
+ 
+Otherwise, we recommend installing *cgmisc* by using:
 `devtools::install_github('cgmisc-team/cgmisc')`
 
 To install using the tarball, open a terminal and type: 
