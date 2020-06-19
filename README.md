@@ -10,8 +10,12 @@
 
 **cgmisc** is a R package that enables enhanced data analysis and visualisation of results from GWAS. The package contains several utilities and modules that complement and enhance the functionality of existing softwares. It also provides several tools for advanced visualisation of genomic data and utilises the power of the R language to aid in preparation of publication-quality figures. Some of the package functions are specific for the domestic dog (*Canis familiaris*) data.
 
-## Release philosophy
+## Releases
 Beginning from version 2.9.11, we are no longer using releases system. Instead, we maintain cgmisc in the CD/CI manner. From time to time, major versions will be frozen and available as source packages. Otherwise, track commit messages to know what has changed.
+
+## Docker container
+For you who are familiar with Docker, there is a `cgmisc` container available from the DockerHub, so that you can just:  
+`docker pull quiestrho/cgmisc:latest`
 
 ## Pre-requisites
 `cgmisc` enchances functionalities of `GenABEL` package which is, unfortunately, no longer supported. Thus you will need to install it manualy from source available on CRAN Package Archives:
@@ -20,10 +24,17 @@ Beginning from version 2.9.11, we are no longer using releases system. Instead, 
 
 *  `install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz", type='source', repos=NULL)`  
 
+In addition, some more packages are required, but they should be installed automatically.
+We recommend to use an excellent `renv` package to recreate optimal environment for `cgmisc` installation. First, retrieve the `renv.lock` file:  
+```wget https://raw.githubusercontent.com/cgmisc-team/cgmisc/master/renv.lock```  
+and put it in your project directory. Next, type this in R:
+```
+install.packages(renv)
+library(renv)
+renv::init()
+```
+
 ## Installation 
-For you who are familiar with Docker, there is a `cgmisc` container available from the DockerHub, so that you can just:
-`docker pull quiestrho/cgmisc:latest`
- 
 Otherwise, we recommend installing *cgmisc* by using:
 `devtools::install_github('cgmisc-team/cgmisc')`
 
