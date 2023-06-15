@@ -21,7 +21,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
       - name: Install libraries for GenABEL compilation
         run: |
-          apt install
+          apt install libcurl4-openssl-dev
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr", "png", "RSQLite", "DBI"))
