@@ -11,7 +11,7 @@ jobs:
       fail-fast: true
       matrix:
         config:
-        - { os: ubuntu-latest, r: '4.3'}
+        - { os: ubuntu-latest, r: '4.1.3'}
     
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -21,7 +21,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
       - name: Install libraries for GenABEL compilation
         run: |
-          sudo apt install libcurl4-openssl-dev
+          sudo apt install libcurl4-openssl-dev libxml2-dev
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr", "png", "RSQLite", "DBI"))
@@ -35,6 +35,6 @@ jobs:
       - name: Check
         run: Rscript -e "rcmdcheck::rcmdcheck(args='--no-manual', error_on='error', check_dir='check')"
       - name: Test coverage
-        if: matrix.config.os == 'ubuntu-latest' && matrix.config.r == '4.3'
+        if: matrix.config.os == 'ubuntu-latest' && matrix.config.r == '4.1.3'
         run: |
           Rscript -e 'covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")'
