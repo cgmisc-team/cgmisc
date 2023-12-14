@@ -27,7 +27,7 @@ jobs:
           sudo apt install libcurl4-openssl-dev libxml2-dev
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr", "png", "RSQLite", "DBI"))
+          install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr", "png", "RSQLite", "DBI", 'testthat'))
           BiocManager::install("rtracklayer")
           BiocManager::install("GenomicRanges")
           install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz", type="source", repos=NULL)
