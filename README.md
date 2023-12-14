@@ -19,7 +19,7 @@ For you who are familiar with Docker, there is a `cgmisc` container available fr
 `docker pull quiestrho/cgmisc:latest`
 
 ## Pre-requisites
-`cgmisc` enchances functionalities of `GenABEL` package which is, unfortunately, no longer supported. Thus you will need to install it manualy from source available on CRAN Package Archives:
+`cgmisc` enchances functionalities of `GenABEL` package which is, unfortunately, no longer supported. Thus you will need to install it manualy from source available on CRAN Package Archives and, in addition, you need to be advised that GenABEL won't compile for r-base > 4.1.3! Thus we strongly recommend to go for the Docker container solution:
 
 *  `install.packages("https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz", type='source', repos=NULL)`  
 
@@ -49,7 +49,12 @@ doi:10.1093/bioinformatics/btv426
 ## Selected publications that used `cgmisc`
 
 Here we list some publications where cgmisc has been helpful:
+* [Sigurðardóttir H. et al. The genetics of gaits in Icelandic horses goes beyond DMRT3, with RELN and STAU2 identified as two new candidate genes. Genetics Selection 2023](https://link.springer.com/article/10.1186/s12711-023-00863-6)
 
+* [Bannasch DL. et al. Pigment Intensity in Dogs is Associated with a Copy Number Variant Upstream of KITLG. Genes 2020.](https://www.mdpi.com/2073-4425/11/1/75)
+  
+* [Vernau KM. et al. A Missense Variant in ALDH5A1 Associated with Canine Succinic Semialdehyde Dehydrogenase Deficiency (SSADHD) in the Saluki Dog. Genes 2020.](https://www.mdpi.com/2073-4425/11/9/1033)
+  
 * [Bianchi M. et al. Whole-genome genotyping and resequencing reveal the association of a deletion in the complex interferon alpha gene cluster with hypothyroidism in dogs. BMC Genomics 2020.](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-6700-3)
 
 * [Weich K. et al. Pigment Intensity in Dogs is Associated with a Copy Number Variant Upstream of KITLG. Genes 2020.](https://doi.org/10.3390/genes11010075)
