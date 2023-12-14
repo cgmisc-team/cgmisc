@@ -1,6 +1,6 @@
 library(cgmisc)
 library(GenABEL)
-library(visualTest)
+#library(visualTest)
 library(RSQLite)
 library(DBI)
 
