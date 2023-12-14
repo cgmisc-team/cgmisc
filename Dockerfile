@@ -1,4 +1,4 @@
-FROM rocker/r-base:3.6.3
+FROM rocker/r-base:4.1.3
 MAINTAINER Marcin Kierczak <marcin.kierczak@scilifelab.se>
 
 RUN apt update && apt install -y r-base r-cran-devtools libcurl4-openssl-dev
