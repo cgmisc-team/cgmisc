@@ -7,7 +7,7 @@ RUN apt update && \
     libxml2-dev
 RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/GenABEL.data/GenABEL.data_1.0.0.tar.gz', type='source', repos=NULL)"
 RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/GenABEL/GenABEL_1.8-0.tar.gz', type='source', repos=NULL)"
-RUN R -e "install.packages('BiocManager' ,'remotes')"
+RUN R -e "install.packages(c('BiocManager' ,'remotes'))"
 RUN R -e "BiocManager::install('GenomicRanges')"
 RUN R -e "BiocManager::install('rtracklayer')"
 RUN R -e "remotes::install_github('cgmisc-team/cgmisc')"
