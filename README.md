@@ -1,10 +1,9 @@
 <!-- badges: start -->
 
 # cgmisc <img src="assets/cgmisc_logo_small.png" align="right" width="120" />
-
-[![R build status](https://github.com/cgmisc-team/cgmisc/workflows/R-CMD-check/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions)
-[![Coverage status](https://codecov.io/gh/cgmisc-team/cgmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/cgmisc-team/cgmisc?branch=master)
-[![Docker Build And Push To Docker Hub](https://github.com/cgmisc-team/cgmisc/actions/workflows/docker-publish.yml/badge.svg?branch=release)](https://github.com/cgmisc-team/cgmisc/actions/workflows/docker-publish.yml)
+[![R-CMD-check](https://github.com/cgmisc-team/cgmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions/workflows/R-CMD-check.yaml)
+<!-- [![Coverage status](https://codecov.io/gh/cgmisc-team/cgmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/cgmisc-team/cgmisc?branch=master) -->
+[![Create and publish a Docker image](https://github.com/cgmisc-team/cgmisc/actions/workflows/main.yml/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions/workflows/main.yml)
 <!-- badges: end -->
 
 ## Overview
@@ -15,8 +14,13 @@
 Beginning from version 2.9.11, we are no longer using releases system. Instead, we maintain cgmisc in the CD/CI manner. From time to time, major versions will be frozen and available as source packages. Otherwise, track commit messages to know what has changed.
 
 ## Docker container
-For you who are familiar with Docker, there is a `cgmisc` container available from the DockerHub, so that you can just:  
-`docker pull quiestrho/cgmisc:latest`
+To ensure reproducibility of articles using `cgmisc`, we provide a Docker container with working `GenABEL` and pre-installed `cgmisc`.
+We have recently moved to [ghcr.io](https://github.com/orgs/cgmisc-team/packages?repo_name=cgmisc) and no longer maintain images on 
+DockerHub. To pull and run the container:
+
+```
+docker pull ghcr.io/cgmisc-team/cgmisc:release
+```
 
 ## Pre-requisites
 `cgmisc` enchances functionalities of `GenABEL` package which is, unfortunately, no longer supported. Thus you will need to install it manualy from source available on CRAN Package Archives and, in addition, you need to be advised that GenABEL won't compile for r-base > 4.1.3! Thus we strongly recommend to go for the Docker container solution:
