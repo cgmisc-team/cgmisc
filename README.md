@@ -4,7 +4,7 @@
 
 [![R build status](https://github.com/cgmisc-team/cgmisc/workflows/R-CMD-check/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions)
 [![Coverage status](https://codecov.io/gh/cgmisc-team/cgmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/cgmisc-team/cgmisc?branch=master)
-[![build-and-push-to-DockerHub](https://github.com/cgmisc-team/cgmisc/actions/workflows/docker-publish.yml/badge.svg?branch=master)](https://github.com/cgmisc-team/cgmisc/actions/workflows/docker-publish.yml)
+[![Docker Build And Push To Docker Hub](https://github.com/cgmisc-team/cgmisc/actions/workflows/docker-publish.yml/badge.svg?branch=release)](https://github.com/cgmisc-team/cgmisc/actions/workflows/docker-publish.yml)
 <!-- badges: end -->
 
 ## Overview
