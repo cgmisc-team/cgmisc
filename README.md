@@ -1,7 +1,7 @@
 <!-- badges: start -->
 
 # cgmisc <img src="assets/cgmisc_logo_small.png" align="right" width="120" />
-[![R-CMD-check](https://github.com/cgmisc-team/cgmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/cgmisc-team/cgmisc/actions/workflows/R-CMD-check.yaml/badge.svg?branch=master)](https://github.com/cgmisc-team/cgmisc/actions/workflows/R-CMD-check.yaml)
 <!-- [![Coverage status](https://codecov.io/gh/cgmisc-team/cgmisc/branch/master/graph/badge.svg)](https://codecov.io/gh/cgmisc-team/cgmisc?branch=master) -->
 [![Create and publish a Docker image](https://github.com/cgmisc-team/cgmisc/actions/workflows/main.yml/badge.svg)](https://github.com/cgmisc-team/cgmisc/actions/workflows/main.yml)
 <!-- badges: end -->
